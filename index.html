@@ -730,10 +730,43 @@ select option { background: #1a2332; }
 
       <!-- TAB: Play -->
       <div class="tab-content active" id="tabPlay">
-        <div class="panel-card">
-          <h3>Actions</h3>
-          <div class="actions-grid">
-            <button class="action-btn primary" onclick="playGame()">▶ Play Game</button>
+
+        <!-- Season progress bar -->
+        <div class="panel-card" style="padding:16px 20px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <span style="font-size:0.78rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;">Season Progress</span>
+            <span style="font-size:0.82rem;font-weight:700;" id="seasonProgressLabel">Week 1 · Game 0 / 30</span>
+          </div>
+          <div style="background:rgba(255,255,255,0.06);height:10px;border-radius:999px;overflow:hidden;">
+            <div id="seasonProgressBar" style="height:10px;border-radius:999px;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0%;transition:width 0.3s ease;"></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-top:5px;">
+            <span>Opening Day</span>
+            <span id="seasonMidLabel">Mid-Season</span>
+            <span>Season End</span>
+          </div>
+        </div>
+
+        <!-- Main action buttons -->
+        <div class="panel-card" style="margin-top:0;">
+          <h3 style="margin-bottom:14px;">Actions</h3>
+
+          <!-- Primary game controls - prominent -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <button class="action-btn primary" onclick="advanceWeek()" id="btnAdvWeek" style="padding:16px;font-size:0.95rem;">
+              📅 Advance Week
+            </button>
+            <button class="action-btn" onclick="simulateFullSeason()" id="btnSimSeason" style="padding:16px;font-size:0.95rem;background:linear-gradient(135deg,#1a3a6e,#0f2040);border-color:rgba(59,158,255,0.3);color:var(--accent2);">
+              ⚡ Simulate Full Season
+            </button>
+          </div>
+
+          <!-- Week detail toggle -->
+          <div id="weekSummaryBox" style="display:none;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:12px;font-size:0.82rem;line-height:1.7;color:var(--muted);"></div>
+
+          <!-- Secondary controls -->
+          <div class="actions-grid" style="margin-top:4px;">
+            <button class="action-btn" onclick="playGame()">▶ Single Game</button>
             <button class="action-btn" onclick="practiceSession()">🏋 Practice</button>
             <button class="action-btn" onclick="advanceCareer()">📈 Advance Career</button>
             <button class="action-btn" onclick="endSeason()">🗓 End Season</button>
@@ -741,6 +774,7 @@ select option { background: #1a2332; }
             <button class="action-btn" onclick="retire()" style="color:var(--muted);">🏁 Retire</button>
           </div>
         </div>
+
         <div class="choices-area hidden" id="choicesArea">
           <h3>🚨 Decision Required</h3>
           <div class="choices-btns" id="choicesBtns"></div>
@@ -824,6 +858,19 @@ select option { background: #1a2332; }
   </div>
 </div>
 
+<!-- FULL SEASON SIM OVERLAY -->
+<div class="modal-overlay hidden" id="simOverlay" style="z-index:300;">
+  <div style="text-align:center;max-width:440px;width:100%;padding:40px 32px;background:var(--surface);border:1px solid var(--border);border-radius:28px;box-shadow:0 32px 80px rgba(0,0,0,0.7);">
+    <div style="font-size:3rem;margin-bottom:16px;animation:spin 0.8s linear infinite;display:inline-block;">⚾</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:1.6rem;font-weight:900;margin-bottom:8px;">Simulating Season…</h2>
+    <p id="simStatusText" style="color:var(--muted);font-size:0.92rem;margin-bottom:20px;">Week 1 of <span id="simTotalWeeks">20</span></p>
+    <div style="background:rgba(255,255,255,0.06);height:8px;border-radius:999px;overflow:hidden;">
+      <div id="simProgressBar" style="height:8px;border-radius:999px;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0%;transition:width 0.15s ease;"></div>
+    </div>
+    <p id="simLatestEvent" style="font-size:0.8rem;color:var(--muted);margin-top:14px;min-height:1.2em;font-style:italic;"></p>
+  </div>
+</div>
+
 <!-- HIGH SCHOOL SELECTION MODAL -->
 <div class="modal-overlay hidden" id="hsModal">
   <div class="hs-modal">
@@ -902,6 +949,8 @@ const STAGES = ["Little League","High School","College","Single-A","Double-A","T
 const STAGE_CAPS = {"Little League":30,"High School":40,"College":56,"Single-A":140,"Double-A":140,"Triple-A":140,"MLB":162};
 const STAGE_AGES = {"Little League":8,"High School":14,"College":18,"Single-A":19,"Double-A":21,"Triple-A":23,"MLB":25};
 let collegeSeasonsPlayed = 0; // track 4-season college arc
+let currentWeek = 1;          // week within the current season
+let isSimulating = false;     // true while full-season sim is running
 
 let careerStage = "Little League";
 let age = 8;
@@ -1154,7 +1203,248 @@ function practiceSession(){
   updateUI();
 }
 
-// ===================== INJURY =====================
+// ===================== WEEK / SEASON SIM =====================
+
+// How many games are in a "week" for each stage
+function gamesPerWeek(){
+  if(careerStage==="Little League") return 2;
+  if(careerStage==="High School") return 3;
+  if(careerStage==="College") return 4;
+  if(careerStage==="Single-A"||careerStage==="Double-A"||careerStage==="Triple-A") return 6;
+  if(careerStage==="MLB") return 7;
+  return 3;
+}
+
+function totalWeeks(){
+  return Math.ceil(STAGE_CAPS[careerStage] / gamesPerWeek());
+}
+
+// Silently simulate one game (no UI update, no toast, returns a summary string)
+function silentGame(){
+  if(!player.eligibility || injury.active) return null;
+
+  applyPersonalityEffects();
+
+  let hits=0, hr=0, so=0;
+  for(let i=0;i<4;i++){
+    let r = simAtBat();
+    player.stats.AB++;
+    player.stats.H += r.H;
+    player.stats.HR += r.HR;
+    player.stats.SO += r.SO;
+    player.stats.RBI += r.H + r.HR;
+    if(r.HR){ player.money+=500; hr++; }
+    hits += r.H; so += r.SO;
+  }
+  updateAdvancedStats(player);
+  gainXPSilent();
+  gamesPlayed++;
+
+  simulateOtherTeams();
+  if(Math.random()<0.06){ triggerInjurySilent(); return "🤕 Injury"; }
+  recoverInjury();
+  if(Math.random()<0.2) schoolEvent();
+
+  if(hr>0) return `💣 ${hr} HR`;
+  if(hits>=3) return `🔥 ${hits}-for-4`;
+  if(hits===0&&so>=2) return `❌ 0-for-4`;
+  return `✅ ${hits} hit${hits!==1?"s":""}`;
+}
+
+function gainXPSilent(){
+  let earned = player.stats.H*5 + player.stats.HR*20;
+  player.xp += earned;
+  if(player.xp >= player.levelTier*100){
+    player.xp -= player.levelTier*100;
+    player.levelTier++;
+    attributes.contact = Math.min(99,attributes.contact+2);
+    attributes.power   = Math.min(99,attributes.power+2);
+  }
+}
+
+function triggerInjurySilent(){
+  let inj = INJURIES[~~(Math.random()*INJURIES.length)];
+  injury.active = true;
+  injury.name = inj.name;
+  injury.weeksRemaining = inj.weeks;
+  addFeed("Injury", `${inj.name} — ${inj.weeks}wk recovery.`, "warning");
+}
+
+// ---- ADVANCE WEEK ----
+function advanceWeek(){
+  if(isSimulating) return;
+  let cap = STAGE_CAPS[careerStage];
+  if(gamesPlayed >= cap){
+    setSpotlight("Season Done","Season complete.",`You've finished all ${cap} games. Hit End Season or Advance Career.`,"warning");
+    showToast("Season complete — end the season first.","warning"); return;
+  }
+  if(!player.eligibility){
+    showToast("Ineligible to play.","warning"); return;
+  }
+
+  let gpw = gamesPerWeek();
+  let gamesToPlay = Math.min(gpw, cap - gamesPlayed);
+  let weekResults = [];
+  let weekStart = gamesPlayed + 1;
+  let injuryHit = false;
+
+  for(let g=0; g<gamesToPlay; g++){
+    if(gamesPlayed >= cap) break;
+    if(injury.active && injury.weeksRemaining > 0){
+      injuryHit = true;
+      recoverInjury();
+      weekResults.push("🏥 Recovering");
+      continue;
+    }
+    let r = silentGame();
+    if(r) weekResults.push(`G${gamesPlayed}: ${r}`);
+    if(injury.active){ injuryHit=true; break; }
+  }
+
+  currentWeek++;
+
+  // Build week summary
+  let avgStr = player.stats.AVG.toFixed(3);
+  let hrStr  = player.stats.HR;
+  let summaryLines = weekResults.join(" · ");
+  let weekSummary = `Week results: ${summaryLines} | Season: .${Math.round(player.stats.AVG*1000).toString().padStart(3,"0")} AVG · ${hrStr} HR`;
+
+  let box = document.getElementById("weekSummaryBox");
+  if(box){
+    box.style.display = "block";
+    box.innerHTML = `<strong style="color:var(--ink);">Week ${currentWeek-1} Recap</strong> — Games ${weekStart}–${gamesPlayed}<br>${weekResults.map(r=>`<span>${r}</span>`).join("  ·  ")}<br><span style="color:var(--accent);">.${Math.round(player.stats.AVG*1000).toString().padStart(3,"0")} AVG · ${hrStr} HR · ${player.stats.RBI} RBI this season</span>`;
+  }
+
+  if(injuryHit){
+    setSpotlight("Week "+( currentWeek-1), `Week cut short by injury.`, `${injury.name} — ${injury.weeksRemaining} weeks remaining. Season stats: ${weekSummary}`, "warning");
+    showToast(`Injured: ${injury.name}. ${injury.weeksRemaining} wks out.`,"warning");
+  } else if(gamesPlayed >= cap){
+    setSpotlight("Season Complete 🏆",`All ${cap} games played.`,`Final line: .${Math.round(player.stats.AVG*1000).toString().padStart(3,"0")} AVG · ${player.stats.HR} HR · ${player.stats.RBI} RBI. Hit End Season.`,"success");
+    showToast("Season done! Hit End Season.","success");
+  } else {
+    addFeed(`Week ${currentWeek-1}`, summaryLines, "success");
+    setSpotlight(`Week ${currentWeek-1} Complete`, buildHeadline(), weekSummary, "success");
+    showToast(`Week ${currentWeek-1} done — ${gamesPlayed}/${cap} games.`,"success");
+  }
+
+  updateUI();
+}
+
+// ---- SIMULATE FULL SEASON ----
+async function simulateFullSeason(){
+  if(isSimulating) return;
+  let cap = STAGE_CAPS[careerStage];
+  if(gamesPlayed >= cap){
+    showToast("Season already complete — hit End Season.","warning"); return;
+  }
+
+  isSimulating = true;
+  let remaining = cap - gamesPlayed;
+  let totalW = Math.ceil(remaining / gamesPerWeek());
+  let weeksRun = 0;
+
+  // Show overlay
+  let overlay = document.getElementById("simOverlay");
+  overlay.classList.remove("hidden");
+  document.getElementById("simTotalWeeks").textContent = totalW;
+
+  let seasonHighlights = [];
+  let injuryDuringSimCount = 0;
+
+  // Sim week-by-week with small delay so browser can paint progress
+  while(gamesPlayed < cap){
+    let gpw = gamesPerWeek();
+    let gamesToPlay = Math.min(gpw, cap - gamesPlayed);
+    let weekEvents = [];
+
+    for(let g=0; g<gamesToPlay; g++){
+      if(gamesPlayed >= cap) break;
+      if(injury.active){
+        recoverInjury();
+        weekEvents.push("🏥 recovering");
+        continue;
+      }
+      let r = silentGame();
+      if(r) weekEvents.push(r);
+      if(injury.active){ injuryDuringSimCount++; weekEvents.push(`⚠️ ${injury.name}`); break; }
+    }
+
+    weeksRun++;
+    currentWeek++;
+
+    // Milestone highlights
+    if(player.stats.HR > 0 && player.stats.HR % 5 === 0)
+      seasonHighlights.push(`💣 HR #${player.stats.HR} in week ${weeksRun}`);
+    if(player.stats.AVG > 0.350 && weeksRun % 4 === 0)
+      seasonHighlights.push(`🔥 Batting .${Math.round(player.stats.AVG*1000)} after week ${weeksRun}`);
+
+    // Update overlay progress
+    let pct = Math.round((weeksRun / totalW) * 100);
+    document.getElementById("simProgressBar").style.width = pct+"%";
+    document.getElementById("simStatusText").textContent = `Week ${weeksRun} of ${totalW} · ${gamesPlayed} games played`;
+    document.getElementById("simLatestEvent").textContent = weekEvents.slice(-3).join(" · ");
+
+    // Yield to browser every 3 weeks so it stays responsive
+    if(weeksRun % 3 === 0){
+      await new Promise(r=>setTimeout(r,30));
+    }
+  }
+
+  isSimulating = false;
+  overlay.classList.add("hidden");
+
+  // Build season summary
+  let avg = player.stats.AVG;
+  let hr  = player.stats.HR;
+  let rbi = player.stats.RBI;
+  let so  = player.stats.SO;
+  let ab  = player.stats.AB;
+  let ops = player.stats.OPS;
+
+  let grade = "C";
+  if(avg>=0.320&&hr>=20) grade="A+";
+  else if(avg>=0.300&&hr>=15) grade="A";
+  else if(avg>=0.280&&hr>=10) grade="B+";
+  else if(avg>=0.260) grade="B";
+  else if(avg>=0.230) grade="C+";
+
+  let highlightText = seasonHighlights.length
+    ? seasonHighlights.slice(-3).join(" · ")
+    : `${player.name} completed the ${careerStage} season.`;
+
+  if(injuryDuringSimCount>0)
+    highlightText += ` · ⚠️ ${injuryDuringSimCount} injury event(s) during the season.`;
+
+  // Show week summary box
+  let box = document.getElementById("weekSummaryBox");
+  if(box){
+    box.style.display = "block";
+    box.innerHTML = `
+      <strong style="color:var(--ink);">⚡ Full Season Simulated — Grade: <span style="color:var(--accent);">${grade}</span></strong><br>
+      .${Math.round(avg*1000).toString().padStart(3,"0")} AVG &nbsp;·&nbsp; ${hr} HR &nbsp;·&nbsp; ${rbi} RBI &nbsp;·&nbsp; ${so} K &nbsp;·&nbsp; ${ab} AB &nbsp;·&nbsp; ${ops.toFixed(3)} OPS<br>
+      <span style="color:var(--muted);">${highlightText}</span>
+    `;
+  }
+
+  addFeed("Season Simulated", `.${Math.round(avg*1000).toString().padStart(3,"0")} AVG · ${hr} HR · ${rbi} RBI · Grade ${grade}`, "success");
+  setSpotlight("Season Complete ⚡", `Grade: ${grade} — .${Math.round(avg*1000).toString().padStart(3,"0")} AVG · ${hr} HR · ${rbi} RBI`, `Hit End Season to collect your salary, update finances, and move to the off-season.`, "success");
+  showToast(`Season done! ${hr} HR · .${Math.round(avg*1000).toString().padStart(3,"0")} AVG · Grade ${grade}`, "success");
+  updateUI();
+}
+
+// update season progress bar in UI
+function updateSeasonProgress(){
+  let cap = STAGE_CAPS[careerStage]||30;
+  let pct = Math.min(100, Math.round((gamesPlayed/cap)*100));
+  let bar = document.getElementById("seasonProgressBar");
+  let lbl = document.getElementById("seasonProgressLabel");
+  let mid = document.getElementById("seasonMidLabel");
+  if(bar) bar.style.width = pct+"%";
+  if(lbl) lbl.textContent = `Week ${currentWeek} · Game ${gamesPlayed} / ${cap}`;
+  if(mid) mid.textContent = `Game ${Math.floor(cap/2)}`;
+}
+
+
 function triggerInjury(){
   let inj = INJURIES[~~(Math.random()*INJURIES.length)];
   injury.active = true;
@@ -1588,6 +1878,9 @@ function completeCareerAdvance(){
   let newSalary = calculateSalary();
   player.salary = newSalary;
   gamesPlayed = 0;
+  currentWeek = 1;
+  let box = document.getElementById("weekSummaryBox");
+  if(box) box.style.display="none";
   addFeed("Promoted",`Advanced to ${careerStage}!${newSalary>0?` Salary: $${fmt(newSalary)}/yr.`:""}`, "success");
   setSpotlight("Level Up!",`Welcome to ${careerStage}.`,`${player.name} earned a promotion. The competition just got real.`,"success");
   showToast(`Advanced to ${careerStage}!`,"success");
@@ -1933,7 +2226,7 @@ function acceptDraftOffer(){
   player.mlbTeam = t.name; player.mlbTeamCity = t.city;
   player.draftRound = draftOffer.roundInfo.round; player.draftBonus = bonus;
   player.contract = draftOffer.offerData.years;
-  careerStage = "Single-A"; gamesPlayed = 0; age = Math.max(age,19);
+  careerStage = "Single-A"; gamesPlayed = 0; currentWeek = 1; age = Math.max(age,19);
   document.getElementById("draftModal").classList.add("hidden");
   addFeed("Signed Pro Contract",`${player.name} signs with ${t.name} for $${fmt(bonus)}. Reports to Single-A.`,"success");
   setSpotlight("Pro Career Begins",`${t.name} — ${draftOffer.roundInfo.supp?"Supp. 1st":"Round "+draftOffer.roundInfo.round} Pick`,`$${fmt(bonus)} signing bonus. The grind at Single-A starts now.`,"success");
@@ -2083,6 +2376,10 @@ function endSeason(){
   applyExpenses();
   player.money += player.salary;
   player.stats = {AB:0,H:0,HR:0,RBI:0,SO:0,AVG:0,OBP:0,SLG:0,OPS:0};
+  currentWeek = 1;
+  // Hide week summary box ready for new season
+  let box = document.getElementById("weekSummaryBox");
+  if(box) box.style.display="none";
 
   saveAutoSlot();
 
@@ -2214,7 +2511,7 @@ function generateAwards(){
 
 // ===================== SAVE / LOAD =====================
 function saveToSlot(n){
-  let data = {player,attributes,teams,careerStage,age,gamesPlayed,seasonsPlayed,lastOutcome,injury,steroidUse,difficulty,eventFeed,physique,collegeSeasonsPlayed};
+  let data = {player,attributes,teams,careerStage,age,gamesPlayed,seasonsPlayed,lastOutcome,injury,steroidUse,difficulty,eventFeed,physique,collegeSeasonsPlayed,currentWeek};
   localStorage.setItem(`bls_save_${n}`, JSON.stringify(data));
   showToast(`Saved to Slot ${n}.`,"success");
   renderSaveSlots();
@@ -2231,13 +2528,14 @@ function loadGameSlot(n){
   eventFeed=d.eventFeed||[];
   if(d.physique) physique=d.physique;
   if(d.collegeSeasonsPlayed!==undefined) collegeSeasonsPlayed=d.collegeSeasonsPlayed;
+  if(d.currentWeek!==undefined) currentWeek=d.currentWeek;
   showScreen("screenGame");
   updateUI();
   showToast("Game loaded!","success");
 }
 
 function saveAutoSlot(){
-  let data = {player,attributes,teams,careerStage,age,gamesPlayed,seasonsPlayed,lastOutcome,injury,steroidUse,difficulty,eventFeed,physique,collegeSeasonsPlayed};
+  let data = {player,attributes,teams,careerStage,age,gamesPlayed,seasonsPlayed,lastOutcome,injury,steroidUse,difficulty,eventFeed,physique,collegeSeasonsPlayed,currentWeek};
   localStorage.setItem("bls_auto", JSON.stringify(data));
 }
 
@@ -2470,6 +2768,7 @@ function updateUI(){
 
   renderFeed();
   renderSaveSlots();
+  updateSeasonProgress();
 }
 
 // ===================== GAME START =====================
@@ -2493,7 +2792,7 @@ function startGame(){
   clampAttrs();
 
   careerStage = "Little League";
-  age = 8; gamesPlayed = 0; seasonsPlayed = 0; collegeSeasonsPlayed = 0;
+  age = 8; gamesPlayed = 0; seasonsPlayed = 0; collegeSeasonsPlayed = 0; currentWeek = 1;
   injury = {active:false,name:"",weeksRemaining:0};
   steroidUse = {used:false,suspensions:0};
   lastOutcome = "Career begins.";
