@@ -1,0 +1,2519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Baseball Life Simulator</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d1117;
+  --surface: #161b22;
+  --surface2: #1e2a3a;
+  --card: #1a2332;
+  --border: rgba(99,179,237,0.12);
+  --ink: #e2eaf4;
+  --muted: #7a8fa6;
+  --accent: #e6a020;
+  --accent2: #3b9eff;
+  --green: #22c55e;
+  --red: #ef4444;
+  --gold: #f59e0b;
+  --shadow: 0 8px 32px rgba(0,0,0,0.5);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: '';
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(59,158,255,0.07), transparent),
+              radial-gradient(ellipse 60% 40% at 90% 80%, rgba(230,160,32,0.05), transparent);
+}
+
+/* LAYOUT */
+.app { position: relative; z-index: 1; }
+
+/* HEADER */
+.header {
+  background: linear-gradient(135deg, #0a1628 0%, #0f2040 50%, #0a1628 100%);
+  border-bottom: 1px solid var(--border);
+  padding: 18px 28px;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  position: sticky; top: 0; z-index: 50;
+  backdrop-filter: blur(20px);
+}
+.header-brand {
+  display: flex; align-items: center; gap: 12px;
+}
+.logo-ball {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff8f0, #e8c97a, #c8800a);
+  box-shadow: 0 0 16px rgba(230,160,32,0.35);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 18px; flex-shrink: 0;
+}
+.header-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem; font-weight: 900; letter-spacing: -0.02em;
+  background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+}
+.header-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.pill {
+  padding: 4px 12px; border-radius: 999px; font-size: 0.75rem; font-weight: 600;
+  background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+  color: var(--muted);
+}
+.pill.active { background: rgba(230,160,32,0.15); border-color: rgba(230,160,32,0.3); color: var(--accent); }
+
+/* SCREENS */
+.screen { display: none; }
+.screen.active { display: block; }
+
+/* ======= START SCREEN ======= */
+.start-hero {
+  max-width: 900px; margin: 0 auto;
+  padding: 60px 24px 40px;
+  text-align: center;
+}
+.start-hero h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+  font-weight: 900; line-height: 0.92;
+  letter-spacing: -0.04em;
+  background: linear-gradient(160deg, #fff 20%, #e2eaf4 50%, var(--accent) 100%);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  margin-bottom: 16px;
+}
+.start-hero p {
+  color: var(--muted); font-size: 1.1rem; line-height: 1.6; max-width: 520px; margin: 0 auto 40px;
+}
+
+.creation-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 760px; margin: 0 auto 28px;
+}
+.creation-section {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 20px; padding: 24px;
+  text-align: left;
+}
+.creation-section h3 {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 16px;
+}
+.field-group { display: flex; flex-direction: column; gap: 12px; }
+label { font-size: 0.82rem; color: var(--muted); font-weight: 500; margin-bottom: 4px; display: block; }
+input, select {
+  width: 100%; padding: 10px 14px;
+  background: rgba(255,255,255,0.04); border: 1px solid var(--border);
+  border-radius: 10px; color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
+  outline: none; transition: border-color 0.2s;
+}
+input:focus, select:focus { border-color: var(--accent2); }
+select option { background: #1a2332; }
+
+.archetype-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.arch-btn {
+  padding: 8px 6px; border-radius: 10px; border: 1px solid var(--border);
+  background: rgba(255,255,255,0.03); color: var(--muted); font-size: 0.8rem;
+  cursor: pointer; transition: all 0.2s; text-align: center;
+}
+.arch-btn:hover { border-color: var(--accent); color: var(--ink); }
+.arch-btn.selected { border-color: var(--accent); background: rgba(230,160,32,0.12); color: var(--accent); }
+
+.start-btn {
+  display: inline-flex; align-items: center; gap: 10px;
+  padding: 16px 48px; border-radius: 999px;
+  background: linear-gradient(135deg, var(--accent), #c87010);
+  border: none; cursor: pointer; color: #0d1117;
+  font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 700;
+  box-shadow: 0 0 40px rgba(230,160,32,0.3);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.start-btn:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(230,160,32,0.45); }
+
+/* ======= GAME SCREEN ======= */
+.game-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr 300px;
+  min-height: calc(100vh - 65px);
+}
+
+/* Sidebar left */
+.sidebar-left {
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 20px 16px;
+  display: flex; flex-direction: column; gap: 14px;
+  overflow-y: auto;
+}
+.player-badge {
+  background: linear-gradient(135deg, var(--surface2), var(--card));
+  border: 1px solid var(--border); border-radius: 16px; padding: 18px;
+  text-align: center;
+}
+.player-badge .number {
+  font-family: 'Playfair Display', serif;
+  font-size: 3.5rem; font-weight: 900; line-height: 1;
+  color: var(--accent); opacity: 0.15;
+  position: absolute; right: 14px; top: 8px;
+}
+.player-badge-name { font-size: 1.1rem; font-weight: 700; }
+.player-badge-sub { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+.badge-tags { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 10px; }
+.tag { padding: 3px 9px; border-radius: 999px; font-size: 0.7rem; font-weight: 600; background: rgba(59,158,255,0.1); border: 1px solid rgba(59,158,255,0.2); color: var(--accent2); }
+.tag.gold { background: rgba(230,160,32,0.1); border-color: rgba(230,160,32,0.25); color: var(--accent); }
+.tag.red { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.25); color: var(--red); }
+
+.stat-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+.stat-row:last-child { border-bottom: none; }
+.stat-row .label { color: var(--muted); }
+.stat-row .val { font-weight: 700; }
+
+.attr-bar-item { margin-bottom: 10px; }
+.attr-bar-header { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px; }
+.attr-bar-header .name { color: var(--muted); }
+.attr-bar-track { height: 6px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; }
+.attr-bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent2), var(--accent)); transition: width 0.5s ease; }
+
+.sidebar-section-title {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); padding: 4px 0;
+}
+.sidebar-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
+
+.xp-bar-track { height: 8px; background: rgba(255,255,255,0.06); border-radius: 999px; margin-top: 8px; }
+.xp-bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #8b5cf6, #ec4899); transition: width 0.5s ease; }
+
+/* Main area */
+.main-area { padding: 20px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
+
+.spotlight {
+  border-radius: 20px; padding: 28px 28px 24px;
+  position: relative; overflow: hidden;
+  background: linear-gradient(135deg, #0f2040, #1a3060);
+  border: 1px solid rgba(59,158,255,0.15);
+  min-height: 130px;
+}
+.spotlight::before {
+  content: '⚾';
+  position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+  font-size: 5rem; opacity: 0.06; pointer-events: none;
+}
+.spotlight.success { background: linear-gradient(135deg, #082015, #0d3520); border-color: rgba(34,197,94,0.2); }
+.spotlight.warning { background: linear-gradient(135deg, #201008, #3d1a08); border-color: rgba(239,68,68,0.2); }
+.spotlight-label {
+  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--accent2); margin-bottom: 8px;
+}
+.spotlight.success .spotlight-label { color: var(--green); }
+.spotlight.warning .spotlight-label { color: var(--red); }
+.spotlight-title { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem,3vw,2rem); font-weight: 700; margin-bottom: 8px; }
+.spotlight-text { color: var(--muted); font-size: 0.92rem; line-height: 1.5; max-width: 50ch; }
+
+/* Tab nav */
+.tab-nav { display: flex; gap: 6px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 6px; }
+.tab-btn {
+  flex: 1; padding: 9px 12px; border-radius: 10px; border: none; cursor: pointer;
+  background: transparent; color: var(--muted);
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600;
+  transition: all 0.2s;
+}
+.tab-btn.active { background: var(--surface2); color: var(--ink); }
+
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* Action buttons */
+.actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.action-btn {
+  padding: 12px 10px; border-radius: 12px; border: 1px solid var(--border);
+  background: var(--card); color: var(--ink);
+  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600;
+  cursor: pointer; transition: all 0.2s; text-align: center;
+}
+.action-btn:hover { border-color: var(--accent); background: rgba(230,160,32,0.08); }
+.action-btn:disabled { opacity: 0.35; pointer-events: none; }
+.action-btn.primary { background: linear-gradient(135deg, var(--accent), #c87010); border-color: transparent; color: #0d1117; }
+.action-btn.primary:hover { transform: translateY(-1px); }
+.action-btn.blue { background: rgba(59,158,255,0.1); border-color: rgba(59,158,255,0.25); color: var(--accent2); }
+.action-btn.blue:hover { background: rgba(59,158,255,0.2); }
+
+/* Data table */
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.data-table th { padding: 8px 12px; text-align: left; color: var(--muted); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+.data-table td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); }
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+/* Mini stat cards */
+.mini-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+.mini-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; text-align: center; }
+.mini-card .mv { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; }
+.mini-card .mk { font-size: 0.72rem; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+/* Sidebar right (feed) */
+.sidebar-right {
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  padding: 20px 16px;
+  display: flex; flex-direction: column; gap: 14px;
+  overflow-y: auto;
+}
+.feed-list { display: flex; flex-direction: column; gap: 8px; }
+.feed-item {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 11px 13px; animation: slideInFeed 0.3s ease;
+}
+.feed-item.success { border-color: rgba(34,197,94,0.2); }
+.feed-item.warning { border-color: rgba(239,68,68,0.2); }
+.feed-item strong { display: block; font-size: 0.82rem; margin-bottom: 3px; }
+.feed-item span { font-size: 0.77rem; color: var(--muted); line-height: 1.4; }
+
+@keyframes slideInFeed { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: translateX(0); } }
+
+/* Finance */
+.finance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.finance-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
+.finance-card h4 { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+.finance-value { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; }
+.finance-value.green { color: var(--green); }
+.finance-value.gold { color: var(--gold); }
+
+/* Standings */
+.standing-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; }
+.standing-row.player-team { background: rgba(230,160,32,0.08); border: 1px solid rgba(230,160,32,0.15); }
+.standing-rank { width: 20px; color: var(--muted); font-size: 0.8rem; }
+.standing-name { flex: 1; font-weight: 600; }
+.standing-record { color: var(--muted); font-size: 0.8rem; }
+
+/* Career history */
+.career-history-item {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px; margin-bottom: 8px; font-size: 0.85rem;
+}
+
+/* Choices modal */
+.choices-area {
+  background: var(--card); border: 1px solid rgba(230,160,32,0.25);
+  border-radius: 16px; padding: 18px; margin-top: 4px;
+}
+.choices-area h3 { font-size: 0.85rem; color: var(--accent); margin-bottom: 12px; }
+.choices-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* Toast */
+.toast-wrap { position: fixed; bottom: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
+.toast {
+  padding: 12px 18px; border-radius: 14px;
+  background: rgba(26,35,50,0.95); border: 1px solid var(--border);
+  backdrop-filter: blur(16px); color: var(--ink); font-size: 0.88rem; font-weight: 600;
+  box-shadow: var(--shadow);
+  opacity: 0; transform: translateY(10px);
+  transition: opacity 0.25s, transform 0.25s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0); }
+.toast.success { border-color: rgba(34,197,94,0.3); color: var(--green); }
+.toast.warning { border-color: rgba(239,68,68,0.3); color: var(--red); }
+
+/* Progress ring */
+.progress-ring { position: relative; width: 72px; height: 72px; flex-shrink: 0; }
+.progress-ring svg { transform: rotate(-90deg); }
+.progress-ring .pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; }
+
+/* Save slots */
+.save-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+.save-slot { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; }
+.save-slot:hover { border-color: var(--accent2); }
+.save-slot .slot-label { color: var(--muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.save-slot .slot-data { font-weight: 700; font-size: 0.9rem; }
+
+/* Height/weight display */
+.physique-bar { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+.height-visual { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.height-block { width: 10px; border-radius: 2px; background: rgba(255,255,255,0.08); }
+.height-block.filled { background: linear-gradient(180deg, var(--accent2), var(--accent)); }
+.growth-indicator { font-size: 0.7rem; color: var(--green); font-weight: 700; }
+
+/* High School Modal Overlay */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(0,0,0,0.82);
+  backdrop-filter: blur(8px);
+  display: flex; align-items: center; justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.25s ease;
+}
+.modal-overlay.hidden { display: none; }
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+.hs-modal {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 28px;
+  padding: 32px;
+  max-width: 780px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 32px 80px rgba(0,0,0,0.7);
+  animation: slideUp 0.3s ease;
+}
+@keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+.hs-modal-header { margin-bottom: 20px; }
+.hs-modal-header h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; margin-bottom: 6px; }
+.hs-modal-header p { color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
+
+.hs-loading { text-align: center; padding: 40px 0; }
+.hs-loading .spin { font-size: 2rem; display: inline-block; animation: spin 1s linear infinite; }
+@keyframes spin { to { transform: rotate(360deg); } }
+.hs-loading p { color: var(--muted); margin-top: 12px; }
+
+.hs-options { display: flex; flex-direction: column; gap: 14px; }
+
+.hs-card {
+  background: var(--card);
+  border: 2px solid var(--border);
+  border-radius: 18px;
+  padding: 20px;
+  cursor: pointer;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+.hs-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+.hs-card.selected { border-color: var(--accent); background: rgba(230,160,32,0.06); }
+.hs-card.private { border-color: rgba(230,160,32,0.3); }
+.hs-card.scholarship { border-color: rgba(34,197,94,0.35); }
+.hs-card.private::before {
+  content: '⭐ PRIVATE'; position: absolute; top: 12px; right: 14px;
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em;
+  color: var(--accent); background: rgba(230,160,32,0.12); padding: 3px 8px; border-radius: 999px;
+}
+.hs-card.scholarship::before {
+  content: '🎓 SCHOLARSHIP'; position: absolute; top: 12px; right: 14px;
+  font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em;
+  color: var(--green); background: rgba(34,197,94,0.1); padding: 3px 8px; border-radius: 999px;
+}
+.hs-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; padding-right: 100px; }
+.hs-card .hs-meta { font-size: 0.78rem; color: var(--muted); margin-bottom: 10px; }
+.hs-card .hs-desc { font-size: 0.85rem; line-height: 1.5; color: var(--ink); opacity: 0.85; }
+.hs-card .hs-bonuses {
+  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px;
+}
+.hs-bonus {
+  padding: 3px 10px; border-radius: 999px; font-size: 0.72rem; font-weight: 700;
+  background: rgba(59,158,255,0.1); border: 1px solid rgba(59,158,255,0.2); color: var(--accent2);
+}
+.hs-bonus.green { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.2); color: var(--green); }
+.hs-bonus.gold { background: rgba(230,160,32,0.1); border-color: rgba(230,160,32,0.2); color: var(--accent); }
+
+.hs-modal-footer { margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px; }
+
+/* ---- College Recruitment Modal ---- */
+.college-modal { max-width: 900px; }
+
+.offer-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 4px 12px; border-radius: 999px; font-size: 0.7rem; font-weight: 800;
+  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px;
+}
+.offer-badge.full-ride { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.35); color: var(--gold); }
+.offer-badge.partial   { background: rgba(59,158,255,0.12); border: 1px solid rgba(59,158,255,0.3); color: var(--accent2); }
+.offer-badge.walk-on   { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); }
+.offer-badge.nil       { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3); color: var(--green); }
+
+.college-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media(max-width:640px){ .college-grid { grid-template-columns: 1fr; } }
+
+.college-card {
+  background: var(--card); border: 2px solid var(--border); border-radius: 18px;
+  padding: 18px; cursor: pointer; transition: all 0.2s; position: relative;
+}
+.college-card:hover { border-color: var(--accent2); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,0.4); }
+.college-card.selected { border-color: var(--accent); background: rgba(230,160,32,0.06); }
+
+.college-card .school-colors {
+  width: 100%; height: 5px; border-radius: 999px; margin-bottom: 14px;
+}
+.college-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 3px; }
+.college-card .conf { font-size: 0.75rem; color: var(--muted); margin-bottom: 10px; }
+.college-card .school-desc { font-size: 0.83rem; line-height: 1.5; margin-bottom: 10px; }
+.college-card .nil-row {
+  display: flex; align-items: center; gap: 8px; margin-top: 10px;
+  padding-top: 10px; border-top: 1px solid var(--border);
+  font-size: 0.8rem;
+}
+.nil-amount { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--green); }
+
+/* ---- MLB Draft Modal ---- */
+.draft-modal { max-width: 860px; }
+
+.draft-header-band {
+  background: linear-gradient(135deg, #0a1628, #1a3060);
+  border-radius: 16px; padding: 20px 24px; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 20px;
+  border: 1px solid rgba(59,158,255,0.2);
+}
+.draft-round-badge {
+  min-width: 80px; height: 80px; border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #c87010);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  flex-shrink: 0; box-shadow: 0 0 30px rgba(230,160,32,0.35);
+}
+.draft-round-badge .round-num { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: #0d1117; line-height: 1; }
+.draft-round-badge .round-lbl { font-size: 0.6rem; font-weight: 800; color: rgba(13,17,23,0.7); text-transform: uppercase; letter-spacing: 0.05em; }
+
+.draft-header-band h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; margin-bottom: 4px; }
+.draft-header-band p { color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+
+.draft-team-card {
+  background: var(--card); border: 2px solid var(--border); border-radius: 18px;
+  padding: 20px; margin-bottom: 14px;
+}
+.draft-team-card .team-row {
+  display: flex; align-items: center; gap: 16px; margin-bottom: 14px;
+}
+.team-logo-circle {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; flex-shrink: 0;
+  border: 2px solid var(--border);
+}
+.draft-team-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 2px; }
+.draft-team-card .team-meta { font-size: 0.78rem; color: var(--muted); }
+
+.offer-breakdown {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 14px;
+}
+.offer-stat { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; }
+.offer-stat .ov { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; }
+.offer-stat .ok { font-size: 0.7rem; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.06em; }
+
+.draft-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+
+.negotiate-panel {
+  background: rgba(230,160,32,0.06); border: 1px solid rgba(230,160,32,0.2);
+  border-radius: 14px; padding: 16px; margin-top: 14px; display: none;
+}
+.negotiate-panel h4 { font-size: 0.85rem; color: var(--accent); margin-bottom: 10px; }
+
+.draft-vs-college {
+  background: var(--surface2); border: 1px solid var(--border); border-radius: 16px;
+  padding: 18px; margin-top: 14px;
+}
+.draft-vs-college h4 { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+.vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.vs-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
+  padding: 14px; cursor: pointer; transition: all 0.2s;
+}
+.vs-card:hover { border-color: var(--accent); }
+.vs-card h5 { font-size: 0.92rem; font-weight: 700; margin-bottom: 6px; }
+.vs-card ul { padding-left: 16px; font-size: 0.8rem; color: var(--muted); line-height: 1.7; }
+
+/* Retirement screen */
+.retire-screen { max-width: 720px; margin: 60px auto; padding: 0 24px; text-align: center; }
+.trophy { font-size: 5rem; margin-bottom: 16px; display: block; }
+.hof-card { background: linear-gradient(135deg, #1a2c10, #2a4818); border: 1px solid rgba(34,197,94,0.2); border-radius: 24px; padding: 32px; margin-top: 24px; }
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .game-layout { grid-template-columns: 240px 1fr; }
+  .sidebar-right { display: none; }
+}
+@media (max-width: 760px) {
+  .game-layout { grid-template-columns: 1fr; }
+  .sidebar-left { display: none; }
+  .creation-grid { grid-template-columns: 1fr; }
+  .mini-stats { grid-template-columns: 1fr 1fr; }
+}
+
+/* Panel */
+.panel-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 20px; }
+.panel-card h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 14px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- HEADER -->
+<header class="header">
+  <div class="header-brand">
+    <div class="logo-ball">⚾</div>
+    <span class="header-title">Baseball Life Sim</span>
+  </div>
+  <div class="header-pills">
+    <span class="pill active" id="pillStage">Little League</span>
+    <span class="pill" id="pillAge">Age 8</span>
+    <span class="pill" id="pillMoney">$0</span>
+    <span class="pill" id="pillStatus">Healthy</span>
+  </div>
+</header>
+
+<!-- TOAST -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<!-- START SCREEN -->
+<div class="screen active" id="screenStart">
+  <div class="start-hero">
+    <h1>Baseball<br>Life Simulator</h1>
+    <p>Build a player from Little League to the Pros. Manage your game, your grades, your money, and your legacy.</p>
+
+    <div class="creation-grid">
+      <div class="creation-section">
+        <h3>Your Player</h3>
+        <div class="field-group">
+          <div>
+            <label>Name</label>
+            <input id="inputName" placeholder="Jordan Cruz">
+          </div>
+          <div>
+            <label>Hometown</label>
+            <input id="inputTown" placeholder="Austin, Texas">
+          </div>
+          <div>
+            <label>Position</label>
+            <select id="inputPos">
+              <option value="P">Pitcher (P)</option>
+              <option value="C">Catcher (C)</option>
+              <option value="1B">First Base (1B)</option>
+              <option value="2B">Second Base (2B)</option>
+              <option value="3B">Third Base (3B)</option>
+              <option value="SS">Shortstop (SS)</option>
+              <option value="LF">Left Field (LF)</option>
+              <option value="CF">Center Field (CF)</option>
+              <option value="RF">Right Field (RF)</option>
+            </select>
+          </div>
+          <div>
+            <label>Jersey Number</label>
+            <input id="inputNum" placeholder="21" type="number" min="1" max="99">
+          </div>
+          <div>
+            <label>Difficulty</label>
+            <select id="inputDiff">
+              <option value="Easy">Easy</option>
+              <option value="Normal" selected>Normal</option>
+              <option value="Hard">Hard</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="creation-section">
+        <h3>Archetype</h3>
+        <div class="archetype-grid" id="archetypeGrid">
+          <button class="arch-btn selected" data-arch="athletic" onclick="selectArch(this)">⚡ Athletic<br><small>+Speed +Field</small></button>
+          <button class="arch-btn" data-arch="power" onclick="selectArch(this)">💪 Power Hitter<br><small>+Power -Speed</small></button>
+          <button class="arch-btn" data-arch="contact" onclick="selectArch(this)">🎯 Contact<br><small>+Contact +Field</small></button>
+          <button class="arch-btn" data-arch="pitcher" onclick="selectArch(this)">🔥 Ace Pitcher<br><small>+Control +Arm</small></button>
+          <button class="arch-btn" data-arch="star" onclick="selectArch(this)">⭐ Born Star<br><small>+All Stats</small></button>
+          <button class="arch-btn" data-arch="scrappy" onclick="selectArch(this)">😤 Scrappy<br><small>+Contact +Hustle</small></button>
+        </div>
+        <div style="margin-top:14px;">
+          <label>Family Background</label>
+          <select id="inputParents">
+            <option value="wealthy">Wealthy Family — +$50k, +Contact</option>
+            <option value="middle" selected>Middle Class — +$10k</option>
+            <option value="poor">Poor — +Power, +Speed</option>
+            <option value="sports">Sports Family — +Contact, +Fielding</option>
+            <option value="strict">Strict Parents — +Contact</option>
+            <option value="absent">Absent Parents — +Power, -Contact</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;">
+      <button class="start-btn" onclick="startGame()">⚾ Start Career</button>
+      <button class="action-btn blue" onclick="loadGameSlot(1)" style="padding:14px 24px;border-radius:999px;">Load Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- GAME SCREEN -->
+<div class="screen" id="screenGame">
+  <div class="game-layout">
+
+    <!-- Sidebar Left -->
+    <aside class="sidebar-left">
+      <div class="player-badge" style="position:relative;">
+        <div class="number" id="badgeNumber">21</div>
+        <div class="player-badge-name" id="badgeName">Player</div>
+        <div class="player-badge-sub" id="badgeSub">Shortstop • Little League</div>
+        <div class="badge-tags" id="badgeTags"></div>
+      </div>
+
+      <div>
+        <div class="sidebar-section-title">Physique</div>
+        <div class="sidebar-card">
+          <div class="stat-row"><span class="label">Height</span><span class="val" id="sHeight">4'2"</span></div>
+          <div class="stat-row"><span class="label">Weight</span><span class="val" id="sWeight">75 lbs</span></div>
+          <div class="stat-row"><span class="label">Build</span><span class="val" id="sBuild">Child</span></div>
+          <div style="margin-top:8px;" id="growthNote"></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="sidebar-section-title">Current Season Stats</div>
+        <div class="sidebar-card">
+          <div class="stat-row"><span class="label">AVG</span><span class="val" id="sAVG">.000</span></div>
+          <div class="stat-row"><span class="label">OPS</span><span class="val" id="sOPS">.000</span></div>
+          <div class="stat-row"><span class="label">HR</span><span class="val" id="sHR">0</span></div>
+          <div class="stat-row"><span class="label">RBI</span><span class="val" id="sRBI">0</span></div>
+          <div class="stat-row"><span class="label">SO</span><span class="val" id="sSO">0</span></div>
+          <div class="stat-row"><span class="label">AB</span><span class="val" id="sAB">0</span></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="sidebar-section-title">Attributes</div>
+        <div class="sidebar-card" id="attrBars"></div>
+      </div>
+
+      <div>
+        <div class="sidebar-section-title">Level Progress</div>
+        <div class="sidebar-card">
+          <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:6px;">
+            <span>Level <span id="sLevel">1</span></span>
+            <span style="color:var(--muted)"><span id="sXP">0</span> / <span id="sXPMax">100</span> XP</span>
+          </div>
+          <div class="xp-bar-track"><div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div></div>
+        </div>
+      </div>
+
+      <div>
+        <div class="sidebar-section-title">School & Life</div>
+        <div class="sidebar-card">
+          <div class="stat-row"><span class="label">GPA</span><span class="val" id="sGPA">2.5</span></div>
+          <div class="stat-row"><span class="label">Eligible</span><span class="val" id="sEligible">✅ Yes</span></div>
+          <div class="stat-row"><span class="label">Popularity</span><span class="val" id="sPop">50</span></div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main-area">
+      <!-- Spotlight -->
+      <div class="spotlight" id="spotlight">
+        <div class="spotlight-label" id="spotLabel">Opening Day</div>
+        <h2 class="spotlight-title" id="spotTitle">Your baseball story starts here.</h2>
+        <p class="spotlight-text" id="spotText">Step onto the field and build your legacy one season at a time.</p>
+      </div>
+
+      <!-- Mini stats -->
+      <div class="mini-stats">
+        <div class="mini-card"><div class="mv" id="mStage">LL</div><div class="mk">Stage</div></div>
+        <div class="mini-card"><div class="mv" id="mAge">8</div><div class="mk">Age</div></div>
+        <div class="mini-card"><div class="mv" id="mGames">0</div><div class="mk">Games</div></div>
+        <div class="mini-card"><div class="mv" id="mSeasons">0</div><div class="mk">Seasons</div></div>
+      </div>
+
+      <!-- Tab nav -->
+      <div class="tab-nav">
+        <button class="tab-btn active" onclick="showTab('tabPlay')">⚾ Play</button>
+        <button class="tab-btn" onclick="showTab('tabFinance')">💰 Finance</button>
+        <button class="tab-btn" onclick="showTab('tabLeague')">🏟 League</button>
+        <button class="tab-btn" onclick="showTab('tabCareer')">📋 Career</button>
+        <button class="tab-btn" onclick="showTab('tabSave')">💾 Save</button>
+      </div>
+
+      <!-- TAB: Play -->
+      <div class="tab-content active" id="tabPlay">
+        <div class="panel-card">
+          <h3>Actions</h3>
+          <div class="actions-grid">
+            <button class="action-btn primary" onclick="playGame()">▶ Play Game</button>
+            <button class="action-btn" onclick="practiceSession()">🏋 Practice</button>
+            <button class="action-btn" onclick="advanceCareer()">📈 Advance Career</button>
+            <button class="action-btn" onclick="endSeason()">🗓 End Season</button>
+            <button class="action-btn blue" onclick="signContract()">✍ Sign Contract</button>
+            <button class="action-btn" onclick="retire()" style="color:var(--muted);">🏁 Retire</button>
+          </div>
+        </div>
+        <div class="choices-area hidden" id="choicesArea">
+          <h3>🚨 Decision Required</h3>
+          <div class="choices-btns" id="choicesBtns"></div>
+        </div>
+      </div>
+
+      <!-- TAB: Finance -->
+      <div class="tab-content" id="tabFinance">
+        <div class="finance-grid">
+          <div class="finance-card"><h4>Cash</h4><div class="finance-value green" id="fCash">$0</div></div>
+          <div class="finance-card"><h4>Salary / yr</h4><div class="finance-value" id="fSalary">$0</div></div>
+          <div class="finance-card"><h4>Investments</h4><div class="finance-value gold" id="fInv">$0</div></div>
+          <div class="finance-card"><h4>Real Estate</h4><div class="finance-value gold" id="fRE">$0</div></div>
+          <div class="finance-card"><h4>Gold</h4><div class="finance-value" id="fGold">$0</div></div>
+          <div class="finance-card"><h4>Bitcoin</h4><div class="finance-value" id="fBTC">$0</div></div>
+        </div>
+        <div class="panel-card">
+          <h3>Invest Money</h3>
+          <div class="actions-grid">
+            <button class="action-btn blue" onclick="invest('investments')">📈 S&P 500 (50%)</button>
+            <button class="action-btn blue" onclick="invest('realEstate')">🏠 Real Estate (50%)</button>
+            <button class="action-btn blue" onclick="invest('gold')">🥇 Gold (50%)</button>
+            <button class="action-btn blue" onclick="invest('bitcoin')">₿ Bitcoin (50%)</button>
+            <button class="action-btn" onclick="sellAsset('investments')">Sell Investments</button>
+            <button class="action-btn" onclick="sellAsset('realEstate')">Sell Real Estate</button>
+            <button class="action-btn" onclick="sellAsset('gold')">Sell Gold</button>
+            <button class="action-btn" onclick="sellAsset('bitcoin')">Sell Bitcoin</button>
+          </div>
+          <div style="margin-top:14px;">
+            <label>Lifestyle</label>
+            <select id="lifestyleSelect" onchange="setLifestyle(this.value)" style="max-width:200px;">
+              <option value="Budget">Budget ($20k/yr)</option>
+              <option value="Normal" selected>Normal ($50k/yr)</option>
+              <option value="Luxury">Luxury ($200k/yr)</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB: League -->
+      <div class="tab-content" id="tabLeague">
+        <div class="panel-card" style="margin-bottom:14px;">
+          <h3>Standings</h3>
+          <div id="standingsDiv"></div>
+        </div>
+        <div class="panel-card">
+          <h3>League Leaders</h3>
+          <table class="data-table" id="leadersTable">
+            <thead><tr><th>Category</th><th>Player</th><th>Value</th></tr></thead>
+            <tbody id="leadersTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- TAB: Career -->
+      <div class="tab-content" id="tabCareer">
+        <div class="panel-card">
+          <h3>Career History</h3>
+          <div id="careerHistoryDiv"></div>
+        </div>
+      </div>
+
+      <!-- TAB: Save -->
+      <div class="tab-content" id="tabSave">
+        <div class="panel-card">
+          <h3>Save Slots</h3>
+          <div class="save-grid" id="saveGrid"></div>
+          <p style="font-size:0.8rem;color:var(--muted);margin-top:12px;">Auto-saved on season end.</p>
+        </div>
+      </div>
+    </main>
+
+    <!-- Sidebar Right - Feed -->
+    <aside class="sidebar-right">
+      <div class="sidebar-section-title">Career Feed</div>
+      <div class="feed-list" id="feedList">
+        <p style="font-size:0.82rem;color:var(--muted);">Play a game to start building your story.</p>
+      </div>
+    </aside>
+
+  </div>
+</div>
+
+<!-- HIGH SCHOOL SELECTION MODAL -->
+<div class="modal-overlay hidden" id="hsModal">
+  <div class="hs-modal">
+    <div class="hs-modal-header">
+      <h2>🏫 Choose Your High School</h2>
+      <p id="hsModalSubtitle">Your Little League career has opened some doors. Pick the right school to shape the next chapter.</p>
+    </div>
+    <div id="hsModalBody">
+      <div class="hs-loading">
+        <span class="spin">⚾</span>
+        <p>Scouting schools near <span id="hsLoadingCity">your hometown</span>…</p>
+      </div>
+    </div>
+    <div class="hs-modal-footer">
+      <button class="action-btn" onclick="skipHSChoice()" style="color:var(--muted);">Decide Later</button>
+    </div>
+  </div>
+</div>
+
+<!-- COLLEGE RECRUITMENT MODAL -->
+<div class="modal-overlay hidden" id="collegeModal">
+  <div class="hs-modal college-modal">
+    <div class="hs-modal-header">
+      <h2>🎓 College Scholarship Offers</h2>
+      <p id="collegeModalSubtitle">Your high school career has attracted attention from college programs. Choose where to take your game next.</p>
+    </div>
+    <div id="collegeModalBody">
+      <div class="hs-loading">
+        <span class="spin">⚾</span>
+        <p>Loading scholarship offers near <span id="collegeLoadingCity">your hometown</span>…</p>
+      </div>
+    </div>
+    <div class="hs-modal-footer">
+      <button class="action-btn" onclick="skipCollegeChoice()" style="color:var(--muted);">Decide Later</button>
+    </div>
+  </div>
+</div>
+
+<!-- MLB DRAFT MODAL -->
+<div class="modal-overlay hidden" id="draftModal">
+  <div class="hs-modal draft-modal">
+    <div id="draftModalBody">
+      <div class="hs-loading">
+        <span class="spin">⚾</span>
+        <p>MLB Draft in progress…</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RETIREMENT SCREEN -->
+<div class="screen" id="screenRetire">
+  <div class="retire-screen">
+    <span class="trophy">🏆</span>
+    <h1 style="font-family:'Playfair Display',serif;font-size:3rem;font-weight:900;margin-bottom:12px;">Career Complete</h1>
+    <p style="color:var(--muted);font-size:1.1rem;margin-bottom:24px;">Your baseball journey has ended. Here's the final record.</p>
+    <div class="hof-card" id="retireStats"></div>
+    <div style="margin-top:24px;display:flex;gap:12px;justify-content:center;">
+      <button class="start-btn" onclick="newGame()">Play Again</button>
+    </div>
+  </div>
+</div>
+
+</div><!-- .app -->
+
+<script>
+// ===================== STATE =====================
+let player = null;
+let attributes = {};
+let teams = [];
+let commentary = [];
+let eventFeed = [];
+let difficulty = "Normal";
+
+const STAGES = ["Little League","High School","College","Single-A","Double-A","Triple-A","MLB"];
+const STAGE_CAPS = {"Little League":30,"High School":40,"College":56,"Single-A":140,"Double-A":140,"Triple-A":140,"MLB":162};
+const STAGE_AGES = {"Little League":8,"High School":14,"College":18,"Single-A":19,"Double-A":21,"Triple-A":23,"MLB":25};
+let collegeSeasonsPlayed = 0; // track 4-season college arc
+
+let careerStage = "Little League";
+let age = 8;
+let gamesPlayed = 0;
+let seasonsPlayed = 0;
+let lastOutcome = "";
+let injury = {active:false,name:"",weeksRemaining:0};
+let steroidUse = {used:false,suspensions:0};
+let selectedArch = "athletic";
+
+const INJURIES = [
+  {name:"Hamstring Strain",weeks:3},
+  {name:"Rotator Cuff",weeks:8},
+  {name:"Ankle Sprain",weeks:4},
+  {name:"Elbow Tendonitis",weeks:6},
+  {name:"Concussion",weeks:2},
+  {name:"Back Spasm",weeks:3},
+  {name:"Knee Contusion",weeks:2},
+];
+
+const FIRST_NAMES = ["Jake","Mike","Chris","Alex","Ryan","Tyler","Jordan","Logan","Ethan","Noah","Brandon","Marcus","Donte","Luis","Carlos","Jaylen","Isaiah"];
+const LAST_NAMES = ["Smith","Johnson","Martinez","Brown","Davis","Wilson","Moore","Taylor","Anderson","Thomas","Jackson","Garcia","Harris","Rivera","Lee"];
+
+function rndName(){ return FIRST_NAMES[~~(Math.random()*FIRST_NAMES.length)]+" "+LAST_NAMES[~~(Math.random()*LAST_NAMES.length)]; }
+
+// ===================== PLAYER FACTORY =====================
+function createPlayer(){
+  return {
+    name:"", town:"", position:"SS", number:21,
+    archetype:"athletic", parents:"middle",
+    personality:[], rivalry:null,
+    stats:{AB:0,H:0,HR:0,RBI:0,SO:0,AVG:0,OBP:0,SLG:0,OPS:0},
+    career:[],
+    money:0, salary:0, contract:0,
+    investments:0, realEstate:0, gold:0, bitcoin:0,
+    costBasis:{investments:0,realEstate:0,gold:0,bitcoin:0},
+    grades:70, popularity:50, eligibility:true,
+    xp:0, levelTier:1,
+    lifestyle:"Normal",
+    mediaRep:"Prospect",
+  };
+}
+
+function createAttrs(){
+  return {contact:50,power:50,speed:50,fielding:50,arm:50,control:50};
+}
+
+// ===================== ARCHETYPES =====================
+const ARCHETYPES = {
+  athletic:   {contact:0,power:0,speed:10,fielding:5,arm:0,control:0},
+  power:      {contact:-5,power:15,speed:-10,fielding:-5,arm:5,control:0},
+  contact:    {contact:12,power:-5,speed:3,fielding:8,arm:0,control:0},
+  pitcher:    {contact:-5,power:-5,speed:0,fielding:5,arm:10,control:15},
+  star:       {contact:8,power:8,speed:6,fielding:5,arm:5,control:4},
+  scrappy:    {contact:10,power:-5,speed:8,fielding:5,arm:0,control:0},
+};
+
+const PARENTS_EFFECTS = {
+  wealthy:  {money:50000, attrs:{contact:5}},
+  middle:   {money:10000, attrs:{}},
+  poor:     {money:0,     attrs:{power:5,speed:5}},
+  sports:   {money:5000,  attrs:{contact:8,fielding:5}},
+  strict:   {money:5000,  attrs:{contact:6}},
+  absent:   {money:0,     attrs:{power:5,contact:-5}},
+};
+
+const PERSONALITY_MAP = {wealthy:"confident",poor:"hardworking",sports:"disciplined",strict:"focused",absent:"independent",overbearing:"anxious"};
+
+function applyArchetype(a){
+  let d = ARCHETYPES[a]||{};
+  for(let k in d) attributes[k] = Math.max(20,Math.min(99, (attributes[k]||50)+d[k]));
+}
+
+function applyParents(p){
+  let d = PARENTS_EFFECTS[p];
+  if(!d) return;
+  player.money += d.money;
+  for(let k in d.attrs) attributes[k] = Math.max(20,Math.min(99,(attributes[k]||50)+d.attrs[k]));
+  if(PERSONALITY_MAP[p]) player.personality.push(PERSONALITY_MAP[p]);
+}
+
+function clampAttrs(){
+  for(let k in attributes) attributes[k] = Math.max(20,Math.min(99,attributes[k]));
+}
+
+// ===================== LEAGUE =====================
+function generateLeague(){
+  const tNames=["Tigers","Wildcats","Blue Jays","Bulldogs","Eagles","Spartans","Huskies","Gators"];
+  teams=[];
+  for(let i=0;i<8;i++){
+    let t={name:tNames[i],wins:0,losses:0,players:[]};
+    for(let j=0;j<9;j++){
+      t.players.push({name:rndName(),stats:{AB:0,H:0,HR:0,RBI:0,SO:0,AVG:0,OBP:0,SLG:0,OPS:0}});
+    }
+    teams.push(t);
+  }
+  player.team = teams[0];
+  teams[0].players[0] = player;
+
+  // rival
+  let others = [];
+  teams.slice(1).forEach(t=>others=others.concat(t.players));
+  player.rival = others[~~(Math.random()*others.length)].name;
+}
+
+// ===================== SIMULATION =====================
+function getDiffMod(){
+  if(difficulty==="Easy") return 1.25;
+  if(difficulty==="Hard") return 0.78;
+  return 1;
+}
+
+function simAtBat(){
+  let mod = getDiffMod();
+  let contact = (attributes.contact/100)*mod;
+  let power = (attributes.power/100)*mod;
+  let roll = Math.random();
+  let res = {H:0,HR:0,SO:0};
+  if(roll < (1-contact)*0.28){ res.SO=1; return res; }
+  if(roll < power*0.06){ res.H=1; res.HR=1; return res; }
+  if(roll < contact*0.35){ res.H=1; }
+  return res;
+}
+
+function updateAdvancedStats(p){
+  let AB = p.stats.AB||1;
+  p.stats.AVG = p.stats.H/AB;
+  p.stats.OBP = (p.stats.H+2)/(AB+4);
+  p.stats.SLG = (p.stats.H+(p.stats.HR*3))/AB;
+  p.stats.OPS = p.stats.OBP+p.stats.SLG;
+}
+
+function applyPersonalityEffects(){
+  if(player.personality.includes("confident")) attributes.power = Math.min(99,attributes.power+1);
+  if(player.personality.includes("anxious") && Math.random()<0.3) attributes.contact = Math.max(20,attributes.contact-1);
+  if(player.personality.includes("hardworking")) attributes.contact = Math.min(99,attributes.contact+1);
+  if(player.personality.includes("disciplined")) attributes.contact = Math.min(99,attributes.contact+1);
+}
+
+function gainXP(){
+  let earned = player.stats.H*5 + player.stats.HR*20;
+  player.xp += earned;
+  if(player.xp >= player.levelTier*100){
+    player.xp -= player.levelTier*100;
+    player.levelTier++;
+    attributes.contact = Math.min(99,attributes.contact+2);
+    attributes.power = Math.min(99,attributes.power+2);
+    showToast(`Level up! Now Level ${player.levelTier}`, "success");
+    addFeed("Level Up", `Reached Level ${player.levelTier} — attributes boosted.`, "success");
+  }
+}
+
+function developPlayer(){
+  let f = age<18?1.2:age<24?1:age<30?0.5:0.2;
+  attributes.contact = Math.min(99, attributes.contact + Math.random()*2.5*f);
+  attributes.power   = Math.min(99, attributes.power   + Math.random()*2*f);
+  attributes.speed   = Math.min(99, attributes.speed   + Math.random()*2*f);
+  if(age>32) attributes.speed = Math.max(20, attributes.speed - Math.random()*2);
+  clampAttrs();
+  growPlayer(); // grow height each season
+  age++;        // age up each season
+}
+
+// ===================== GAME PLAY =====================
+function playGame(){
+  if(!player.eligibility){
+    setSpotlight("Ineligible","Can't play — grades too low.","Improve your GPA to at least 2.0 to regain eligibility.","warning");
+    showToast("Ineligible to play.", "warning"); return;
+  }
+  if(injury.active){
+    setSpotlight("Injured",`${player.name} is recovering.`,`${injury.name}: ${injury.weeksRemaining} weeks remaining.`,"warning");
+    showToast("Player is injured.", "warning"); return;
+  }
+
+  let cap = STAGE_CAPS[careerStage];
+  if(gamesPlayed >= cap){
+    setSpotlight("Season Done","Season complete.",`You've played all ${cap} games. End the season to advance.`,"warning");
+    showToast("Season complete — end season first.", "warning"); return;
+  }
+
+  applyPersonalityEffects();
+  if(player.rival && Math.random()<0.25){ attributes.power = Math.min(99,attributes.power+2); addFeed("Rivalry Game","Fired up against the rival!","success"); }
+
+  let results = [];
+  for(let i=0;i<4;i++){
+    let r = simAtBat();
+    player.stats.AB++;
+    player.stats.H += r.H;
+    player.stats.HR += r.HR;
+    player.stats.SO += r.SO;
+    player.stats.RBI += r.H + r.HR;
+    if(r.HR){ player.money+=500; results.push("💣 HOME RUN"); }
+    else if(r.H) results.push("✅ Hit");
+    else if(r.SO) results.push("❌ K");
+    else results.push("○ Out");
+  }
+  updateAdvancedStats(player);
+  gainXP();
+
+  gamesPlayed++;
+  lastOutcome = results.join("  ");
+  let headline = buildHeadline();
+
+  // simulate other teams
+  simulateOtherTeams();
+
+  if(Math.random()<0.08) triggerInjury();
+  recoverInjury();
+
+  // school event
+  if(Math.random()<0.25) schoolEvent();
+
+  addFeed(`Game ${gamesPlayed}`, `${headline} | ${lastOutcome}`, "success");
+  setSpotlight("Game Result", headline, lastOutcome, "success");
+  showToast(`Game ${gamesPlayed} / ${cap}`, "success");
+  updateUI();
+}
+
+function buildHeadline(){
+  let hr = player.stats.HR; let avg = player.stats.AVG;
+  if(hr>20 && avg>.300) return `${player.name} is on fire — elite season!`;
+  if(hr>10) return `${player.name} showing power at ${careerStage}.`;
+  if(avg>.280) return `${player.name} makes contact look easy.`;
+  if(avg<.200) return `${player.name} struggling at the plate.`;
+  return `${player.name} gets another ${careerStage} start.`;
+}
+
+function simulateOtherTeams(){
+  teams.forEach(t=>{
+    if(t===player.team) return;
+    t.players.forEach(p=>{
+      let H=Math.random()<0.25?1:0;
+      let HR=Math.random()<0.04?1:0;
+      p.stats.AB+=4; p.stats.H+=H; p.stats.HR+=HR; p.stats.RBI+=H+HR;
+      updateAdvancedStats(p);
+    });
+    // game outcome
+    if(Math.random()<0.5) t.wins++; else t.losses++;
+  });
+  if(Math.random()<0.5) player.team.wins++; else player.team.losses++;
+}
+
+function practiceSession(){
+  let gain = (Math.random()*3+1).toFixed(1);
+  let attr = ["contact","power","speed","fielding"][~~(Math.random()*4)];
+  attributes[attr] = Math.min(99, attributes[attr] + parseFloat(gain));
+  addFeed("Practice", `+${gain} ${attr} from extra work.`, "success");
+  showToast(`Practice: +${gain} ${attr}`, "success");
+  setSpotlight("Training Day", "Hard work pays off.", `${player.name} focused on ${attr} and saw improvement.`, "success");
+  updateUI();
+}
+
+// ===================== INJURY =====================
+function triggerInjury(){
+  let inj = INJURIES[~~(Math.random()*INJURIES.length)];
+  injury.active = true;
+  injury.name = inj.name;
+  injury.weeksRemaining = inj.weeks;
+
+  addFeed("Injury", `${inj.name} — ${inj.weeks} weeks recovery.`, "warning");
+  setSpotlight("Injury Setback", `${inj.name}`, `${player.name} is sidelined for ${inj.weeks} weeks. Choose how to respond.`, "warning");
+  showToast(`Injured: ${inj.name}`, "warning");
+
+  document.getElementById("choicesArea").classList.remove("hidden");
+  let btns = document.getElementById("choicesBtns");
+  btns.innerHTML = "";
+
+  let btnRehab = document.createElement("button");
+  btnRehab.className = "action-btn blue"; btnRehab.textContent = "🏥 Standard Rehab";
+  btnRehab.onclick = () => { clearChoices(); updateUI(); };
+
+  let btnSteroids = document.createElement("button");
+  btnSteroids.className = "action-btn"; btnSteroids.textContent = "💉 PED Recovery (risky)";
+  btnSteroids.onclick = () => {
+    steroidUse.used = true;
+    injury.weeksRemaining = Math.max(1, Math.floor(injury.weeksRemaining/2));
+    if(Math.random()<0.35){
+      steroidUse.suspensions++;
+      addFeed("Caught!",`Suspended for PED use. Total: ${steroidUse.suspensions}.`,"warning");
+      showToast("Caught for PED use!", "warning");
+    }
+    clearChoices(); updateUI();
+  };
+
+  btns.appendChild(btnRehab);
+  btns.appendChild(btnSteroids);
+}
+
+function recoverInjury(){
+  if(!injury.active) return;
+  injury.weeksRemaining--;
+  if(injury.weeksRemaining<=0){
+    injury.active = false;
+    injury.name = "";
+    addFeed("Recovery","Cleared to return to play.","success");
+    showToast("Healthy again!", "success");
+  }
+}
+
+function clearChoices(){
+  document.getElementById("choicesArea").classList.add("hidden");
+  document.getElementById("choicesBtns").innerHTML = "";
+}
+
+// ===================== HEIGHT / WEIGHT SYSTEM =====================
+// Heights stored as total inches. 
+// Age 8 start: 41–59" (3'5" to 4'11"). 
+// Adult ceiling: 73" typical, extremely rare 82" (6'10").
+
+let physique = {
+  heightIn: 0,      // current height in inches
+  weightLbs: 0,     // current weight in lbs
+  adultHeightIn: 0, // genetic ceiling (randomised at creation)
+  lastGrowthAge: 8,
+  growthEvents: [], // log of growth spurts
+};
+
+const BUILDS = [
+  { maxIn: 48,  label: "Small Child",   weightBase: 60,  weightVar: 15 },
+  { maxIn: 54,  label: "Kid",           weightBase: 80,  weightVar: 20 },
+  { maxIn: 60,  label: "Young Teen",    weightBase: 105, weightVar: 20 },
+  { maxIn: 66,  label: "Teenager",      weightBase: 140, weightVar: 25 },
+  { maxIn: 70,  label: "Athletic Teen", weightBase: 165, weightVar: 20 },
+  { maxIn: 74,  label: "Average Build", weightBase: 185, weightVar: 20 },
+  { maxIn: 78,  label: "Tall",          weightBase: 210, weightVar: 25 },
+  { maxIn: 82,  label: "Towering",      weightBase: 235, weightVar: 25 },
+];
+
+function getBuild(inches){
+  for(let b of BUILDS){ if(inches <= b.maxIn) return b; }
+  return BUILDS[BUILDS.length-1];
+}
+
+function inchesToStr(inches){
+  let ft = Math.floor(inches/12);
+  let i = Math.round(inches % 12);
+  if(i===12){ ft++; i=0; }
+  return `${ft}'${i}"`;
+}
+
+function generateAdultHeight(){
+  // Distribution: most adults 66–76", small chance of extreme heights
+  // Absolute max 82" (6'10"), made very rare
+  let roll = Math.random();
+  let base;
+  if(roll < 0.005) base = 82;          // 6'10" — extreme rarity (~0.5%)
+  else if(roll < 0.02) base = 79 + Math.random()*2;  // 6'7"-6'9" rare (~1.5%)
+  else if(roll < 0.10) base = 76 + Math.random()*3;  // 6'4"-6'7" uncommon (~8%)
+  else if(roll < 0.35) base = 73 + Math.random()*3;  // 6'1"-6'4" above average (~25%)
+  else if(roll < 0.70) base = 69 + Math.random()*4;  // 5'9"-6'1" average range (~35%)
+  else base = 63 + Math.random()*6;                   // 5'3"-5'9" below average (~30%)
+
+  // Archetype modifiers
+  if(player.archetype==="power") base += Math.random()*2;
+  if(player.archetype==="scrappy") base -= Math.random()*2;
+
+  return Math.min(82, Math.round(base * 10) / 10);
+}
+
+function initPhysique(){
+  physique.adultHeightIn = generateAdultHeight();
+  // Starting height age 8: random between 41 and 51 inches (3'5" to 4'3")
+  let startH = 41 + Math.random()*10;
+  // Make sure start is well below adult ceiling
+  startH = Math.min(startH, physique.adultHeightIn * 0.62);
+  physique.heightIn = Math.round(startH * 10) / 10;
+  physique.lastGrowthAge = 8;
+  physique.growthEvents = [];
+  updatePhysiqueWeight();
+}
+
+function updatePhysiqueWeight(){
+  let b = getBuild(physique.heightIn);
+  physique.weightLbs = Math.round(b.weightBase + (Math.random()*b.weightVar - b.weightVar*0.3));
+  // Archetype weight modifiers
+  if(player.archetype==="power") physique.weightLbs += Math.round(Math.random()*20 + 5);
+  if(player.archetype==="athletic") physique.weightLbs -= Math.round(Math.random()*10);
+  if(player.archetype==="scrappy") physique.weightLbs -= Math.round(Math.random()*15);
+  physique.weightLbs = Math.max(50, physique.weightLbs);
+}
+
+function growPlayer(){
+  // Only grow up to age 18
+  if(age >= 18){
+    // Ensure they've reached adult height by 18
+    if(physique.heightIn < physique.adultHeightIn){
+      physique.heightIn = physique.adultHeightIn;
+      updatePhysiqueWeight();
+    }
+    return;
+  }
+
+  let target = physique.adultHeightIn;
+  let current = physique.heightIn;
+  let remaining = target - current;
+
+  if(remaining <= 0.1) return;
+
+  // Age-based growth rate — growth spurts more common at certain ages
+  let growthRate;
+  if(age <= 10)  growthRate = 0.10 + Math.random()*0.08;  // slow, steady
+  else if(age <= 13) growthRate = 0.15 + Math.random()*0.18; // pre-puberty surge
+  else if(age <= 16) growthRate = 0.20 + Math.random()*0.22; // peak growth years
+  else growthRate = 0.30 + Math.random()*0.25; // finishing off to adult height
+
+  // Random spurt chance
+  let isSpurt = Math.random() < 0.3;
+  if(isSpurt) growthRate *= (1.4 + Math.random()*0.5);
+
+  let gained = remaining * growthRate;
+  gained = Math.max(0.2, Math.min(gained, remaining));
+  gained = Math.round(gained * 10) / 10;
+
+  physique.heightIn = Math.min(target, physique.heightIn + gained);
+  physique.heightIn = Math.round(physique.heightIn * 10) / 10;
+  updatePhysiqueWeight();
+
+  let event = {age, gained, isSpurt, heightAfter: physique.heightIn};
+  physique.growthEvents.push(event);
+
+  if(isSpurt && gained >= 1.5){
+    let msg = `📏 Growth spurt! +${gained}" — now ${inchesToStr(physique.heightIn)}`;
+    addFeed("Growth Spurt", msg, "success");
+    showToast(msg, "success");
+    // Big growth spurts can affect power/speed
+    attributes.power = Math.min(99, attributes.power + Math.random()*3);
+    if(gained < 2) attributes.speed = Math.min(99, attributes.speed + Math.random());
+    else attributes.speed = Math.max(20, attributes.speed - Math.random()*2); // very tall may slow a bit
+  }
+}
+
+// ===================== HIGH SCHOOL CHOICE SYSTEM =====================
+let hsChoiceData = null;
+let pendingHSTransition = false;
+
+function evaluateLLCareer(){
+  // Score the Little League career
+  let avg = player.stats.AVG || 0;
+  let hr  = player.stats.HR || 0;
+  let totalCareerHR  = player.career.reduce((a,s)=>a+(s.stats.HR||0),0) + hr;
+  let totalCareerAVG = player.career.length 
+    ? (player.career.reduce((a,s)=>a+s.stats.AVG,0)/player.career.length) 
+    : avg;
+
+  let score = 0;
+  if(totalCareerAVG >= 0.350) score += 40;
+  else if(totalCareerAVG >= 0.280) score += 25;
+  else if(totalCareerAVG >= 0.220) score += 10;
+
+  if(totalCareerHR >= 20) score += 30;
+  else if(totalCareerHR >= 10) score += 20;
+  else if(totalCareerHR >= 5) score += 10;
+
+  if(player.levelTier >= 4) score += 20;
+  else if(player.levelTier >= 2) score += 10;
+
+  return { score, totalCareerAVG, totalCareerHR };
+}
+
+function showHSChoiceModal(){
+  let evaluation = evaluateLLCareer();
+  let isAffluentBackground = (player.parents === "wealthy");
+  let isPoorBackground = (player.parents === "poor" || player.parents === "absent");
+  let isSportsFamily = (player.parents === "sports");
+
+  document.getElementById("hsModal").classList.remove("hidden");
+  document.getElementById("hsLoadingCity").textContent = player.town || "your hometown";
+
+  // Build subtitle based on career
+  let subtitle = "";
+  if(evaluation.score >= 60){
+    subtitle = `Your ${evaluation.totalCareerHR} home runs and .${Math.round(evaluation.totalCareerAVG*1000)} average in Little League have scouts talking. You have options.`;
+  } else if(evaluation.score >= 30){
+    subtitle = `A solid Little League career. You've earned a look from a few schools. Choose wisely.`;
+  } else {
+    subtitle = `Little League is behind you. Every high school needs a baseball player — pick your path.`;
+  }
+  document.getElementById("hsModalSubtitle").textContent = subtitle;
+
+  // Use AI to generate contextual high schools
+  fetchHSOptions(player.town, evaluation, isAffluentBackground, isPoorBackground, isSportsFamily);
+}
+
+async function fetchHSOptions(town, evaluation, isAffluent, isPoor, isSports){
+  let hasGreatCareer = evaluation.score >= 60;
+  let hasGoodCareer = evaluation.score >= 30;
+
+  let prompt = `You are generating high school options for a baseball life simulation game. The player's hometown is: "${town || 'Austin, Texas'}".
+
+Generate EXACTLY 3 high school options as a JSON array. Each school should feel realistic and grounded in that area.
+
+Context:
+- Career quality: ${hasGreatCareer ? 'ELITE (standout LL career, .'+Math.round(evaluation.totalCareerAVG*1000)+' avg, '+evaluation.totalCareerHR+' HR)' : hasGoodCareer ? 'GOOD' : 'AVERAGE'}
+- Family background: ${isAffluent ? 'Wealthy' : isPoor ? 'Poor/working class' : isSports ? 'Sports family' : 'Middle class'}
+
+Rules for the 3 schools:
+1. School 1: The LOCAL PUBLIC high school near ${town}. Real or realistic-sounding name. Type: "public".
+2. School 2: ${hasGoodCareer ? 'A nearby PUBLIC high school known for baseball. A rival-type school. Type: "public".' : 'Another local public school option. Type: "public".'}
+3. School 3: ${isAffluent || hasGreatCareer ? 'A PRIVATE or prep school with a strong baseball program. If career was elite OR family is wealthy, this is offered. Type: "private".' : isPoor && hasGoodCareer ? 'A school offering a SCHOLARSHIP based on baseball talent. Type: "scholarship".' : 'A public school with a strong sports culture. Type: "public".'}
+
+Each school object must have these exact fields:
+{
+  "name": "School Name High School",
+  "type": "public" | "private" | "scholarship",
+  "location": "City/area description, e.g. North Austin",
+  "enrollment": number (e.g. 1800),
+  "baseballRecord": "e.g. 18-8 last season",
+  "description": "2 sentences about the school culture and baseball program. Be specific and flavourful.",
+  "bonuses": [
+    {"label": "short label e.g. +3 Contact", "color": "blue|green|gold"},
+    {"label": "short label e.g. Strong Coaching", "color": "green"}
+  ],
+  "attrBonus": {"contact": 0, "power": 0, "speed": 0, "fielding": 0, "arm": 0, "control": 0},
+  "moneyEffect": 0,
+  "gradeBonus": 0,
+  "popularityBonus": 0,
+  "flavor": "One punchy sentence — what does choosing this school mean for the player's story?"
+}
+
+Make the bonuses meaningful and differentiated. Private schools get +grades, scholarship schools get +contact/fielding, local public schools get variety. Return ONLY the JSON array, no other text.`;
+
+  try {
+    let resp = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    let data = await resp.json();
+    let text = data.content.map(c=>c.text||"").join("");
+    // Strip markdown fences if present
+    text = text.replace(/```json|```/g,"").trim();
+    let schools = JSON.parse(text);
+    hsChoiceData = schools;
+    renderHSOptions(schools, evaluation);
+  } catch(e){
+    // Fallback schools if API fails
+    hsChoiceData = generateFallbackSchools(town, evaluation, isAffluent, isPoor);
+    renderHSOptions(hsChoiceData, evaluation);
+  }
+}
+
+function generateFallbackSchools(town, evaluation, isAffluent, isPoor){
+  let city = (town||"Austin").split(",")[0].trim();
+  let schools = [
+    {
+      name: `${city} Central High School`,
+      type: "public",
+      location: `Central ${city}`,
+      enrollment: 1650,
+      baseballRecord: "14-12 last season",
+      description: `A solid community school with a dedicated baseball program. The coaching staff develops raw talent well.`,
+      bonuses: [{label:"+2 Contact",color:"blue"},{label:"Community Bond",color:"green"}],
+      attrBonus:{contact:2,power:0,speed:1,fielding:1,arm:0,control:0},
+      moneyEffect:0, gradeBonus:3, popularityBonus:5,
+      flavor:"The hometown school — you'll know everyone in the stands."
+    },
+    {
+      name: `${city} North High School`,
+      type: "public",
+      location: `North ${city}`,
+      enrollment: 1400,
+      baseballRecord: "19-6 last season",
+      description: `Known across the district for its competitive baseball culture. Players from here regularly get college looks.`,
+      bonuses: [{label:"+2 Power",color:"gold"},{label:"+2 Speed",color:"blue"},{label:"College Pipeline",color:"green"}],
+      attrBonus:{contact:0,power:2,speed:2,fielding:0,arm:1,control:0},
+      moneyEffect:0, gradeBonus:0, popularityBonus:8,
+      flavor:"High expectations, high rewards — you'll be pushed."
+    },
+  ];
+
+  if(isAffluent || evaluation.score >= 60){
+    schools.push({
+      name: `St. Michael's Preparatory`,
+      type: "private",
+      location: `${city} area`,
+      enrollment: 620,
+      baseballRecord: "22-4 last season",
+      description: `An elite prep school where the baseball program sends players to top college programs. Small classes, excellent facilities.`,
+      bonuses: [{label:"+3 Fielding",color:"gold"},{label:"+Grades",color:"green"},{label:"College Scout Access",color:"blue"}],
+      attrBonus:{contact:2,power:1,speed:0,fielding:3,arm:2,control:1},
+      moneyEffect: isAffluent ? -25000 : 0,
+      gradeBonus:15, popularityBonus:5,
+      flavor:"The expensive path — but the baseball pedigree is unmatched."
+    });
+  } else if(isPoor && evaluation.score >= 30){
+    schools.push({
+      name: `${city} Academy (Scholarship)`,
+      type: "scholarship",
+      location: `${city}`,
+      enrollment: 900,
+      baseballRecord: "16-10 last season",
+      description: `Awarded a full athletic scholarship based on your Little League performance. This school punches above its weight in baseball.`,
+      bonuses: [{label:"+3 Contact",color:"green"},{label:"Free Tuition",color:"gold"},{label:"+Confidence",color:"blue"}],
+      attrBonus:{contact:3,power:1,speed:1,fielding:2,arm:0,control:0},
+      moneyEffect: 5000, gradeBonus:5, popularityBonus:10,
+      flavor:"They saw something in you before anyone else did."
+    });
+  } else {
+    schools.push({
+      name: `${city} West High School`,
+      type: "public",
+      location: `West ${city}`,
+      enrollment: 1200,
+      baseballRecord: "11-15 last season",
+      description: `A rebuilding program looking for players like you to help turn things around. There's opportunity here.`,
+      bonuses: [{label:"+2 Arm",color:"blue"},{label:"Starter Role",color:"gold"}],
+      attrBonus:{contact:0,power:1,speed:0,fielding:0,arm:2,control:2},
+      moneyEffect:0, gradeBonus:5, popularityBonus:3,
+      flavor:"Not flashy — but you'd be a cornerstone from day one."
+    });
+  }
+  return schools;
+}
+
+function renderHSOptions(schools, evaluation){
+  let body = document.getElementById("hsModalBody");
+  let html = `<div class="hs-options">`;
+  schools.forEach((s, i) => {
+    let cardClass = `hs-card ${s.type}`;
+    let bonusesHtml = (s.bonuses||[]).map(b=>`<span class="hs-bonus ${b.color}">${b.label}</span>`).join("");
+    let costNote = "";
+    if(s.type === "private" && s.moneyEffect < 0) costNote = `<span class="hs-bonus" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.25);color:var(--red);">Cost: $${fmt(Math.abs(s.moneyEffect))}</span>`;
+    if(s.type === "scholarship" && s.moneyEffect > 0) costNote = `<span class="hs-bonus green">+$${fmt(s.moneyEffect)} stipend</span>`;
+
+    html += `<div class="${cardClass}" onclick="selectHS(${i})">
+      <h3>${s.name}</h3>
+      <div class="hs-meta">${s.location} · ${(s.enrollment||0).toLocaleString()} students · Baseball: ${s.baseballRecord||"Unknown"}</div>
+      <div class="hs-desc">${s.description}</div>
+      <div class="hs-bonuses">${bonusesHtml}${costNote}</div>
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:0.8rem;color:var(--muted);font-style:italic;">${s.flavor}</div>
+    </div>`;
+  });
+  html += `</div>`;
+  body.innerHTML = html;
+}
+
+function selectHS(index){
+  let school = hsChoiceData[index];
+  if(!school) return;
+
+  // Apply bonuses
+  for(let k in school.attrBonus){
+    if(school.attrBonus[k] && attributes[k] !== undefined){
+      attributes[k] = Math.min(99, attributes[k] + school.attrBonus[k]);
+    }
+  }
+  player.grades = Math.min(100, player.grades + (school.gradeBonus||0));
+  player.popularity = Math.min(100, player.popularity + (school.popularityBonus||0));
+  if(school.moneyEffect) player.money = Math.max(0, player.money + school.moneyEffect);
+  player.eligibility = player.grades >= 60;
+
+  player.highSchool = school.name;
+  player.highSchoolType = school.type;
+
+  addFeed("High School Choice", `Enrolled at ${school.name} (${school.type}). ${school.flavor}`, "success");
+  setSpotlight("New Chapter", school.name, school.flavor, "success");
+  showToast(`Welcome to ${school.name}!`, "success");
+
+  closeHSModal();
+  completeCareerAdvance();
+}
+
+function skipHSChoice(){
+  // Pick first (local public) school by default
+  if(hsChoiceData && hsChoiceData.length){
+    let school = hsChoiceData[0];
+    player.highSchool = school.name;
+    player.highSchoolType = "public";
+  }
+  closeHSModal();
+  completeCareerAdvance();
+}
+
+function closeHSModal(){
+  document.getElementById("hsModal").classList.add("hidden");
+  pendingHSTransition = false;
+}
+
+function completeCareerAdvance(){
+  let newSalary = calculateSalary();
+  player.salary = newSalary;
+  gamesPlayed = 0;
+  addFeed("Promoted",`Advanced to ${careerStage}!${newSalary>0?` Salary: $${fmt(newSalary)}/yr.`:""}`, "success");
+  setSpotlight("Level Up!",`Welcome to ${careerStage}.`,`${player.name} earned a promotion. The competition just got real.`,"success");
+  showToast(`Advanced to ${careerStage}!`,"success");
+  updateUI();
+}
+
+
+// ===================== MLB TEAMS (ALL 30) =====================
+const MLB_TEAMS = [
+  {name:"New York Yankees",     city:"New York",     state:"NY", abbr:"NYY", emoji:"⚾", color1:"#003087",color2:"#E4002C", division:"AL East",   prestige:10, marketSize:"large"},
+  {name:"Boston Red Sox",       city:"Boston",       state:"MA", abbr:"BOS", emoji:"🧦", color1:"#BD3039",color2:"#0D2B56", division:"AL East",   prestige:9,  marketSize:"large"},
+  {name:"Los Angeles Dodgers",  city:"Los Angeles",  state:"CA", abbr:"LAD", emoji:"💙", color1:"#005A9C",color2:"#EF3E42", division:"NL West",   prestige:9,  marketSize:"large"},
+  {name:"Chicago Cubs",         city:"Chicago",      state:"IL", abbr:"CHC", emoji:"🐻", color1:"#0E3386",color2:"#CC3433", division:"NL Central",prestige:8,  marketSize:"large"},
+  {name:"San Francisco Giants", city:"San Francisco",state:"CA", abbr:"SF",  emoji:"🔶", color1:"#FD5A1E",color2:"#27251F", division:"NL West",   prestige:8,  marketSize:"large"},
+  {name:"Houston Astros",       city:"Houston",      state:"TX", abbr:"HOU", emoji:"⭐", color1:"#002D62",color2:"#EB6E1F", division:"AL West",   prestige:9,  marketSize:"large"},
+  {name:"Atlanta Braves",       city:"Atlanta",      state:"GA", abbr:"ATL", emoji:"🪓", color1:"#CE1141",color2:"#13274F", division:"NL East",   prestige:8,  marketSize:"large"},
+  {name:"St. Louis Cardinals",  city:"St. Louis",    state:"MO", abbr:"STL", emoji:"🐦", color1:"#C41E3A",color2:"#0C2340", division:"NL Central",prestige:8,  marketSize:"medium"},
+  {name:"New York Mets",        city:"New York",     state:"NY", abbr:"NYM", emoji:"🔵", color1:"#002D72",color2:"#FF5910", division:"NL East",   prestige:7,  marketSize:"large"},
+  {name:"Philadelphia Phillies",city:"Philadelphia", state:"PA", abbr:"PHI", emoji:"🔔", color1:"#E81828",color2:"#002D72", division:"NL East",   prestige:7,  marketSize:"large"},
+  {name:"Texas Rangers",        city:"Dallas",       state:"TX", abbr:"TEX", emoji:"🤠", color1:"#003278",color2:"#C0111F", division:"AL West",   prestige:7,  marketSize:"large"},
+  {name:"Chicago White Sox",    city:"Chicago",      state:"IL", abbr:"CWS", emoji:"⚫", color1:"#27251F",color2:"#C4CED3", division:"AL Central",prestige:6,  marketSize:"large"},
+  {name:"Seattle Mariners",     city:"Seattle",      state:"WA", abbr:"SEA", emoji:"🧊", color1:"#0C2C56",color2:"#005C5C", division:"AL West",   prestige:6,  marketSize:"medium"},
+  {name:"Minnesota Twins",      city:"Minneapolis",  state:"MN", abbr:"MIN", emoji:"🌙", color1:"#002B5C",color2:"#D31145", division:"AL Central",prestige:6,  marketSize:"medium"},
+  {name:"Cleveland Guardians",  city:"Cleveland",    state:"OH", abbr:"CLE", emoji:"🛡",  color1:"#00385D",color2:"#E31937", division:"AL Central",prestige:6,  marketSize:"medium"},
+  {name:"Detroit Tigers",       city:"Detroit",      state:"MI", abbr:"DET", emoji:"🐯", color1:"#0C2340",color2:"#FA4616", division:"AL Central",prestige:6,  marketSize:"medium"},
+  {name:"Toronto Blue Jays",    city:"Toronto",      state:"ON", abbr:"TOR", emoji:"🐦", color1:"#134A8E",color2:"#1D2D5C", division:"AL East",   prestige:7,  marketSize:"large"},
+  {name:"Baltimore Orioles",    city:"Baltimore",    state:"MD", abbr:"BAL", emoji:"🦅", color1:"#DF4601",color2:"#000000", division:"AL East",   prestige:6,  marketSize:"medium"},
+  {name:"Tampa Bay Rays",       city:"Tampa Bay",    state:"FL", abbr:"TB",  emoji:"☀️", color1:"#092C5C",color2:"#8FBCE6", division:"AL East",   prestige:7,  marketSize:"medium"},
+  {name:"Kansas City Royals",   city:"Kansas City",  state:"MO", abbr:"KC",  emoji:"👑", color1:"#004687",color2:"#C09A5B", division:"AL Central",prestige:5,  marketSize:"small"},
+  {name:"Oakland Athletics",    city:"Oakland",      state:"CA", abbr:"OAK", emoji:"🐘", color1:"#003831",color2:"#EFB21E", division:"AL West",   prestige:5,  marketSize:"medium"},
+  {name:"Los Angeles Angels",   city:"Anaheim",      state:"CA", abbr:"LAA", emoji:"👼", color1:"#BA0021",color2:"#003263", division:"AL West",   prestige:6,  marketSize:"large"},
+  {name:"San Diego Padres",     city:"San Diego",    state:"CA", abbr:"SD",  emoji:"🟤", color1:"#2F241D",color2:"#FFC425", division:"NL West",   prestige:7,  marketSize:"medium"},
+  {name:"Arizona Diamondbacks", city:"Phoenix",      state:"AZ", abbr:"ARI", emoji:"🐍", color1:"#A71930",color2:"#E3D4AD", division:"NL West",   prestige:6,  marketSize:"medium"},
+  {name:"Colorado Rockies",     city:"Denver",       state:"CO", abbr:"COL", emoji:"⛰️", color1:"#33006F",color2:"#C4CED4", division:"NL West",   prestige:5,  marketSize:"medium"},
+  {name:"Miami Marlins",        city:"Miami",        state:"FL", abbr:"MIA", emoji:"🐟", color1:"#00A3E0",color2:"#EF3340", division:"NL East",   prestige:5,  marketSize:"medium"},
+  {name:"Cincinnati Reds",      city:"Cincinnati",   state:"OH", abbr:"CIN", emoji:"🔴", color1:"#C6011F",color2:"#000000", division:"NL Central",prestige:5,  marketSize:"medium"},
+  {name:"Pittsburgh Pirates",   city:"Pittsburgh",   state:"PA", abbr:"PIT", emoji:"🏴‍☠️",color1:"#27251F",color2:"#FDB827", division:"NL Central",prestige:5,  marketSize:"small"},
+  {name:"Milwaukee Brewers",    city:"Milwaukee",    state:"WI", abbr:"MIL", emoji:"🍺", color1:"#12284B",color2:"#FFC52F", division:"NL Central",prestige:5,  marketSize:"small"},
+  {name:"Washington Nationals", city:"Washington",   state:"DC", abbr:"WSH", emoji:"🦅", color1:"#AB0003",color2:"#14225A", division:"NL East",   prestige:6,  marketSize:"large"},
+];
+
+const DRAFT_SLOT_VALUES = {
+  1: {min:2000000,  max:9500000,  years:4},
+  2: {min:800000,   max:2000000,  years:4},
+  3: {min:400000,   max:800000,   years:4},
+  4: {min:200000,   max:400000,   years:4},
+  5: {min:100000,   max:200000,   years:4},
+  supp: {min:500000, max:1800000, years:4},
+};
+
+// ===================== COLLEGE RECRUITMENT =====================
+let collegeChoiceData = null;
+
+function evaluateHSCareer(){
+  let hsSeasons = player.career.filter(s=>s.stage==="High School");
+  let avgAVG = hsSeasons.length ? hsSeasons.reduce((a,s)=>a+s.stats.AVG,0)/hsSeasons.length : player.stats.AVG;
+  let totalHR = hsSeasons.reduce((a,s)=>a+(s.stats.HR||0),0) + player.stats.HR;
+  let score = 0;
+  if(avgAVG>=0.350) score+=45; else if(avgAVG>=0.300) score+=30; else if(avgAVG>=0.250) score+=15;
+  if(totalHR>=30) score+=35; else if(totalHR>=15) score+=20; else if(totalHR>=5) score+=8;
+  if(player.levelTier>=5) score+=20; else if(player.levelTier>=3) score+=10;
+  return {score, avgAVG, totalHR};
+}
+
+function showCollegeRecruitmentModal(){
+  let ev = evaluateHSCareer();
+  document.getElementById("collegeModal").classList.remove("hidden");
+  document.getElementById("collegeLoadingCity").textContent = player.town||"your hometown";
+  let subtitle = ev.score>=70
+    ? `A .${Math.round(ev.avgAVG*1000)} average and ${ev.totalHR} HR in high school. Programs across the country want you.`
+    : ev.score>=40
+    ? "A solid high school career. Several programs are ready to invest in your development."
+    : "You've earned your spot at the next level. Here are the programs offering you a place.";
+  document.getElementById("collegeModalSubtitle").textContent = subtitle;
+  fetchCollegeOffers(player.town, ev);
+}
+
+async function fetchCollegeOffers(town, ev){
+  let isElite = ev.score>=70, isGood = ev.score>=40;
+  let isPoor = (player.parents==="poor"||player.parents==="absent");
+  let attrStr = `Contact ${Math.round(attributes.contact)}, Power ${Math.round(attributes.power)}, Speed ${Math.round(attributes.speed)}`;
+
+  let prompt = `You are generating college baseball scholarship offers for a sim game. Player hometown: "${town||'Austin, Texas'}". Attributes: ${attrStr}.
+
+Generate EXACTLY 4 college offers as a JSON array. Prioritize schools geographically close to ${town}.
+
+Career: ${isElite?'ELITE — .'+Math.round(ev.avgAVG*1000)+' avg, '+ev.totalHR+' HR. Power 5 schools interested.':isGood?'GOOD. Mid-major and some Power 5.':'AVERAGE. Smaller programs.'}
+Background: ${isPoor?'Poor — scholarship value matters greatly.':'Middle/wealthy family.'}
+
+School mix:
+1. Local/regional school near ${town} (any division)
+2. Well-known baseball program same state/region as ${town}
+3. ${isElite?'Nationally ranked Power 5 program (e.g. Vanderbilt, Texas, Florida, LSU, Arkansas, Mississippi State)':'Mid-major known for development'}
+4. ${isPoor&&isGood?'School with FULL RIDE based on need + talent — personal and heartfelt tone':isElite?'Another elite or Ivy League academic school':'JUCO or community college development path'}
+
+Each offer object MUST have these exact fields — return ONLY valid JSON array, no extra text:
+{"name":"","shortName":"","city":"City, State","conference":"","division":"NCAA D1|NCAA D2|NCAA D3|NAIA|JUCO","colors":["#hex1","#hex2"],"scholarshipType":"Full Ride|75% Scholarship|50% Scholarship|Walk-On|Full Ride (Need-Based)","scholarshipValue":0,"nilDeal":false,"nilAmount":0,"nilSponsor":"","baseballRecord":"","ranking":"","description":"2 sentences.","attrBonus":{"contact":0,"power":0,"speed":0,"fielding":0,"arm":0,"control":0},"gradeBonus":0,"popularityBonus":0,"flavor":"One memorable sentence."}
+
+NIL rules: only Power 5 / well-known programs get significant NIL ($5k-$150k/yr). Small schools: $0. Return ONLY the JSON array.`;
+
+  try {
+    let resp = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1400,messages:[{role:"user",content:prompt}]})});
+    let data = await resp.json();
+    let text = data.content.map(c=>c.text||"").join("").replace(/```json|```/g,"").trim();
+    collegeChoiceData = JSON.parse(text);
+  } catch(e){
+    collegeChoiceData = buildFallbackColleges(town, ev, isPoor, isElite);
+  }
+  renderCollegeOffers(collegeChoiceData);
+}
+
+function buildFallbackColleges(town, ev, isPoor, isElite){
+  let city = (town||"Austin").split(",")[0].trim();
+  let st = (town||"Austin, TX").split(",")[1]?.trim()||"TX";
+  return [
+    {name:`${city} State University`,shortName:`${city} State`,city:`${city}, ${st}`,conference:"Sun Belt",division:"NCAA D1",colors:["#1a3a6e","#c8a84b"],scholarshipType:"50% Scholarship",scholarshipValue:18000,nilDeal:false,nilAmount:0,nilSponsor:"",baseballRecord:"28-24",ranking:"Unranked",description:`A solid D1 program close to home. The staff develops local talent into professional prospects.`,attrBonus:{contact:2,power:1,speed:1,fielding:2,arm:0,control:0},gradeBonus:5,popularityBonus:5,flavor:"Home is where the story starts."},
+    {name:`${st} A&M University`,shortName:`${st} A&M`,city:`College Station, ${st}`,conference:"Big 12",division:"NCAA D1",colors:["#500000","#ffffff"],scholarshipType:"75% Scholarship",scholarshipValue:28000,nilDeal:true,nilAmount:9000,nilSponsor:"Local Dealership Group",baseballRecord:"41-15",ranking:"#18 nationally",description:`A powerhouse program. Playing here puts you in front of professional scouts every weekend series.`,attrBonus:{contact:3,power:2,speed:2,fielding:2,arm:2,control:1},gradeBonus:8,popularityBonus:12,flavor:"Big stage — scouts will be watching from Opening Day."},
+    isElite ? {name:"Vanderbilt University",shortName:"Vandy",city:"Nashville, TN",conference:"SEC",division:"NCAA D1",colors:["#866D4B","#000000"],scholarshipType:"75% Scholarship",scholarshipValue:38000,nilDeal:true,nilAmount:28000,nilSponsor:"Nashville Sports Group",baseballRecord:"48-15",ranking:"#4 nationally",description:"The gold standard. Vanderbilt alumni are selected in every MLB Draft. If you want to go pro, this accelerates everything.",attrBonus:{contact:4,power:3,speed:1,fielding:3,arm:2,control:2},gradeBonus:12,popularityBonus:15,flavor:"The fastest lane to the MLB."}
+            : {name:"Coastal Carolina University",shortName:"Coastal Carolina",city:"Conway, SC",conference:"Sun Belt",division:"NCAA D1",colors:["#006F51","#000000"],scholarshipType:"Full Ride",scholarshipValue:32000,nilDeal:false,nilAmount:0,nilSponsor:"",baseballRecord:"39-19",ranking:"#22 nationally",description:"A mid-major powerhouse turning overlooked players into draft picks for 15 years.",attrBonus:{contact:3,power:2,speed:2,fielding:2,arm:1,control:1},gradeBonus:8,popularityBonus:10,flavor:"The program that finds the players everyone else missed."},
+    isPoor&&ev.score>=30 ? {name:`${city} Community College`,shortName:`${city} CC`,city:`${city}, ${st}`,conference:"NJCAA",division:"JUCO",colors:["#2563eb","#ffffff"],scholarshipType:"Full Ride (Need-Based)",scholarshipValue:22000,nilDeal:false,nilAmount:0,nilSponsor:"",baseballRecord:"32-12",ranking:"JUCO Top 25",description:"A full athletic scholarship based on talent and financial need. JUCO has launched hundreds of pro careers.",attrBonus:{contact:3,power:2,speed:3,fielding:2,arm:1,control:1},gradeBonus:10,popularityBonus:8,flavor:"They saw your talent and your situation — and opened a door."}
+            : {name:"Rice University",shortName:"Rice",city:"Houston, TX",conference:"AAC",division:"NCAA D1",colors:["#00205B","#5B6770"],scholarshipType:"50% Scholarship",scholarshipValue:32000,nilDeal:false,nilAmount:0,nilSponsor:"",baseballRecord:"36-22",ranking:"Unranked",description:"An academically elite program with strong MLB ties. A Rice degree opens doors whether you reach the Show or not.",attrBonus:{contact:2,power:1,speed:0,fielding:3,arm:1,control:2},gradeBonus:18,popularityBonus:5,flavor:"Smart bet — elite education, strong baseball, great fallback."}
+  ];
+}
+
+function renderCollegeOffers(schools){
+  let body = document.getElementById("collegeModalBody");
+  let html = `<div class="college-grid">`;
+  schools.forEach((s,i)=>{
+    let bClass = (s.scholarshipType||"").includes("Full")?"full-ride":(s.scholarshipType||"").includes("75")||(s.scholarshipType||"").includes("50")?"partial":"walk-on";
+    let c1=(s.colors||["#1a3a6e","#c8a84b"])[0], c2=(s.colors||["#1a3a6e","#c8a84b"])[1]||c1;
+    let nilHtml = s.nilDeal&&s.nilAmount>0?`<div class="nil-row"><span class="offer-badge nil">💰 NIL Deal</span><span class="nil-amount">$${fmt(s.nilAmount)}/yr</span><span style="color:var(--muted);font-size:0.78rem;margin-left:4px;">${s.nilSponsor||""}</span></div>`:"";
+    let bonuses = Object.entries(s.attrBonus||{}).filter(([k,v])=>v>0).map(([k,v])=>`<span class="hs-bonus">${k.charAt(0).toUpperCase()+k.slice(1)} +${v}</span>`).join("");
+    html += `<div class="college-card" onclick="selectCollege(${i})">
+      <div class="school-colors" style="background:linear-gradient(90deg,${c1},${c2})"></div>
+      <span class="offer-badge ${bClass}">🎓 ${s.scholarshipType||"Walk-On"}</span>
+      <h3>${s.name}</h3>
+      <div class="conf">${s.conference} · ${s.division} · ${s.city}</div>
+      <div class="conf" style="margin-top:-2px;">${s.ranking} · ${s.baseballRecord}</div>
+      <div class="school-desc">${s.description}</div>
+      <div class="hs-bonuses">${s.scholarshipValue>0?`<span class="hs-bonus green">$${fmt(s.scholarshipValue)}/yr</span>`:""} ${bonuses} ${s.gradeBonus>0?`<span class="hs-bonus gold">GPA +${(s.gradeBonus/25).toFixed(1)}</span>`:""}</div>
+      ${nilHtml}
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--border);font-size:0.8rem;color:var(--muted);font-style:italic;">${s.flavor}</div>
+    </div>`;
+  });
+  html += `</div>`;
+  body.innerHTML = html;
+}
+
+function selectCollege(index){
+  let s = collegeChoiceData[index]; if(!s) return;
+  for(let k in s.attrBonus||{}) if(s.attrBonus[k]&&attributes[k]!==undefined) attributes[k]=Math.min(99,attributes[k]+s.attrBonus[k]);
+  player.grades=Math.min(100,player.grades+(s.gradeBonus||0));
+  player.popularity=Math.min(100,player.popularity+(s.popularityBonus||0));
+  if(s.nilAmount) player.money+=s.nilAmount;
+  player.college=s.name; player.collegeConference=s.conference;
+  player.nilDeal=s.nilDeal?s.nilAmount:0; player.scholarship=s.scholarshipValue;
+  collegeSeasonsPlayed=0;
+  addFeed("College Commitment",`${player.name} commits to ${s.name}${s.nilDeal?` with $${fmt(s.nilAmount)}/yr NIL`:""}!`,"success");
+  setSpotlight("College Bound",s.name,s.flavor||"A new chapter begins.","success");
+  showToast(`Committed to ${s.shortName||s.name}!`,"success");
+  document.getElementById("collegeModal").classList.add("hidden");
+  completeCareerAdvance();
+}
+
+function skipCollegeChoice(){
+  if(collegeChoiceData&&collegeChoiceData.length) selectCollege(0);
+  else { document.getElementById("collegeModal").classList.add("hidden"); completeCareerAdvance(); }
+}
+
+// ===================== MLB DRAFT SYSTEM =====================
+let draftOffer = null;
+let draftIsRedraft = false;
+
+function calculateDraftRound(fromCollege){
+  let attrSum = Object.values(attributes).reduce((a,b)=>a+b,0);
+  let careerHR = player.career.reduce((a,s)=>a+(s.stats.HR||0),0)+player.stats.HR;
+  let careerAVG = player.career.length ? player.career.reduce((a,s)=>a+s.stats.AVG,0)/player.career.length : player.stats.AVG;
+  let score = attrSum;
+  if(careerAVG>0.350) score+=40; else if(careerAVG>0.280) score+=20;
+  if(careerHR>30) score+=35; else if(careerHR>15) score+=20;
+  if(player.levelTier>5) score+=20;
+  if(fromCollege) score+=30;
+  if(score>620) return {round:1,supp:false};
+  if(score>580) return {round:1,supp:true};
+  if(score>540) return {round:2,supp:false};
+  if(score>500) return {round:3,supp:false};
+  if(score>460) return {round:4,supp:false};
+  return {round:5,supp:false};
+}
+
+function getDraftBonus(roundInfo){
+  let slotKey = roundInfo.supp ? "supp" : roundInfo.round;
+  let slot = DRAFT_SLOT_VALUES[slotKey]||DRAFT_SLOT_VALUES[5];
+  let ratio = Math.min(1, Object.values(attributes).reduce((a,b)=>a+b,0)/594);
+  let bonus = Math.round((slot.min+(slot.max-slot.min)*ratio)/5000)*5000;
+  return {bonus, years:slot.years, annualSalary:80000};
+}
+
+function triggerMLBDraft(fromCollege){
+  draftIsRedraft = fromCollege;
+  draftOffer = null;
+  document.getElementById("draftModal").classList.remove("hidden");
+  document.getElementById("draftModalBody").innerHTML = `<div class="hs-loading"><span class="spin">⚾</span><p>MLB Draft in progress…</p></div>`;
+  setTimeout(()=>generateDraftOffer(fromCollege), 1400);
+}
+
+async function generateDraftOffer(fromCollege){
+  let roundInfo = calculateDraftRound(fromCollege);
+  let offerData = getDraftBonus(roundInfo);
+  let town = (player.town||"").toLowerCase();
+  let scored = MLB_TEAMS.map(t=>{
+    let s=Math.random()*8+t.prestige*0.4;
+    if(town.includes(t.state.toLowerCase())||town.includes(t.city.toLowerCase())) s+=14;
+    s+=(10-t.prestige)*(roundInfo.round<=2?2:0.5);
+    return {team:t,score:s};
+  }).sort((a,b)=>b.score-a.score);
+  let draftingTeam = scored.slice(0,5)[~~(Math.random()*5)].team;
+
+  let prompt = `Write a short dramatic MLB Draft announcement for a baseball game sim. Under 75 words. No quotes or labels — just the announcement text.
+Player: ${player.name}, ${player.position}, from ${player.town}.
+${fromCollege?"Coming out of college.":"Straight out of high school."}
+Drafted by: ${draftingTeam.name} (${draftingTeam.division})
+${roundInfo.supp?"Supplemental First Round":"Round "+roundInfo.round} pick.
+Signing bonus: $${(offerData.bonus/1000000).toFixed(2)}M.
+Make it exciting. Reference hometown. End with something about Single-A and the road ahead.`;
+
+  let announcement = "";
+  try {
+    let resp = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:180,messages:[{role:"user",content:prompt}]})});
+    let data = await resp.json();
+    announcement = data.content.map(c=>c.text||"").join("").trim();
+  } catch(e){
+    announcement = `With their ${roundInfo.supp?"supplemental first round":"Round "+roundInfo.round} selection, the ${draftingTeam.name} pick ${player.name}, ${player.position} from ${player.town}. A $${fmt(offerData.bonus)} signing bonus is on the table — the road to Single-A begins now.`;
+  }
+
+  draftOffer = {team:draftingTeam, roundInfo, offerData, announcement, originalBonus:offerData.bonus};
+  renderDraftModal(fromCollege);
+}
+
+function renderDraftModal(fromCollege){
+  let o = draftOffer; let t = o.team;
+  let roundLabel = o.roundInfo.supp?"Supp. 1st":`Rd ${o.roundInfo.round}`;
+  let roundFull = o.roundInfo.supp?"Supplemental First Round":`Round ${o.roundInfo.round}`;
+  let bonus = o.offerData.bonus;
+
+  let decisionHtml = fromCollege ? `
+    <div class="draft-vs-college">
+      <h4>⚖️ Your Decision</h4>
+      <div class="vs-grid">
+        <div class="vs-card" onclick="acceptDraftOffer()">
+          <h5>✍️ Accept Offer</h5>
+          <ul>
+            <li>$${fmt(bonus)} signing bonus</li>
+            <li>${o.offerData.years}-year contract</li>
+            <li>Report to Single-A</li>
+            <li>Standard MLB service time</li>
+          </ul>
+        </div>
+        <div class="vs-card" onclick="holdOutDraft()">
+          <h5>💪 Hold Out for More</h5>
+          <ul>
+            <li>Risk: team may walk away</li>
+            <li>Potential 10–30% bonus increase</li>
+            <li>Damages team relationship</li>
+            <li>Uncertainty for months</li>
+          </ul>
+        </div>
+      </div>
+      <div style="margin-top:10px;text-align:center;">
+        <button class="action-btn" style="color:var(--muted);width:100%;" onclick="demandTrade()">🔀 Demand Trade to a Different Team</button>
+      </div>
+    </div>` : `
+    <div class="draft-vs-college">
+      <h4>⚖️ Your Decision</h4>
+      <div class="vs-grid">
+        <div class="vs-card" onclick="acceptDraftOffer()">
+          <h5>⚾ Sign Pro Contract</h5>
+          <ul>
+            <li>$${fmt(bonus)} signing bonus today</li>
+            <li>Start at Single-A immediately</li>
+            <li>Fast-track MLB career path</li>
+            <li>Forfeit college eligibility</li>
+          </ul>
+        </div>
+        <div class="vs-card" onclick="chooseCOllege_fromDraft()">
+          <h5>🎓 Go to College Instead</h5>
+          <ul>
+            <li>4 college seasons of development</li>
+            <li>Scholarship + potential NIL money</li>
+            <li>Re-enter draft as stronger prospect</li>
+            <li>Education as a safety net</li>
+          </ul>
+        </div>
+      </div>
+    </div>`;
+
+  document.getElementById("draftModalBody").innerHTML = `
+    <div class="draft-header-band">
+      <div class="draft-round-badge">
+        <span class="round-num">${o.roundInfo.round}</span>
+        <span class="round-lbl">${o.roundInfo.supp?"Supp.":"Round"}</span>
+      </div>
+      <div>
+        <h2>${fromCollege?"You've Been Re-Drafted!":"⚾ You've Been Drafted!"}</h2>
+        <p>${o.announcement}</p>
+      </div>
+    </div>
+    <div class="draft-team-card">
+      <div class="team-row">
+        <div class="team-logo-circle" style="background:linear-gradient(135deg,${t.color1},${t.color2});">${t.emoji}</div>
+        <div>
+          <h3>${t.name}</h3>
+          <div class="team-meta">${t.division} · ${t.city}, ${t.state} · ${t.marketSize.charAt(0).toUpperCase()+t.marketSize.slice(1)} Market</div>
+        </div>
+      </div>
+      <div class="offer-breakdown">
+        <div class="offer-stat"><div class="ov" style="color:var(--green);">$${fmt(bonus)}</div><div class="ok">Signing Bonus</div></div>
+        <div class="offer-stat"><div class="ov">${roundFull}</div><div class="ok">Draft Selection</div></div>
+        <div class="offer-stat"><div class="ov">${o.offerData.years} yr</div><div class="ok">Contract Term</div></div>
+      </div>
+      <div style="font-size:0.82rem;color:var(--muted);padding:10px;background:rgba(255,255,255,0.02);border-radius:10px;line-height:1.6;">
+        <strong style="color:var(--ink);">Path to MLB:</strong> Single-A → Double-A → Triple-A → The Show. Average time for a ${roundFull} pick: ${o.roundInfo.round<=2?"2–3":"3–5"} years.
+      </div>
+    </div>
+    ${decisionHtml}
+    <div class="negotiate-panel" id="negotiatePanel">
+      <h4>💬 Counter-Offer Negotiation</h4>
+      <p style="font-size:0.82rem;color:var(--muted);margin-bottom:12px;">Holding out is a gamble — the team may walk.</p>
+      <div class="draft-actions">
+        <button class="action-btn primary" onclick="resolveHoldout('aggressive')">💰 Demand 30% More</button>
+        <button class="action-btn blue" onclick="resolveHoldout('moderate')">📋 Ask for 15% More</button>
+        <button class="action-btn" onclick="resolveHoldout('accept')">✅ Accept Original Offer</button>
+      </div>
+    </div>
+  `;
+}
+
+function acceptDraftOffer(){
+  if(!draftOffer) return;
+  let t = draftOffer.team; let bonus = draftOffer.offerData.bonus;
+  player.money += bonus;
+  player.salary = draftOffer.offerData.annualSalary;
+  player.mlbTeam = t.name; player.mlbTeamCity = t.city;
+  player.draftRound = draftOffer.roundInfo.round; player.draftBonus = bonus;
+  player.contract = draftOffer.offerData.years;
+  careerStage = "Single-A"; gamesPlayed = 0; age = Math.max(age,19);
+  document.getElementById("draftModal").classList.add("hidden");
+  addFeed("Signed Pro Contract",`${player.name} signs with ${t.name} for $${fmt(bonus)}. Reports to Single-A.`,"success");
+  setSpotlight("Pro Career Begins",`${t.name} — ${draftOffer.roundInfo.supp?"Supp. 1st":"Round "+draftOffer.roundInfo.round} Pick`,`$${fmt(bonus)} signing bonus. The grind at Single-A starts now.`,"success");
+  showToast(`Signed with ${t.name}! $${fmt(bonus)} bonus.`,"success");
+  updateUI();
+}
+
+function chooseCOllege_fromDraft(){
+  document.getElementById("draftModal").classList.add("hidden");
+  careerStage = "College"; age = 18; gamesPlayed = 0; collegeSeasonsPlayed = 0;
+  showCollegeRecruitmentModal();
+}
+
+function holdOutDraft(){
+  let p = document.getElementById("negotiatePanel");
+  if(p) p.style.display = "block";
+  document.querySelector(".draft-vs-college").style.display = "none";
+}
+
+function resolveHoldout(type){
+  if(!draftOffer) return;
+  let orig = draftOffer.originalBonus;
+  if(type==="accept"){ acceptDraftOffer(); return; }
+  let roll = Math.random();
+  if(type==="aggressive"){
+    if(roll<0.35){
+      document.getElementById("draftModal").classList.add("hidden");
+      addFeed("Holdout Failed","Team rescinded offer after aggressive holdout. Wait for next year.","warning");
+      setSpotlight("Offer Rescinded","The team walked away.","You'll have to wait for next year's draft. Consider college in the meantime.","warning");
+      showToast("Offer rescinded! Team walked away.","warning");
+      draftOffer=null; updateUI(); return;
+    }
+    let inc = 0.20+Math.random()*0.15;
+    draftOffer.offerData.bonus = Math.round(orig*(1+inc)/5000)*5000;
+  } else {
+    if(roll<0.15){ showToast("Team held firm on the number.","warning"); document.getElementById("negotiatePanel").style.display="none"; return; }
+    let inc = 0.08+Math.random()*0.10;
+    draftOffer.offerData.bonus = Math.round(orig*(1+inc)/5000)*5000;
+  }
+  showToast(`Bonus raised to $${fmt(draftOffer.offerData.bonus)}!`,"success");
+  addFeed("Holdout Result",`Bonus raised to $${fmt(draftOffer.offerData.bonus)}.`,"success");
+  document.getElementById("negotiatePanel").style.display="none";
+  renderDraftModal(draftIsRedraft);
+}
+
+async function demandTrade(){
+  if(!draftOffer) return;
+  document.getElementById("draftModalBody").innerHTML=`<div class="hs-loading"><span class="spin">⚾</span><p>Finding a team willing to take the deal…</p></div>`;
+  let cur = draftOffer.team;
+  let alts = MLB_TEAMS.filter(t=>t!==cur);
+  let scored = alts.map(t=>({team:t,score:t.prestige*2+Math.random()*8})).sort((a,b)=>b.score-a.score);
+  let newTeam = scored.slice(0,5)[~~(Math.random()*5)].team;
+  let pen = 0.05+Math.random()*0.10;
+  draftOffer.offerData.bonus = Math.round(draftOffer.originalBonus*(1-pen)/5000)*5000;
+  draftOffer.team = newTeam;
+  await new Promise(r=>setTimeout(r,900));
+  addFeed("Trade Demand",`Traded to ${newTeam.name} — bonus drops to $${fmt(draftOffer.offerData.bonus)}.`,"warning");
+  showToast(`Traded to ${newTeam.name}.`,"warning");
+  renderDraftModal(draftIsRedraft);
+}
+
+function schoolEvent(){
+  let r = Math.random();
+  if(r<0.2){ player.grades = Math.min(100, player.grades+5); }
+  else if(r<0.35){ player.grades = Math.max(0, player.grades-5); }
+  else if(r<0.5){ player.popularity = Math.min(100, player.popularity+5); }
+  else if(r<0.6){ attributes.contact = Math.min(99, attributes.contact+1); }
+  player.eligibility = player.grades >= 60;
+  if(!player.eligibility) showToast("GPA too low — ineligible!", "warning");
+}
+
+// ===================== CAREER PROGRESSION =====================
+function advanceCareer(){
+  let cap = STAGE_CAPS[careerStage];
+  if(gamesPlayed < cap){
+    setSpotlight("Not Yet","Finish the season first.",`Still ${cap-gamesPlayed} games left in ${careerStage}.`,"warning");
+    showToast("Finish the season first.","warning"); return;
+  }
+
+  let prevStage = careerStage;
+
+  // -------- High School → get drafted OR go to college --------
+  if(prevStage === "High School"){
+    // Must have played at least 1 HS season (end season first)
+    growPlayer();
+    triggerMLBDraft(false);
+    return;
+  }
+
+  // -------- College → 4 seasons, then re-draft --------
+  if(prevStage === "College"){
+    collegeSeasonsPlayed++;
+    if(collegeSeasonsPlayed < 4){
+      // Still have college seasons remaining
+      gamesPlayed = 0;
+      age++;
+      if(player.nilDeal) player.money += player.nilDeal; // annual NIL payment
+      addFeed(`College Season ${collegeSeasonsPlayed}`,`${player.name} completes year ${collegeSeasonsPlayed} at ${player.college||"college"}.`,"success");
+      setSpotlight(`College Year ${collegeSeasonsPlayed}`,`Season ${collegeSeasonsPlayed} of 4 complete.`,`${4-collegeSeasonsPlayed} season(s) remaining. Keep developing before the draft.`,"success");
+      showToast(`College Year ${collegeSeasonsPlayed}/4 complete.`,"success");
+      updateUI(); return;
+    }
+    // 4 seasons done — Re-enter the draft
+    growPlayer();
+    addFeed("College Career Complete",`${player.name} finishes 4 years at ${player.college||"college"}. Re-entering the MLB Draft.`,"success");
+    triggerMLBDraft(true);
+    return;
+  }
+
+  // -------- Minor League promotions (Single-A → Double-A → Triple-A) --------
+  const minorPromotions = {"Single-A":"Double-A","Double-A":"Triple-A","Triple-A":"MLB"};
+  if(minorPromotions[prevStage]){
+    careerStage = minorPromotions[prevStage];
+    gamesPlayed = 0;
+    age = Math.max(age, STAGE_AGES[careerStage]||age+1);
+    growPlayer();
+    completeCareerAdvance(); return;
+  }
+
+  // -------- MLB top — already there --------
+  if(prevStage === "MLB"){
+    setSpotlight("The Show","You've reached the top.",`Keep playing seasons at MLB level or retire.`,"success");
+    showToast("You're in the MLB!","success"); return;
+  }
+
+  // -------- Little League → High School --------
+  careerStage = "High School";
+  age = STAGE_AGES["High School"]||14;
+  growPlayer();
+  pendingHSTransition = true;
+  showHSChoiceModal();
+}
+
+function endSeason(){
+  let awards = generateAwards();
+  player.career.push({
+    stage: careerStage,
+    season: seasonsPlayed+1,
+    stats: {...player.stats},
+    awards,
+    age
+  });
+  seasonsPlayed++;
+
+  developPlayer();
+  updateMarkets();
+  applyExpenses();
+  player.money += player.salary;
+  player.stats = {AB:0,H:0,HR:0,RBI:0,SO:0,AVG:0,OBP:0,SLG:0,OPS:0};
+
+  saveAutoSlot();
+
+  setSpotlight("Season Over", `Season ${seasonsPlayed} complete.`, `MVP: ${awards.MVP} | Batting Champ: ${awards.BattingChamp} | HR King: ${awards.HRKing}`, "success");
+  addFeed(`Season ${seasonsPlayed} End`, `MVP: ${awards.MVP}. You earned $${fmt(player.salary)}.`, "success");
+  showToast("Season ended. Finances updated.", "success");
+  updateUI();
+}
+
+function retire(){
+  if(!confirm("Are you sure you want to retire?")) return;
+  showRetireScreen();
+}
+
+function showRetireScreen(){
+  let total = player.career.reduce((a,s)=>({
+    HR: a.HR+(s.stats.HR||0),
+    H:  a.H+(s.stats.H||0),
+    RBI: a.RBI+(s.stats.RBI||0),
+    AB:  a.AB+(s.stats.AB||0),
+  }),{HR:0,H:0,RBI:0,AB:0});
+  let careerAVG = total.AB>0 ? (total.H/total.AB).toFixed(3) : ".000";
+  let net = player.money + player.investments + player.realEstate + player.gold + player.bitcoin;
+
+  document.getElementById("retireStats").innerHTML = `
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;text-align:center;">
+      <div><div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--accent)">${player.name}</div><div style="color:var(--muted)">Career</div></div>
+      <div><div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;">${total.HR}</div><div style="color:var(--muted)">Career HR</div></div>
+      <div><div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;">${careerAVG}</div><div style="color:var(--muted)">Career AVG</div></div>
+      <div><div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;">${total.RBI}</div><div style="color:var(--muted)">Career RBI</div></div>
+      <div><div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;">${seasonsPlayed}</div><div style="color:var(--muted)">Seasons</div></div>
+      <div><div style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:900;color:var(--green)">$${fmt(net)}</div><div style="color:var(--muted)">Net Worth</div></div>
+    </div>
+    <div style="margin-top:20px;padding-top:20px;border-top:1px solid rgba(34,197,94,0.2);display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left;">
+      ${player.mlbTeam?`<div style="font-size:0.85rem;"><span style="color:var(--muted)">Drafted by</span><br><strong>${player.mlbTeam}</strong> — Round ${player.draftRound||"?"} · $${fmt(player.draftBonus||0)} bonus</div>`:""}
+      ${player.college?`<div style="font-size:0.85rem;"><span style="color:var(--muted)">College</span><br><strong>${player.college}</strong>${player.nilDeal?` · NIL $${fmt(player.nilDeal)}/yr`:""}${player.scholarship?` · $${fmt(player.scholarship)}/yr scholarship`:""}</div>`:""}
+      ${player.highSchool?`<div style="font-size:0.85rem;"><span style="color:var(--muted)">High School</span><br><strong>${player.highSchool}</strong></div>`:""}
+      <div style="font-size:0.85rem;"><span style="color:var(--muted)">Physique</span><br><strong>${physique.heightIn?inchesToStr(physique.heightIn):"—"}</strong> · ${physique.weightLbs||"—"} lbs</div>
+    </div>
+    <div style="margin-top:12px;padding-top:12px;border-top:1px solid rgba(34,197,94,0.1);color:var(--muted);font-size:0.85rem;">
+      Final stage: ${careerStage} · Suspensions: ${steroidUse.suspensions} · Level: ${player.levelTier} · Age: ${age}
+    </div>`;
+
+  showScreen("screenRetire");
+}
+
+// ===================== FINANCE =====================
+function calculateSalary(){
+  let r = attributes.contact+attributes.power+attributes.speed;
+  if(careerStage==="MLB"){
+    if(r>270) return 25000000;
+    if(r>240) return 12000000;
+    if(r>200) return 4000000;
+    return 720000;
+  }
+  if(careerStage==="Triple-A") return 170000;
+  if(careerStage==="Double-A") return 120000;
+  if(careerStage==="Single-A") return 80000;
+  return 0;
+}
+
+function signContract(){
+  if(careerStage==="Little League"||careerStage==="High School"||careerStage==="College"){
+    showToast("No pro contract available yet.", "warning"); return;
+  }
+  player.salary = calculateSalary();
+  player.contract = 3;
+  addFeed("Contract Signed", `$${fmt(player.salary)}/yr × 3 years.`, "success");
+  showToast(`Contract: $${fmt(player.salary)}/yr!`, "success");
+  updateUI();
+}
+
+function invest(type){
+  let amt = player.money*0.5;
+  if(amt<=100){ showToast("Not enough cash.", "warning"); return; }
+  player.money -= amt;
+  player[type] += amt;
+  player.costBasis[type] += amt;
+  showToast(`Invested $${fmt(amt)} in ${type}.`, "success");
+  updateUI();
+}
+
+function sellAsset(type){
+  let val = player[type];
+  if(val<=0){ showToast("Nothing to sell.", "warning"); return; }
+  let profit = val - (player.costBasis[type]||0);
+  player.money += val;
+  player[type] = 0;
+  player.costBasis[type] = 0;
+  addFeed(`Sold ${type}`, `+$${fmt(val)} (profit: $${fmt(profit)})`, profit>0?"success":"warning");
+  showToast(`Sold ${type} for $${fmt(val)}.`, profit>0?"success":"warning");
+  updateUI();
+}
+
+function setLifestyle(val){ player.lifestyle = val; showToast(`Lifestyle: ${val}`, "success"); }
+
+function updateMarkets(){
+  function ch(v,lo,hi){ return Math.max(0, v*(1+(lo+Math.random()*(hi-lo)))); }
+  player.investments = ch(player.investments,-0.05,0.12);
+  player.realEstate  = ch(player.realEstate, 0.02,0.07);
+  player.gold        = ch(player.gold,       -0.02,0.05);
+  player.bitcoin     = ch(player.bitcoin,    -0.25,0.40);
+}
+
+function applyExpenses(){
+  let cost = player.lifestyle==="Luxury"?200000:player.lifestyle==="Normal"?50000:20000;
+  player.money = Math.max(0, player.money - cost);
+}
+
+// ===================== AWARDS / LEADERS =====================
+function getAllPlayers(){
+  let all = [];
+  teams.forEach(t=>all=all.concat(t.players));
+  return all;
+}
+
+function getLeagueLeaders(){
+  let all = getAllPlayers();
+  let avg = [...all].sort((a,b)=>b.stats.AVG-a.stats.AVG)[0]||{name:"-",stats:{AVG:0}};
+  let hr  = [...all].sort((a,b)=>b.stats.HR -a.stats.HR )[0]||{name:"-",stats:{HR:0}};
+  let rbi = [...all].sort((a,b)=>b.stats.RBI-a.stats.RBI)[0]||{name:"-",stats:{RBI:0}};
+  return {avg,hr,rbi};
+}
+
+function generateAwards(){
+  let L = getLeagueLeaders();
+  return {MVP:L.hr.name, BattingChamp:L.avg.name, HRKing:L.hr.name};
+}
+
+// ===================== SAVE / LOAD =====================
+function saveToSlot(n){
+  let data = {player,attributes,teams,careerStage,age,gamesPlayed,seasonsPlayed,lastOutcome,injury,steroidUse,difficulty,eventFeed,physique,collegeSeasonsPlayed};
+  localStorage.setItem(`bls_save_${n}`, JSON.stringify(data));
+  showToast(`Saved to Slot ${n}.`,"success");
+  renderSaveSlots();
+}
+
+function loadGameSlot(n){
+  let raw = localStorage.getItem(`bls_save_${n}`);
+  if(!raw){ showToast("No save found.","warning"); return; }
+  let d = JSON.parse(raw);
+  player=d.player; attributes=d.attributes; teams=d.teams;
+  careerStage=d.careerStage; age=d.age; gamesPlayed=d.gamesPlayed;
+  seasonsPlayed=d.seasonsPlayed; lastOutcome=d.lastOutcome||"";
+  injury=d.injury; steroidUse=d.steroidUse; difficulty=d.difficulty;
+  eventFeed=d.eventFeed||[];
+  if(d.physique) physique=d.physique;
+  if(d.collegeSeasonsPlayed!==undefined) collegeSeasonsPlayed=d.collegeSeasonsPlayed;
+  showScreen("screenGame");
+  updateUI();
+  showToast("Game loaded!","success");
+}
+
+function saveAutoSlot(){
+  let data = {player,attributes,teams,careerStage,age,gamesPlayed,seasonsPlayed,lastOutcome,injury,steroidUse,difficulty,eventFeed,physique,collegeSeasonsPlayed};
+  localStorage.setItem("bls_auto", JSON.stringify(data));
+}
+
+// ===================== UI HELPERS =====================
+function fmt(n){ if(n>=1000000) return (n/1000000).toFixed(1)+"M"; if(n>=1000) return (n/1000).toFixed(0)+"k"; return Math.floor(n).toString(); }
+
+function showScreen(id){
+  document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+}
+
+function showTab(id){
+  document.querySelectorAll(".tab-content").forEach(t=>t.classList.remove("active"));
+  document.getElementById(id).classList.add("active");
+  document.querySelectorAll(".tab-btn").forEach(b=>{
+    b.classList.toggle("active", b.getAttribute("onclick")===`showTab('${id}')`);
+  });
+}
+
+function setSpotlight(label,title,text,type=""){
+  let s = document.getElementById("spotlight");
+  s.className = "spotlight"+(type?" "+type:"");
+  document.getElementById("spotLabel").textContent = label;
+  document.getElementById("spotTitle").textContent = title;
+  document.getElementById("spotText").textContent = text;
+}
+
+function addFeed(title, detail, type=""){
+  eventFeed.unshift({title,detail,type});
+  if(eventFeed.length>30) eventFeed.pop();
+  renderFeed();
+}
+
+function renderFeed(){
+  let list = document.getElementById("feedList");
+  if(!list) return;
+  if(!eventFeed.length){
+    list.innerHTML = '<p style="font-size:0.82rem;color:var(--muted);">Play a game to start building your story.</p>';
+    return;
+  }
+  list.innerHTML = eventFeed.slice(0,20).map(e=>`
+    <div class="feed-item ${e.type}">
+      <strong>${e.title}</strong>
+      <span>${e.detail}</span>
+    </div>`).join("");
+}
+
+function showToast(msg, type=""){
+  let wrap = document.getElementById("toastWrap");
+  let t = document.createElement("div");
+  t.className = "toast "+type;
+  t.textContent = msg;
+  wrap.appendChild(t);
+  requestAnimationFrame(()=>{ requestAnimationFrame(()=>t.classList.add("show")); });
+  setTimeout(()=>{
+    t.classList.remove("show");
+    setTimeout(()=>t.remove(), 300);
+  }, 2500);
+}
+
+function selectArch(btn){
+  document.querySelectorAll(".arch-btn").forEach(b=>b.classList.remove("selected"));
+  btn.classList.add("selected");
+  selectedArch = btn.dataset.arch;
+}
+
+function renderSaveSlots(){
+  let grid = document.getElementById("saveGrid");
+  if(!grid) return;
+  grid.innerHTML = [1,2,3].map(n=>{
+    let raw = localStorage.getItem(`bls_save_${n}`);
+    let info = "Empty";
+    if(raw){
+      let d = JSON.parse(raw);
+      info = `${d.player?.name||"??"} — ${d.careerStage||"??"} S${d.seasonsPlayed||0}`;
+    }
+    return `<div class="save-slot">
+      <div class="slot-label">Slot ${n}</div>
+      <div class="slot-data" style="font-size:0.78rem;color:var(--muted);margin-bottom:8px;">${info}</div>
+      <button class="action-btn primary" style="width:100%;font-size:0.78rem;padding:7px;" onclick="saveToSlot(${n})">Save</button>
+      <button class="action-btn blue" style="width:100%;font-size:0.78rem;padding:7px;margin-top:4px;" onclick="loadGameSlot(${n})">Load</button>
+    </div>`;
+  }).join("");
+}
+
+function updateUI(){
+  if(!player) return;
+
+  // physique
+  if(physique.heightIn){
+    let build = getBuild(physique.heightIn);
+    document.getElementById("sHeight").textContent = inchesToStr(physique.heightIn);
+    document.getElementById("sWeight").textContent = `${physique.weightLbs} lbs`;
+    document.getElementById("sBuild").textContent = build.label;
+    let pctToAdult = Math.min(100, Math.round((physique.heightIn / physique.adultHeightIn)*100));
+    let growthDiv = document.getElementById("growthNote");
+    let isAtAdult = physique.heightIn >= physique.adultHeightIn - 0.5;
+    let heightFlag = physique.adultHeightIn >= 82 ? "🦒 Rare height!" : physique.adultHeightIn >= 78 ? "⬆️ Tall frame" : "";
+    growthDiv.innerHTML = isAtAdult
+      ? `<span style="font-size:0.72rem;color:var(--muted);">Full height: ${inchesToStr(physique.adultHeightIn)} ${heightFlag}</span>`
+      : `<span style="font-size:0.72rem;color:var(--green);">Growing… ${pctToAdult}% of ${inchesToStr(physique.adultHeightIn)} ${heightFlag}</span>`;
+  }
+
+  // header pills
+  document.getElementById("pillStage").textContent = careerStage;
+  document.getElementById("pillAge").textContent = `Age ${age}`;
+  document.getElementById("pillMoney").textContent = `$${fmt(player.money)}`;
+  document.getElementById("pillStatus").textContent = injury.active ? "🤕 Injured" : physique.heightIn ? `📏 ${inchesToStr(physique.heightIn)}` : "✅ Healthy";
+
+  // badge
+  document.getElementById("badgeNumber").textContent = `#${player.number}`;
+  document.getElementById("badgeName").textContent = player.name;
+  let orgLabel = player.mlbTeam ? player.mlbTeam : player.college ? player.college : careerStage;
+  document.getElementById("badgeSub").textContent = `${player.position} · ${orgLabel}`;
+  let tags = document.getElementById("badgeTags");
+  tags.innerHTML = "";
+  player.personality.forEach(p=>{ let t=document.createElement("span"); t.className="tag gold"; t.textContent=p; tags.appendChild(t); });
+  if(injury.active){ let t=document.createElement("span"); t.className="tag red"; t.textContent=injury.name; tags.appendChild(t); }
+  if(steroidUse.suspensions>0){ let t=document.createElement("span"); t.className="tag red"; t.textContent=`${steroidUse.suspensions} susp`; tags.appendChild(t); }
+
+  // stats
+  let s = player.stats;
+  document.getElementById("sAVG").textContent = s.AVG.toFixed(3);
+  document.getElementById("sOPS").textContent = s.OPS.toFixed(3);
+  document.getElementById("sHR").textContent = s.HR;
+  document.getElementById("sRBI").textContent = s.RBI;
+  document.getElementById("sSO").textContent = s.SO;
+  document.getElementById("sAB").textContent = s.AB;
+
+  // attributes bars
+  let attrDiv = document.getElementById("attrBars");
+  if(attrDiv){
+    attrDiv.innerHTML = Object.entries(attributes).map(([k,v])=>`
+      <div class="attr-bar-item">
+        <div class="attr-bar-header"><span class="name">${k.charAt(0).toUpperCase()+k.slice(1)}</span><strong>${Math.round(v)}</strong></div>
+        <div class="attr-bar-track"><div class="attr-bar-fill" style="width:${v}%"></div></div>
+      </div>`).join("");
+  }
+
+  // XP
+  document.getElementById("sLevel").textContent = player.levelTier;
+  document.getElementById("sXP").textContent = Math.round(player.xp);
+  let xpMax = player.levelTier*100;
+  document.getElementById("sXPMax").textContent = xpMax;
+  document.getElementById("xpBarFill").style.width = Math.min(100,(player.xp/xpMax)*100)+"%";
+
+  // school
+  document.getElementById("sGPA").textContent = (player.grades/25).toFixed(1);
+  document.getElementById("sEligible").textContent = player.eligibility ? "✅ Yes" : "❌ No";
+  document.getElementById("sPop").textContent = player.popularity;
+
+  // mini stats
+  let stageAbbr = {"Little League":"LL","High School":"HS","College":"COL","Single-A":"A","Double-A":"AA","Triple-A":"AAA","MLB":"MLB"};
+  document.getElementById("mStage").textContent = stageAbbr[careerStage]||careerStage;
+  document.getElementById("mAge").textContent = age;
+  document.getElementById("mGames").textContent = gamesPlayed;
+  document.getElementById("mSeasons").textContent = seasonsPlayed;
+
+  // finance tab
+  document.getElementById("fCash").textContent = `$${fmt(player.money)}`;
+  document.getElementById("fSalary").textContent = `$${fmt(player.salary)}`;
+  document.getElementById("fInv").textContent = `$${fmt(player.investments)}`;
+  document.getElementById("fRE").textContent = `$${fmt(player.realEstate)}`;
+  document.getElementById("fGold").textContent = `$${fmt(player.gold)}`;
+  document.getElementById("fBTC").textContent = `$${fmt(player.bitcoin)}`;
+
+  // standings
+  let sorted = [...teams].sort((a,b)=>b.wins-a.wins);
+  document.getElementById("standingsDiv").innerHTML = sorted.map((t,i)=>`
+    <div class="standing-row ${t===player.team?'player-team':''}">
+      <span class="standing-rank">${i+1}</span>
+      <span class="standing-name">${t.name}${t===player.team?' ★':''}</span>
+      <span class="standing-record">${t.wins}-${t.losses}</span>
+    </div>`).join("");
+
+  // leaders
+  let L = getLeagueLeaders();
+  document.getElementById("leadersTbody").innerHTML = `
+    <tr><td>Batting AVG</td><td>${L.avg.name}</td><td>${L.avg.stats.AVG.toFixed(3)}</td></tr>
+    <tr><td>Home Runs</td><td>${L.hr.name}</td><td>${L.hr.stats.HR}</td></tr>
+    <tr><td>RBI</td><td>${L.rbi.name}</td><td>${L.rbi.stats.RBI}</td></tr>`;
+
+  // career history
+  let ch = document.getElementById("careerHistoryDiv");
+  // Show college progress indicator if in college
+  let collegeProgressHtml = "";
+  if(careerStage === "College"){
+    let pct = Math.round((collegeSeasonsPlayed/4)*100);
+    collegeProgressHtml = `
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;font-size:0.85rem;margin-bottom:8px;">
+          <strong>🎓 ${player.college||"College"}</strong>
+          <span style="color:var(--muted);">Year ${collegeSeasonsPlayed+1} of 4</span>
+        </div>
+        <div style="background:rgba(255,255,255,0.06);height:6px;border-radius:999px;">
+          <div style="height:6px;border-radius:999px;background:linear-gradient(90deg,var(--accent2),var(--accent));width:${pct}%;transition:width 0.4s"></div>
+        </div>
+        ${player.nilDeal>0?`<div style="font-size:0.75rem;color:var(--green);margin-top:6px;">💰 NIL: $${fmt(player.nilDeal)}/yr</div>`:""}
+        ${player.college&&player.collegeConference?`<div style="font-size:0.75rem;color:var(--muted);margin-top:2px;">${player.collegeConference}</div>`:""}
+      </div>`;
+  }
+  // Show MLB/MiLB team card if pro
+  let proTeamHtml = "";
+  if(player.mlbTeam && ["Single-A","Double-A","Triple-A","MLB"].includes(careerStage)){
+    let t = MLB_TEAMS.find(x=>x.name===player.mlbTeam)||{color1:"#1a3a6e",color2:"#c8a84b",emoji:"⚾",division:"",city:""};
+    proTeamHtml = `
+      <div style="background:linear-gradient(135deg,${t.color1}22,${t.color2}11);border:1px solid ${t.color1}44;border-radius:14px;padding:14px;margin-bottom:12px;display:flex;gap:12px;align-items:center;">
+        <div style="width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,${t.color1},${t.color2});display:flex;align-items:center;justify-content:center;font-size:1.3rem;flex-shrink:0;">${t.emoji}</div>
+        <div>
+          <div style="font-weight:700;">${player.mlbTeam}</div>
+          <div style="font-size:0.75rem;color:var(--muted);">${careerStage} · ${t.division}</div>
+          ${player.draftRound?`<div style="font-size:0.72rem;color:var(--accent);">Round ${player.draftRound} Pick · $${fmt(player.draftBonus||0)} bonus</div>`:""}
+        </div>
+      </div>`;
+  }
+  if(!player.career.length){ ch.innerHTML = collegeProgressHtml+proTeamHtml+'<p style="color:var(--muted);font-size:0.85rem;">End a season to see history here.</p>'; }
+  else {
+    ch.innerHTML = collegeProgressHtml+proTeamHtml+[...player.career].reverse().map(s=>`
+      <div class="career-history-item">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+          <strong>${s.stage} — Season ${s.season}</strong>
+          <span style="color:var(--muted)">Age ${s.age}</span>
+        </div>
+        <div style="font-size:0.8rem;color:var(--muted);">
+          AVG ${s.stats.AVG.toFixed(3)} | HR ${s.stats.HR} | RBI ${s.stats.RBI} | AB ${s.stats.AB}
+        </div>
+        <div style="font-size:0.78rem;color:var(--accent);margin-top:4px;">MVP: ${s.awards.MVP}</div>
+      </div>`).join("");
+  }
+
+  renderFeed();
+  renderSaveSlots();
+}
+
+// ===================== GAME START =====================
+function startGame(){
+  player = createPlayer();
+  attributes = createAttrs();
+  teams = [];
+  eventFeed = [];
+  commentary = [];
+
+  player.name = document.getElementById("inputName").value.trim() || "Jordan Cruz";
+  player.town = document.getElementById("inputTown").value.trim() || "Austin, TX";
+  player.position = document.getElementById("inputPos").value;
+  player.number = parseInt(document.getElementById("inputNum").value)||21;
+  player.archetype = selectedArch;
+  player.parents = document.getElementById("inputParents").value;
+  difficulty = document.getElementById("inputDiff").value;
+
+  applyArchetype(player.archetype);
+  applyParents(player.parents);
+  clampAttrs();
+
+  careerStage = "Little League";
+  age = 8; gamesPlayed = 0; seasonsPlayed = 0; collegeSeasonsPlayed = 0;
+  injury = {active:false,name:"",weeksRemaining:0};
+  steroidUse = {used:false,suspensions:0};
+  lastOutcome = "Career begins.";
+
+  initPhysique();
+  generateLeague();
+
+  showScreen("screenGame");
+  setSpotlight("Career Begins", `${player.name} is ready.`, `A ${player.position} from ${player.town} starts the climb at ${careerStage}.`, "success");
+  addFeed("Career Starts", `${player.name} (#${player.number}) — ${player.archetype} — ${player.town}`, "success");
+  showToast(`Welcome, ${player.name}!`, "success");
+  updateUI();
+}
+
+function newGame(){
+  showScreen("screenStart");
+}
+
+// ===================== INIT =====================
+renderSaveSlots();
+</script>
+</body>
+</html>
