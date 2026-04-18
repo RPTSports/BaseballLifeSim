@@ -745,6 +745,74 @@ display:flex; align-items:center; gap:5px; font-size:0.72rem;
 .equip-summary-slot .ss-name { color:var(–muted); }
 .equip-summary-slot .ss-val  { font-weight:700; color:var(–ink); }
 
+/* ── Season Summary Modal ── */
+.season-summary-modal {
+max-width: 680px; width: 97vw;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 28px; overflow: hidden;
+box-shadow: 0 32px 80px rgba(0,0,0,0.85);
+animation: slideUp 0.35s ease;
+max-height: 92vh; display: flex; flex-direction: column;
+}
+.ss-banner {
+padding: 28px 28px 22px;
+text-align: center;
+flex-shrink: 0;
+}
+.ss-banner .ss-stage-tag {
+font-size: 0.65rem; font-weight: 800; letter-spacing: 0.12em;
+text-transform: uppercase; color: rgba(255,255,255,0.5); margin-bottom: 8px;
+}
+.ss-banner h2 {
+font-family: ‘Playfair Display’, serif; font-size: 1.8rem;
+font-weight: 900; color: white; margin-bottom: 6px;
+}
+.ss-banner .ss-subtitle { font-size: 0.88rem; color: rgba(255,255,255,0.65); }
+.ss-body { flex: 1; overflow-y: auto; padding: 20px 24px; }
+.ss-section { margin-bottom: 20px; }
+.ss-section-title {
+font-size: 0.68rem; font-weight: 800; letter-spacing: 0.1em;
+text-transform: uppercase; color: var(–muted); margin-bottom: 10px;
+padding-bottom: 6px; border-bottom: 1px solid var(–border);
+}
+.ss-stat-grid {
+display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px;
+}
+.ss-stat-box {
+background: var(–card); border: 1px solid var(–border);
+border-radius: 12px; padding: 12px 10px; text-align: center;
+}
+.ss-stat-box .sv { font-size: 1.4rem; font-weight: 900; font-family: ‘Playfair Display’, serif; }
+.ss-stat-box .sl { font-size: 0.68rem; color: var(–muted); margin-top: 3px; font-weight: 600; }
+.ss-attr-row {
+display: flex; align-items: center; gap: 8px; margin-bottom: 8px;
+}
+.ss-attr-name { font-size: 0.78rem; font-weight: 700; color: var(–ink); width: 72px; flex-shrink: 0; }
+.ss-attr-bar-wrap { flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; }
+.ss-attr-bar-fill { height: 6px; border-radius: 999px; transition: width 0.4s ease; }
+.ss-attr-val { font-size: 0.78rem; font-weight: 800; color: var(–ink); width: 26px; text-align: right; }
+.ss-attr-gain { font-size: 0.72rem; font-weight: 800; color: var(–green); width: 32px; text-align: right; }
+.ss-milestone {
+display: flex; align-items: flex-start; gap: 10px;
+padding: 8px 12px; background: var(–card);
+border: 1px solid var(–border); border-radius: 10px; margin-bottom: 6px;
+}
+.ss-milestone .sm-icon { font-size: 1.2rem; flex-shrink: 0; margin-top: 1px; }
+.ss-milestone .sm-text { font-size: 0.82rem; color: var(–ink); line-height: 1.4; }
+.ss-milestone .sm-sub { font-size: 0.72rem; color: var(–muted); margin-top: 2px; }
+.ss-award-chip {
+display: inline-flex; align-items: center; gap: 5px;
+padding: 5px 12px; border-radius: 999px; font-size: 0.78rem; font-weight: 800;
+background: rgba(230,160,32,0.12); border: 1px solid rgba(230,160,32,0.25); color: var(–accent);
+margin: 3px;
+}
+@media(max-width:600px){
+.ss-stat-grid { grid-template-columns: repeat(2,1fr); }
+.ss-body { padding: 14px 16px; }
+.season-summary-modal { border-radius: 20px 20px 0 0; position: fixed; bottom: 0; left: 0; right: 0; width: 100%; }
+}
+
 /* ── Stage Advance Modal ── */
 .stage-advance-modal {
 max-width: 600px;
@@ -935,12 +1003,45 @@ transition: all 0.18s;
 text-align: left;
 font-family: ‘DM Sans’, sans-serif;
 width: 100%;
+position: relative;
 }
 .story-choice-btn:hover {
+transform: translateX(3px);
+box-shadow: 0 4px 16px rgba(0,0,0,0.25);
+}
+.story-choice-btn.moral-kind {
+border-color: rgba(34,197,94,0.3);
+background: rgba(34,197,94,0.04);
+}
+.story-choice-btn.moral-kind:hover {
+border-color: var(–green);
+background: rgba(34,197,94,0.09);
+}
+.story-choice-btn.moral-selfish {
+border-color: rgba(239,68,68,0.25);
+background: rgba(239,68,68,0.03);
+}
+.story-choice-btn.moral-selfish:hover {
+border-color: var(–red);
+background: rgba(239,68,68,0.08);
+}
+.story-choice-btn.moral-neutral:hover {
 border-color: var(–accent2);
 background: rgba(59,158,255,0.07);
-transform: translateX(3px);
 }
+.story-moral-badge {
+position: absolute;
+top: 10px; right: 10px;
+font-size: 0.58rem;
+font-weight: 800;
+padding: 2px 8px;
+border-radius: 999px;
+letter-spacing: 0.06em;
+text-transform: uppercase;
+}
+.moral-badge-kind    { background:rgba(34,197,94,0.12); color:var(–green); border:1px solid rgba(34,197,94,0.25); }
+.moral-badge-selfish { background:rgba(239,68,68,0.1);  color:var(–red);   border:1px solid rgba(239,68,68,0.2); }
+
 .story-choice-btn .choice-letter {
 width: 26px; height: 26px;
 border-radius: 50%;
@@ -1233,6 +1334,7 @@ color: var(–muted); margin-bottom: 12px; display: flex; align-items: center; g
 
 <div style="display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;">
   <button class="start-btn" onclick="startGame()">⚾ Start Career</button>
+  <button class="action-btn" onclick="randomizePlayer()" style="padding:14px 24px;border-radius:999px;font-size:1rem;background:linear-gradient(135deg,#1a2a0a,#166534);border-color:rgba(34,197,94,0.4);color:var(--green);font-weight:800;">🎲 Random</button>
   <button class="action-btn blue" onclick="loadGameSlot(1)" style="padding:14px 24px;border-radius:999px;">Load Save</button>
 </div>
 ```
@@ -1358,13 +1460,10 @@ color: var(–muted); margin-bottom: 12px; display: flex; align-items: center; g
     <div class="panel-card" style="margin-top:0;">
       <h3 style="margin-bottom:14px;">Actions</h3>
 
-      <!-- Primary game controls - prominent -->
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-        <button class="action-btn primary" onclick="advanceWeek()" id="btnAdvWeek" style="padding:16px;font-size:0.95rem;">
+      <!-- Primary game control -->
+      <div style="margin-bottom:12px;">
+        <button class="action-btn primary" onclick="advanceWeek()" id="btnAdvWeek" style="width:100%;padding:16px;font-size:0.95rem;">
           📅 Advance Week
-        </button>
-        <button class="action-btn" onclick="simulateFullSeason()" id="btnSimSeason" style="padding:16px;font-size:0.95rem;background:linear-gradient(135deg,#1a3a6e,#0f2040);border-color:rgba(59,158,255,0.3);color:var(--accent2);">
-          ⚡ Simulate Full Season
         </button>
       </div>
 
@@ -1375,7 +1474,7 @@ color: var(–muted); margin-bottom: 12px; display: flex; align-items: center; g
       <!-- Secondary controls -->
       <div class="actions-grid" style="margin-top:4px;">
         <button class="action-btn" onclick="playGame()">▶ Single Game</button>
-        <button class="action-btn" onclick="endSeason()">🏁 End Season</button>
+        <button class="action-btn" onclick="confirmEndSeason()">🏁 End Season</button>
         <button class="action-btn blue" onclick="signContract()">✍ Sign Contract</button>
         <button class="action-btn" onclick="retire()" style="color:var(--muted);">🏁 Retire</button>
       </div>
@@ -1487,18 +1586,19 @@ color: var(–muted); margin-bottom: 12px; display: flex; align-items: center; g
 
 <div class="modal-overlay hidden" id="hsModal">
   <div class="hs-modal">
-    <div class="hs-modal-header">
-      <h2>🏫 Choose Your High School</h2>
-      <p id="hsModalSubtitle">Your Little League career has opened some doors. Pick the right school to shape the next chapter.</p>
+    <div class="hs-modal-header" style="background:linear-gradient(135deg,#1a0a3e,#1e3a8a);padding:20px 24px 16px;border-radius:20px 20px 0 0;">
+      <div style="font-size:0.65rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;">AGE 14 · REQUIRED DECISION</div>
+      <h2 style="color:white;">🏫 Choose Your High School</h2>
+      <p id="hsModalSubtitle" style="color:rgba(255,255,255,0.7);margin-top:6px;font-size:0.88rem;line-height:1.5;">Your Little League career has opened some doors. Pick the right school to shape the next chapter.</p>
     </div>
-    <div id="hsModalBody">
-      <div class="hs-loading">
-        <span class="spin">⚾</span>
-        <p>Scouting schools near <span id="hsLoadingCity">your hometown</span>…</p>
+    <div id="hsModalBody" style="overflow-y:auto;max-height:65vh;padding:4px 0;">
+      <div class="hs-loading" style="text-align:center;padding:40px;">
+        <span class="spin" style="font-size:2rem;display:inline-block;">⚾</span>
+        <p style="margin-top:12px;color:var(--muted);">Scouting schools near <span id="hsLoadingCity">your hometown</span>…</p>
       </div>
     </div>
-    <div class="hs-modal-footer">
-      <button class="action-btn" onclick="skipHSChoice()" style="color:var(--muted);">Decide Later</button>
+    <div class="hs-modal-footer" style="padding:12px 20px;border-top:1px solid var(--border);background:rgba(255,255,255,0.02);">
+      <span style="font-size:0.78rem;color:var(--muted);font-style:italic;">⚠️ You must select a school to continue. This decision affects your entire career.</span>
     </div>
   </div>
 </div>
@@ -1507,18 +1607,19 @@ color: var(–muted); margin-bottom: 12px; display: flex; align-items: center; g
 
 <div class="modal-overlay hidden" id="collegeModal">
   <div class="hs-modal college-modal">
-    <div class="hs-modal-header">
-      <h2>🎓 College Scholarship Offers</h2>
-      <p id="collegeModalSubtitle">Your high school career has attracted attention from college programs. Choose where to take your game next.</p>
+    <div class="hs-modal-header" style="background:linear-gradient(135deg,#0d1f3c,#1e3a8a);padding:20px 24px 16px;border-radius:20px 20px 0 0;">
+      <div style="font-size:0.65rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:6px;">AGE 18 · REQUIRED DECISION</div>
+      <h2 style="color:white;">🎓 Choose Your College</h2>
+      <p id="collegeModalSubtitle" style="color:rgba(255,255,255,0.7);margin-top:6px;font-size:0.88rem;line-height:1.5;">Your high school career has attracted attention from college programs. Choose where to take your game next.</p>
     </div>
-    <div id="collegeModalBody">
-      <div class="hs-loading">
-        <span class="spin">⚾</span>
-        <p>Loading scholarship offers near <span id="collegeLoadingCity">your hometown</span>…</p>
+    <div id="collegeModalBody" style="overflow-y:auto;max-height:65vh;padding:4px 0;">
+      <div class="hs-loading" style="text-align:center;padding:40px;">
+        <span class="spin" style="font-size:2rem;display:inline-block;">⚾</span>
+        <p style="margin-top:12px;color:var(--muted);">Scouting programs near <span id="collegeLoadingCity">your hometown</span>…</p>
       </div>
     </div>
-    <div class="hs-modal-footer">
-      <button class="action-btn" onclick="skipCollegeChoice()" style="color:var(--muted);">Decide Later</button>
+    <div class="hs-modal-footer" style="padding:12px 20px;border-top:1px solid var(--border);background:rgba(255,255,255,0.02);">
+      <span style="font-size:0.78rem;color:var(--muted);font-style:italic;">⚠️ You must select a college program to continue.</span>
     </div>
   </div>
 </div>
@@ -1569,6 +1670,59 @@ color: var(–muted); margin-bottom: 12px; display: flex; align-items: center; g
           </div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- END SEASON CONFIRM MODAL -->
+
+<div class="modal-overlay hidden" id="endSeasonConfirmModal">
+  <div class="season-summary-modal" style="max-width:440px;">
+    <div class="ss-banner" id="endSeasonConfirmBanner" style="background:linear-gradient(135deg,#0a1628,#166534);padding:24px 28px 20px;">
+      <div class="ss-stage-tag">⏸ END SEASON</div>
+      <h2 style="font-size:1.4rem;" id="endSeasonConfirmTitle">End the Season?</h2>
+      <p class="ss-subtitle" id="endSeasonConfirmSubtitle">Any remaining games will be auto-simulated.</p>
+    </div>
+    <div style="padding:20px 24px;" id="endSeasonConfirmBody">
+      <!-- filled by JS -->
+    </div>
+    <div style="padding:0 20px 18px;display:flex;gap:10px;">
+      <button class="action-btn primary" style="flex:1;padding:13px;" onclick="doEndSeason()">✅ Yes, End Season</button>
+      <button class="action-btn" style="flex:1;padding:13px;color:var(--muted);" onclick="closeEndSeasonConfirm()">Keep Playing →</button>
+    </div>
+  </div>
+</div>
+
+<!-- PRIVATE COACH MODAL -->
+
+<div class="modal-overlay hidden" id="privateCoachModal">
+  <div class="season-summary-modal" style="max-width:520px;">
+    <div class="ss-banner" id="coachBanner" style="background:linear-gradient(135deg,#0a1628,#78350f);">
+      <div class="ss-stage-tag" id="coachTag">🌟 PRIVATE COACHING OFFER</div>
+      <h2 id="coachTitle" style="font-size:1.4rem;">Your Parents Hired a Coach</h2>
+      <p class="ss-subtitle" id="coachSubtitle"></p>
+    </div>
+    <div style="padding:18px 22px;" id="coachBody"></div>
+    <div style="padding:0 20px 18px;display:flex;gap:10px;" id="coachButtons">
+      <!-- filled by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- SEASON SUMMARY MODAL -->
+
+<div class="modal-overlay hidden" id="seasonSummaryModal">
+  <div class="season-summary-modal">
+    <div class="ss-banner" id="ssBanner">
+      <div class="ss-stage-tag" id="ssStageTag">SEASON COMPLETE</div>
+      <h2 id="ssTitle">Season Over</h2>
+      <p class="ss-subtitle" id="ssSubtitle">Here's how it went.</p>
+    </div>
+    <div class="ss-body" id="ssBody"></div>
+    <div style="padding:14px 20px 18px;border-top:1px solid var(--border);flex-shrink:0;">
+      <button class="action-btn primary" style="width:100%;padding:14px;font-size:1rem;" onclick="closeSeasonSummary()">
+        Continue to Off-Season →
+      </button>
     </div>
   </div>
 </div>
@@ -1712,6 +1866,86 @@ color: var(–muted); margin-bottom: 12px; display: flex; align-items: center; g
     <div class="offseason-body">
       <p style="font-size:0.85rem;color:var(--muted);margin-bottom:16px;" id="offseasonPrompt">Choose one main activity for the off-season. Your choice will shape your development.</p>
       <div class="offseason-grid" id="offseasonGrid"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PARENT CONSEQUENCE MODAL -->
+
+<div class="modal-overlay hidden" id="parentConsequenceModal">
+  <div class="season-summary-modal" style="max-width:500px;">
+    <div class="ss-banner" id="parentConsequenceBanner" style="background:linear-gradient(135deg,#1a0a0a,#7c2d12);">
+      <div class="ss-stage-tag" id="parentConsequenceTag">⚠️ PARENT INTERVENTION</div>
+      <h2 style="font-size:1.4rem;" id="parentConsequenceTitle">Your Parents Have Had Enough</h2>
+      <p class="ss-subtitle" id="parentConsequenceSubtitle"></p>
+    </div>
+    <div style="padding:18px 22px;" id="parentConsequenceBody"></div>
+    <div style="padding:12px 20px 18px;border-top:1px solid var(--border);">
+      <button class="action-btn primary" style="width:100%;padding:13px;" onclick="closeParentConsequenceModal()">
+        I understand →
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- BIRTHDAY / HOLIDAY GIFT MODAL -->
+
+<div class="modal-overlay hidden" id="birthdayModal">
+  <div class="season-summary-modal" style="max-width:420px;">
+    <div style="padding:24px 24px 0;background:linear-gradient(135deg,#0a1628,#1a3a6e);border-radius:24px 24px 0 0;" id="birthdayModalBody"></div>
+    <div style="padding:14px 20px 18px;border-top:1px solid var(--border);margin-top:16px;">
+      <button class="action-btn primary" style="width:100%;padding:13px;" onclick="closeBirthdayModal()">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- THEFT EVENT MODAL -->
+
+<div class="modal-overlay hidden" id="theftModal">
+  <div class="season-summary-modal" style="max-width:560px;">
+    <div class="ss-banner" style="background:linear-gradient(135deg,#0a0a0a,#1a1a2e);" id="theftBanner">
+      <div class="ss-stage-tag" style="color:rgba(239,68,68,0.7);">⚠️ RISKY OFFER</div>
+      <h2 style="font-size:1.5rem;" id="theftTitle">Danny's Uncle Has a Plan</h2>
+      <p class="ss-subtitle" id="theftSubtitle">He says he can get you something. No questions asked.</p>
+    </div>
+    <div style="padding:18px 22px 0;" id="theftNarrativeBox">
+      <!-- narrative text -->
+    </div>
+    <!-- Step 1: item picker -->
+    <div id="theftPickerSection" style="padding:14px 22px 18px;">
+      <div style="font-size:0.7rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;">Choose what to take — higher value = higher risk of getting caught</div>
+      <div id="theftItemGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;"></div>
+      <button class="action-btn" style="width:100%;padding:11px;color:var(--muted);font-size:0.85rem;" onclick="declineTheft()">
+        Say no — this isn't who you are
+      </button>
+    </div>
+    <!-- Step 2: outcome (hidden until item chosen) -->
+    <div id="theftOutcomeSection" style="display:none;padding:14px 22px 20px;">
+      <div id="theftOutcomeBox"></div>
+      <button class="action-btn primary" style="width:100%;padding:13px;margin-top:14px;" onclick="closeTheftModal()">Continue →</button>
+    </div>
+  </div>
+</div>
+
+<!-- CHRISTMAS GIFT MODAL -->
+
+<div class="modal-overlay hidden" id="xmasModal">
+  <div class="season-summary-modal" style="max-width:520px;">
+    <div class="ss-banner" style="background:linear-gradient(135deg,#1a0a0a,#7f1d1d);">
+      <div class="ss-stage-tag">🎄 CHRISTMAS MORNING</div>
+      <h2 style="font-size:1.6rem;">A Gift Under the Tree</h2>
+      <p class="ss-subtitle" id="xmasSubtitle">Your parents saved up to get you something special this year.</p>
+    </div>
+    <div style="padding:20px 24px;" id="xmasBody">
+      <!-- filled by JS -->
+    </div>
+    <div style="padding:12px 20px 18px;border-top:1px solid var(--border);">
+      <button class="action-btn primary" style="width:100%;padding:14px;font-size:1rem;" onclick="acceptXmasGift()" id="xmasAcceptBtn">
+        🎁 Unwrap It!
+      </button>
+      <button class="action-btn" style="width:100%;padding:10px;margin-top:8px;font-size:0.85rem;color:var(--muted);" onclick="declineXmasGift()">
+        I already have what I need
+      </button>
     </div>
   </div>
 </div>
@@ -1874,6 +2108,78 @@ const FIRST_NAMES = ["Jake","Mike","Chris","Alex","Ryan","Tyler","Jordan","Logan
 const LAST_NAMES = ["Smith","Johnson","Martinez","Brown","Davis","Wilson","Moore","Taylor","Anderson","Thomas","Jackson","Garcia","Harris","Rivera","Lee"];
 
 function rndName(){ return FIRST_NAMES[~~(Math.random()*FIRST_NAMES.length)]+" "+LAST_NAMES[~~(Math.random()*LAST_NAMES.length)]; }
+
+// Random hometown pool — real US towns with character
+const RANDOM_TOWNS = [
+  "Scranton, PA","Baton Rouge, LA","Tulsa, OK","Fresno, CA","Shreveport, LA",
+  "Little Rock, AR","Amarillo, TX","Corpus Christi, TX","Lubbock, TX","Fort Wayne, IN",
+  "Spokane, WA","Chattanooga, TN","Knoxville, TN","Mobile, AL","Jackson, MS",
+  "Fayetteville, AR","Peoria, IL","Springfield, MO","Dayton, OH","Akron, OH",
+  "Lancaster, PA","Eugene, OR","Salem, OR","Stockton, CA","Bakersfield, CA",
+  "San Bernardino, CA","Des Moines, IA","Madison, WI","Green Bay, WI","Reno, NV",
+  "Durham, NC","Winston-Salem, NC","Augusta, GA","Savannah, GA","Tallahassee, FL",
+  "Laredo, TX","El Paso, TX","Albuquerque, NM","Colorado Springs, CO","Pueblo, CO",
+  "Billings, MT","Boise, ID","Provo, UT","Wichita, KS","Topeka, KS",
+  "Lincoln, NE","Omaha, NE","Sioux Falls, SD","Fargo, ND","Anchorage, AK",
+];
+
+const RANDOM_ARCHETYPES = ["athletic","power","contact","pitcher","star","scrappy"];
+const RANDOM_PARENTS    = ["wealthy","middle","poor","sports","strict","absent","immigrant","religious","add"];
+const RANDOM_POSITIONS  = ["C","1B","2B","3B","SS","LF","CF","RF","P"];
+
+function randomizePlayer(){
+  // Animate the button briefly
+  let btn = event.target;
+  btn.textContent = "🎲 Rolling…";
+  btn.disabled = true;
+
+  // Roll each field with a short staggered delay for drama
+  let steps = [
+    ()=>{ document.getElementById("inputName").value = rndName(); },
+    ()=>{
+      let town = RANDOM_TOWNS[Math.floor(Math.random()*RANDOM_TOWNS.length)];
+      document.getElementById("inputTown").value = town;
+      // Clear any resolved location so it doesn't use stale data
+      if(typeof resolvedLocation !== "undefined") resolvedLocation = null;
+      let resolved = document.getElementById("locationResolved");
+      let err = document.getElementById("locationError");
+      if(resolved) resolved.style.display = "none";
+      if(err) err.style.display = "none";
+    },
+    ()=>{
+      let parents = RANDOM_PARENTS[Math.floor(Math.random()*RANDOM_PARENTS.length)];
+      document.getElementById("inputParents").value = parents;
+    },
+    ()=>{
+      let arch = RANDOM_ARCHETYPES[Math.floor(Math.random()*RANDOM_ARCHETYPES.length)];
+      selectedArch = arch;
+      document.querySelectorAll(".arch-btn").forEach(b => {
+        b.classList.toggle("selected", b.dataset.arch === arch);
+      });
+    },
+    ()=>{
+      let pos = RANDOM_POSITIONS[Math.floor(Math.random()*RANDOM_POSITIONS.length)];
+      let posSelect = document.getElementById("inputPos");
+      if(posSelect) posSelect.value = pos;
+      let num = Math.floor(Math.random()*99)+1;
+      document.getElementById("inputNum").value = num;
+    },
+  ];
+
+  steps.forEach((step, i) => setTimeout(step, i * 90));
+
+  // Re-enable button and flash it green
+  setTimeout(()=>{
+    btn.textContent = "🎲 Random";
+    btn.disabled = false;
+    btn.style.background = "linear-gradient(135deg,#14532d,#166534)";
+    btn.style.transform = "scale(1.06)";
+    setTimeout(()=>{
+      btn.style.background = "";
+      btn.style.transform = "";
+    }, 400);
+  }, steps.length * 90 + 100);
+}
 
 // ===================== PLAYER FACTORY =====================
 function createPlayer(){
@@ -2057,6 +2363,13 @@ function developPlayer(){
 
 // ===================== GAME PLAY =====================
 function playGame(){
+  if(player.suspended && player.suspendedUntilSeason === seasonsPlayed){
+    setSpotlight("⛔ Suspended","You cannot play this season.","End the season to move on.","warning");
+    showToast("Suspended — end the season.", "warning"); return;
+  }
+  if(isParentBlocked()){
+    showParentBlockedToast(); return;
+  }
   if(!player.eligibility){
     setSpotlight("Ineligible","Can't play — grades too low.","Improve your GPA to at least 2.0 to regain eligibility.","warning");
     showToast("Ineligible to play.", "warning"); return;
@@ -2285,20 +2598,278 @@ const OFF_TIME_ACTIVITIES = [
   },
 ];
 
-// Mark physical activities — disabled when injured
+// ===================== PARENT CONSEQUENCE SYSTEM =====================
+
+// Rules: what each family background requires from the player per season
+// checkWeeks: how many weeks before a warning fires
+// blockWeeks: weeks without compliance before baseball is blocked
+// required: the activity key that must be chosen regularly
+// minPerSeason: minimum times per season the required activity must be chosen
+const PARENT_RULES = {
+  religious: {
+    required: "church",
+    label: "Church",
+    icon: "⛪",
+    minPerSeason: 3,          // must go to church at least 3 times per season
+    warningAt: 4,             // warn after 4 weeks without going
+    blockAt: 6,               // block baseball after 6 weeks without going
+    warnMsg: (weeks) => `You haven't been to church in ${weeks} weeks. Your parents are watching.`,
+    blockMsg: "Your parents have grounded you from baseball until you attend church this week.",
+    unblockMsg: "You went to church. You're back on the team.",
+    parentQuote: () => {
+      let quotes = [
+        `"Baseball is a privilege. God comes first in this house."`,
+        `"You haven't been to services in weeks. That changes now."`,
+        `"Your father and I agreed — no church, no baseball. Those are the rules."`,
+        `"The Lord blessed you with this talent. The least you can do is show up Sunday."`,
+      ];
+      return quotes[Math.floor(Math.random()*quotes.length)];
+    },
+    gradient: "linear-gradient(135deg,#1a0a2e,#4c1d95)"
+  },
+
+  strict: {
+    required: "study",
+    label: "Studying",
+    icon: "📚",
+    minPerSeason: 4,
+    warningAt: 3,
+    blockAt: 5,
+    warnMsg: (weeks) => `You've gone ${weeks} weeks without studying. Your grades are slipping. Your parents noticed.`,
+    blockMsg: "Your parents have suspended your baseball until your grades come back up. Study this week.",
+    unblockMsg: "You hit the books. Baseball is back on.",
+    parentQuote: () => {
+      let quotes = [
+        `"Baseball won't pay the bills. Grades will. Get to work."`,
+        `"Every week you skip studying is a week closer to failing out. No more."`,
+        `"This family didn't sacrifice everything so you could ignore school."`,
+      ];
+      return quotes[Math.floor(Math.random()*quotes.length)];
+    },
+    gradient: "linear-gradient(135deg,#1a1a0a,#713f12)"
+  },
+
+  immigrant: {
+    required: "study",
+    label: "Studying",
+    icon: "📚",
+    minPerSeason: 4,
+    warningAt: 3,
+    blockAt: 5,
+    warnMsg: (weeks) => `${weeks} weeks without studying. Your parents came here so you'd have opportunities they didn't. They expect you to take them.`,
+    blockMsg: "Your parents have pulled you from baseball until your grades recover. They didn't sacrifice everything for this.",
+    unblockMsg: "You studied. Your parents see the effort. Baseball is back.",
+    parentQuote: () => {
+      let quotes = [
+        `"We crossed an ocean so you could have a future. Don't waste it."`,
+        `"Baseball is beautiful. But education is forever. Do both or do neither."`,
+        `"Your grandparents worked fields their whole lives. You will not."`,
+      ];
+      return quotes[Math.floor(Math.random()*quotes.length)];
+    },
+    gradient: "linear-gradient(135deg,#0a1f3c,#1e3a6e)"
+  },
+
+  middle: {
+    required: "study",
+    label: "Studying",
+    icon: "📚",
+    minPerSeason: 3,
+    warningAt: 4,
+    blockAt: 7,
+    warnMsg: (weeks) => `${weeks} weeks without studying. Your parents are starting to have conversations about your grades.`,
+    blockMsg: "Your parents are pulling you off the team until your GPA improves. They feel terrible about it. Study this week.",
+    unblockMsg: "You hit the books. Your parents are relieved. You're back on the team.",
+    parentQuote: () => {
+      let quotes = [
+        `"We want you to play. But not at the cost of your future."`,
+        `"Your grades are our agreement. Keep them up and baseball stays."`,
+        `"We're not strict parents — but this is the line."`,
+      ];
+      return quotes[Math.floor(Math.random()*quotes.length)];
+    },
+    gradient: "linear-gradient(135deg,#0a1628,#1e3a8a)"
+  },
+
+  wealthy: {
+    required: "friends",
+    label: "Socializing",
+    icon: "🎉",
+    minPerSeason: 3,
+    warningAt: 4,
+    blockAt: 7,
+    warnMsg: (weeks) => `You've been isolating yourself in the cage for ${weeks} weeks straight. Your parents are worried you're becoming antisocial.`,
+    blockMsg: "Your parents have limited your baseball time until you reconnect with your social life. They're paying for your social network, not a hermit.",
+    unblockMsg: "You hung out with friends. Your parents are satisfied. Baseball is back.",
+    parentQuote: () => {
+      let quotes = [
+        `"You have every advantage in life. Use them — all of them. Including people."`,
+        `"The boys at the club have been asking about you. That matters, son."`,
+        `"Baseball is one thing. But networking is how the world works. Show up."`,
+        `"Your mother and I didn't raise you to live in a batting cage."`,
+      ];
+      return quotes[Math.floor(Math.random()*quotes.length)];
+    },
+    gradient: "linear-gradient(135deg,#0a1628,#78350f)"
+  },
+
+  absent: {
+    required: null, // no parent enforcement — no one's watching
+    label: null,
+    icon: null,
+    minPerSeason: 0,
+    warningAt: 999,
+    blockAt: 999,
+    warnMsg: ()=>"",
+    blockMsg: "",
+    unblockMsg: "",
+    parentQuote: ()=>"",
+    gradient: ""
+  },
+
+  poor: {
+    required: null, // parents too busy working to enforce
+    label: null,
+    icon: null,
+    minPerSeason: 0,
+    warningAt: 999,
+    blockAt: 999,
+    warnMsg: ()=>"",
+    blockMsg: "",
+    unblockMsg: "",
+    parentQuote: ()=>"",
+    gradient: ""
+  },
+};
+
+// Track how many weeks since the player last did the required activity
+// and how many times they've done it this season
+function initActivityTracking(){
+  if(!player.activityCounts) player.activityCounts = {};
+  if(!player.weeksSinceRequired) player.weeksSinceRequired = 0;
+  if(typeof player.baseballBlocked === "undefined") player.baseballBlocked = false;
+}
+
+function trackActivity(key){
+  initActivityTracking();
+  // Count total per season
+  player.activityCounts[key] = (player.activityCounts[key] || 0) + 1;
+
+  let rule = PARENT_RULES[player.parents];
+  if(!rule || !rule.required) return; // no rule for this family
+
+  if(key === rule.required){
+    // Did the required activity — reset counter, unblock if blocked
+    player.weeksSinceRequired = 0;
+    if(player.baseballBlocked){
+      player.baseballBlocked = false;
+      showParentConsequenceModal("unblock", rule);
+    }
+  } else {
+    // Didn't do the required activity — tick up the counter
+    player.weeksSinceRequired = (player.weeksSinceRequired || 0) + 1;
+
+    if(player.weeksSinceRequired >= rule.blockAt && !player.baseballBlocked){
+      player.baseballBlocked = true;
+      showParentConsequenceModal("block", rule);
+    } else if(player.weeksSinceRequired === rule.warningAt){
+      showParentConsequenceModal("warn", rule);
+    }
+  }
+}
+
+function showParentConsequenceModal(type, rule){
+  let banner  = document.getElementById("parentConsequenceBanner");
+  let tag     = document.getElementById("parentConsequenceTag");
+  let title   = document.getElementById("parentConsequenceTitle");
+  let subtitle= document.getElementById("parentConsequenceSubtitle");
+  let body    = document.getElementById("parentConsequenceBody");
+
+  if(type === "warn"){
+    banner.style.background = rule.gradient || "linear-gradient(135deg,#1a1a0a,#78350f)";
+    tag.textContent = `⚠️ ${rule.icon} PARENT WARNING`;
+    title.textContent = "Your Parents Are Watching";
+    subtitle.textContent = rule.warnMsg(player.weeksSinceRequired);
+    body.innerHTML = `
+      <div style="font-style:italic;font-size:0.88rem;color:var(--muted);line-height:1.6;border-left:3px solid rgba(239,68,68,0.4);padding-left:12px;margin-bottom:14px;">
+        ${rule.parentQuote()}
+      </div>
+      <div style="background:rgba(239,68,68,0.06);border:1px solid rgba(239,68,68,0.2);border-radius:12px;padding:12px 14px;font-size:0.82rem;color:var(--ink);">
+        ⚠️ You need to ${rule.label.toLowerCase()} at least once soon or baseball will be taken away.
+      </div>`;
+    addFeed("⚠️ Parent Warning", rule.warnMsg(player.weeksSinceRequired), "warning");
+  }
+  else if(type === "block"){
+    banner.style.background = "linear-gradient(135deg,#1a0a0a,#7f1d1d)";
+    tag.textContent = "⛔ BASEBALL SUSPENDED";
+    title.textContent = "No Baseball Until You Comply";
+    subtitle.textContent = rule.blockMsg;
+    body.innerHTML = `
+      <div style="font-style:italic;font-size:0.88rem;color:var(--muted);line-height:1.6;border-left:3px solid rgba(239,68,68,0.5);padding-left:12px;margin-bottom:14px;">
+        ${rule.parentQuote()}
+      </div>
+      <div style="background:rgba(239,68,68,0.08);border:2px solid rgba(239,68,68,0.3);border-radius:12px;padding:12px 14px;font-size:0.82rem;color:var(--ink);">
+        ⛔ Baseball is <strong>blocked</strong> until you choose <strong>${rule.icon} ${rule.label}</strong> as your weekly activity.
+        It will only take once to get back on the field.
+      </div>`;
+    addFeed("⛔ Grounded", rule.blockMsg, "warning");
+    showToast("Grounded from baseball — " + rule.label + " required.", "warning");
+  }
+  else if(type === "unblock"){
+    banner.style.background = "linear-gradient(135deg,#0a1f0a,#166534)";
+    tag.textContent = "✅ BACK ON THE TEAM";
+    title.textContent = "Baseball Reinstated";
+    subtitle.textContent = rule.unblockMsg;
+    body.innerHTML = `
+      <div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.3);border-radius:12px;padding:12px 14px;font-size:0.85rem;color:var(--ink);">
+        ✅ You're cleared to play. Don't let it slip again.
+      </div>`;
+    addFeed("✅ Ungrounded", rule.unblockMsg, "success");
+    showToast("Back on the team! ✅", "success");
+  }
+
+  document.getElementById("parentConsequenceModal").classList.remove("hidden");
+}
+
+function closeParentConsequenceModal(){
+  document.getElementById("parentConsequenceModal").classList.add("hidden");
+  updateUI();
+}
+
+// Block-gate for playing/advancing while grounded
+function isParentBlocked(){
+  return player.baseballBlocked === true;
+}
+
+function showParentBlockedToast(){
+  let rule = PARENT_RULES[player.parents];
+  if(!rule) return;
+  showToast(`⛔ Grounded — choose ${rule.icon} ${rule.label} to get back on the field.`, "warning");
+  setSpotlight("⛔ Grounded", "No Baseball", `Choose ${rule.label} as your weekly activity to get back on the field.`, "warning");
+}
+
+
+
 const PHYSICAL_ACTIVITIES = ["practice", "exercise"];
 
 function showOfftimePicker(weekNum, injuredOnly = false){
   offTimeAvailable = true;
+  initActivityTracking();
   let panel = document.getElementById("offtimePanel");
   let isReligious = player.religion && player.religion !== "None / Secular";
 
+  let rule = PARENT_RULES[player.parents];
+  let isBlocked = isParentBlocked();
+  let isWarned  = rule && rule.required && (player.weeksSinceRequired || 0) >= (rule.warningAt || 999);
+
   let btnHtml = OFF_TIME_ACTIVITIES.map(a => {
     let isPhysical = PHYSICAL_ACTIVITIES.includes(a.key);
-    let disabled = injuredOnly && isPhysical;
+    let disabled = (injuredOnly && isPhysical) || (isBlocked && a.key !== rule.required);
 
     let isRelBonus = (a.religionBonus === "religion" && isReligious) ||
                      (a.religionBonus === "any" && isReligious);
+    let isRequired = rule && rule.required === a.key;
+
     let effectLines = Object.entries(a.effects).map(([stat, range]) => {
       let lo = range[0], hi = range[1];
       let label = stat === "grades" ? "GPA" : stat.charAt(0).toUpperCase()+stat.slice(1);
@@ -2308,38 +2879,44 @@ function showOfftimePicker(weekNum, injuredOnly = false){
       return `<span style="color:${col};">${label}: ${lo2}→${hi2}</span>`;
     }).join("<br>");
 
-    let relBadge = isRelBonus
-      ? `<span style="font-size:0.62rem;color:var(--gold);font-weight:700;margin-top:2px;">✨ +Bonus</span>`
-      : "";
-    let injBadge = disabled
-      ? `<span style="font-size:0.62rem;color:var(--red);font-weight:700;margin-top:2px;">🚫 Injured</span>`
-      : "";
+    let relBadge = isRelBonus ? `<span style="font-size:0.62rem;color:var(--gold);font-weight:700;margin-top:2px;">✨ +Bonus</span>` : "";
+    let injBadge = disabled && injuredOnly && isPhysical ? `<span style="font-size:0.62rem;color:var(--red);font-weight:700;margin-top:2px;">🚫 Injured</span>` : "";
+    let reqBadge = isBlocked && isRequired
+      ? `<span style="font-size:0.62rem;color:var(--green);font-weight:800;margin-top:2px;">✅ DO THIS TO UNGROUND</span>`
+      : isWarned && isRequired
+      ? `<span style="font-size:0.62rem;color:var(--accent);font-weight:800;margin-top:2px;">⚠️ Parents want you here</span>` : "";
+    let blockedBadge = disabled && isBlocked && !isRequired ? `<span style="font-size:0.62rem;color:var(--red);font-weight:700;margin-top:2px;">⛔ Grounded</span>` : "";
 
-    let btnStyle = disabled ? "opacity:0.4;cursor:not-allowed;pointer-events:none;" : "";
+    let extraStyle = isBlocked && isRequired ? "border-color:var(--green);background:rgba(34,197,94,0.07);"
+      : isWarned && isRequired ? "border-color:var(--accent);background:rgba(230,160,32,0.06);" : "";
+    let btnStyle = disabled ? "opacity:0.35;cursor:not-allowed;pointer-events:none;" : extraStyle;
 
-    return `<button class="offtime-btn${isRelBonus?" religion-highlight":""}" 
+    return `<button class="offtime-btn${isRelBonus?" religion-highlight":""}"
         onclick="${disabled?"":"chooseActivity('"+a.key+"')"}"
         style="${btnStyle}" ${disabled?"disabled":""}>
       <span class="ot-emoji">${a.emoji}</span>
       <span class="ot-label">${a.label}</span>
       <span class="ot-effects" style="font-size:0.62rem;">${effectLines}</span>
-      ${relBadge}${injBadge}
+      ${relBadge}${injBadge}${reqBadge}${blockedBadge}
     </button>`;
   }).join("");
 
-  let injNote = injuredOnly
-    ? `<p style="font-size:0.78rem;color:var(--red);margin-bottom:10px;">🤕 Physical activities unavailable during injury recovery.</p>`
-    : "";
+  let injNote = injuredOnly ? `<p style="font-size:0.78rem;color:var(--red);margin-bottom:10px;">🤕 Physical activities unavailable during injury recovery.</p>` : "";
+  let groundedNote = isBlocked && rule
+    ? `<p style="font-size:0.78rem;color:var(--red);margin-bottom:10px;font-weight:700;">⛔ You're grounded — choose ${rule.icon} ${rule.label} to get back on the field.</p>`
+    : isWarned && rule
+    ? `<p style="font-size:0.78rem;color:var(--accent);margin-bottom:10px;">⚠️ Your parents want you to ${rule.label.toLowerCase()} soon or baseball gets cut.</p>` : "";
 
   panel.style.display = "block";
   panel.innerHTML = `
     <div class="offtime-panel">
       <h4>⏰ Week ${weekNum} Off-Time — Choose Your Activity</h4>
-      ${injNote}
+      ${injNote}${groundedNote}
       <p style="font-size:0.8rem;color:var(--muted);margin-bottom:12px;">You have free time after this week. What do you do with it?</p>
       <div class="offtime-grid">${btnHtml}</div>
     </div>`;
 }
+
 
 function chooseActivity(key){
   if(!offTimeAvailable) return;
@@ -2347,6 +2924,9 @@ function chooseActivity(key){
 
   let act = OFF_TIME_ACTIVITIES.find(a => a.key === key);
   if(!act) return;
+
+  // Track for parent consequence system
+  trackActivity(key);
 
   let isReligious = player.religion && player.religion !== "None / Secular";
   let changes = [];
@@ -2570,20 +3150,29 @@ function applyStoryEffects(fx){
   if(fx.pop)      player.popularity= Math.max(0,Math.min(100,player.popularity+fx.pop));
   if(fx.money){
     player.money = Math.max(0, player.money + fx.money);
-    // In LL, earned money goes to player's own pocket
     if(careerStage === "Little League" && fx.money > 0){
       player.playerMoney = (player.playerMoney||0) + fx.money;
     }
   }
-  // Keep offField.popularity in sync with player.popularity
   if(player.offField) player.offField.popularity = player.popularity;
   if(fx.gamesMiss){
     player.gameMissedStory = (player.gameMissedStory||0) + fx.gamesMiss;
-    // Actually advance game counter (missed games)
     for(let g=0;g<fx.gamesMiss;g++){
       if(gamesPlayed < getCurrentSeasonCap()){ gamesPlayed++; careerGamesTotal++; }
     }
     addFeed("Missed Games",`Missed ${fx.gamesMiss} game${fx.gamesMiss!==1?"s":""} due to family/life event.`,"warning");
+  }
+  // Suspension: banned for remainder of season
+  if(fx.suspend){
+    let cap = getCurrentSeasonCap();
+    let remaining = cap - gamesPlayed;
+    player.suspended = true;
+    player.suspendedUntilSeason = seasonsPlayed; // clears when season ends
+    // Fast-forward the rest of the season as missed
+    while(gamesPlayed < cap){ gamesPlayed++; careerGamesTotal++; }
+    addFeed("⛔ SUSPENDED", `${player.name} is suspended for the remainder of the season (${remaining} game${remaining!==1?"s":""}).`, "warning");
+    setSpotlight("⛔ Suspended", "Banned for the season.", `${remaining} game${remaining!==1?"s":""} missed. The season is over. Deal with the fallout.`, "warning");
+    showToast("Suspended — season over.", "warning");
   }
   player.eligibility = player.grades >= 60;
   clampAttrs();
@@ -2599,7 +3188,8 @@ function fxTags(fx){
   if(fx.grades)   tags.push({label:(fx.grades>0?"+":"")+fx.grades+" GPA pts", pos:fx.grades>0});
   if(fx.pop)      tags.push({label:(fx.pop>0?"+":"")+fx.pop+" Popularity", pos:fx.pop>0});
   if(fx.money)    tags.push({label:(fx.money>0?"+$":"-$")+Math.abs(fx.money), pos:fx.money>0});
-  if(fx.gamesMiss)tags.push({label:"Miss "+fx.gamesMiss+" game"+(fx.gamesMiss!==1?"s":""), pos:false});
+  if(fx.gamesMiss) tags.push({label:"Miss "+fx.gamesMiss+" game"+(fx.gamesMiss!==1?"s":""), pos:false});
+  if(fx.suspend)   tags.push({label:"⛔ Suspension risk", pos:false});
   return tags.map(t=>`<span class="story-eff-tag ${t.pos?"pos":"neg"}">${t.label}</span>`).join("");
 }
 
@@ -3346,14 +3936,20 @@ const STORY_EVENTS = [
     title:"A Better Player Joins the Team",
     emoji:"⚡",
     bannerGradient:"linear-gradient(135deg,#1a1a3e,#312e81)",
-    narrative:"A new kid joins midseason who is clearly better than you — faster, stronger arm, hits the ball harder. The coach moves you to make room for him. Some teammates think it's unfair.",
+    narrative:"A new kid joins midseason who is clearly better than you — faster, stronger arm, hits the ball harder. The coach moves you to make room for him. After practice, two teammates dare you to hide his glove so he looks unprepared tomorrow. It would embarrass him. But it might get you your spot back.",
     choices:[
-      { label:"Challenge yourself — study how he plays", desc:"Turn the rivalry into learning.",
+      { label:"Hide his glove. Get your spot back.", desc:"Mean. It works.",
+        moral:"selfish",
+        fx:{attrs:{contact:4,power:3}, offField:{popularity:-8,reputation:-10,confidence:5,recklessness:10}},
+        outcome:"He shows up glove-less. Coach benches him. You're back in the lineup. Two kids saw you do it. They don't forget." },
+      { label:"Shut it down — warn him instead", desc:"The decent thing. Doesn't help your stats.",
+        moral:"kind",
+        fx:{offField:{reputation:10,popularity:6,confidence:4,intelligence:5}},
+        outcome:"You tell him quietly before practice. He looks at you for a second, then nods. That nod means something you can't explain yet." },
+      { label:"Study how he plays — use him as a target", desc:"Turn rivalry into fuel.",
+        moral:"neutral",
         fx:{attrs:{contact:2,fielding:2,arm:2}, offField:{intelligence:5,confidence:3}},
-        outcome:"You stay after practice and watch how he positions his feet. By month's end you're competing for the same reps." },
-      { label:"Resent it — this is your team", desc:"Dig in and protect your spot.",
-        fx:{offField:{aggression:8,confidence:-3,recklessness:5}},
-        outcome:"The tension fuels your effort. You hit well for two weeks out of spite. He's still better — but you're close." }
+        outcome:"You watch him like a scout. By month's end you're competing for the same reps — and the coach is starting to notice." }
     ]
   },
 
@@ -3429,6 +4025,7 @@ const STORY_EVENTS = [
     narrative:"End of season — Coach says the team votes for next year's captain. You've been one of the better players but captain is about leadership too. A popular kid who hits worse than you is the other main candidate.",
     choices:[
       { label:"Campaign for it — talk to teammates", desc:"Put yourself out there.",
+        moral:"neutral",
         fx:{offField:{popularity:8,confidence:6,aggression:3}},
         outcome:()=>{
           let pop = player.offField?.popularity||50;
@@ -3437,6 +4034,7 @@ const STORY_EVENTS = [
         }
       },
       { label:"Let the vote happen naturally", desc:"Actions speak louder.",
+        moral:"kind",
         fx:{offField:{reputation:5,confidence:3}},
         outcome:()=>{
           let pop = player.offField?.popularity||50; let attr = attributes.contact||50;
@@ -3559,11 +4157,175 @@ const STORY_EVENTS = [
     narrative:"You've been staying after practice throwing into the tire target your coach hung from the fence. Two hundred throws every Tuesday and Thursday after school. No one asked you to. Nobody's watching. Then Coach watches you nail 18-of-20 from 90 feet.",
     choices:[
       { label:"Tell Coach it's been the after-practice throwing", desc:"Give credit to the work.",
+        moral:"kind",
         fx:{attrs:{arm:4,control:5}, offField:{reputation:8,confidence:6}},
         outcome:"Coach announces it to the team: 'This is what separates good players from great ones.' Your arm becomes the team's calling card." },
       { label:"Shrug and say you've just been working", desc:"Stay humble.",
+        moral:"neutral",
         fx:{attrs:{arm:3,control:4}, offField:{reputation:6,confidence:8,popularity:5}},
         outcome:"Your quiet confidence earns more respect than bragging ever would. Teammates start staying after practice with you." }
+    ]
+  },
+
+  // ───────── MORAL TENSION EVENTS ─────────
+
+  {
+    id:"theft_offer",
+    families:["poor","absent","immigrant","add"],
+    condition:()=>careerStage==="Little League" && age>=10,
+    title:"Danny's Uncle Has a Plan",
+    emoji:"🕶️",
+    bannerGradient:"linear-gradient(135deg,#0a0a0a,#1a1a2e)",
+    narrative:"Your friend Danny pulls you aside after practice. His uncle works near the sporting goods store on Fifth. He says he can get you any piece of baseball equipment — no questions asked. 'He does it all the time,' Danny says. 'Never got caught.' You know your family can't afford the gear the other kids have. Danny is watching you.",
+    choices:[
+      { label:"Tell Danny you're not interested — walk away clean", desc:"The right call. Every time.",
+        moral:"kind",
+        fx:{offField:{reputation:8,intelligence:5,confidence:4}},
+        outcome:"Danny shrugs. You walk home. That night you sharpen your fundamentals with what you already have. Clean hands sleep better." },
+      { label:"Ask what he can get you…", desc:"Higher reward. Real risk. The rest is up to you.",
+        moral:"selfish",
+        fx:{}, // applied dynamically by theft modal
+        outcome:"" // filled by theft modal
+      }
+    ],
+    specialAction:"openTheftModal" // triggers custom modal on this choice
+  },
+
+  {
+    id:"moral_injured_teammate",
+    families:["all"], condition:()=>careerStage==="Little League" && age>=10,
+    title:"Your Teammate Gets Hurt",
+    emoji:"🤕",
+    bannerGradient:"linear-gradient(135deg,#1a0a0a,#7f1d1d)",
+    narrative:"Marcus, the starting shortstop and your competition for the spot, gets hit by a pitch and hurts his wrist. He'll be out two to three weeks. Coach pulls you aside and tells you this is your shot to lock down the position. In the dugout, a couple of guys are quietly relieved. Part of you is too.",
+    choices:[
+      { label:"Quietly enjoy the opportunity — focus on your game", desc:"Be honest with yourself. This IS your shot.",
+        moral:"selfish",
+        fx:{attrs:{contact:5,fielding:4,speed:2}, offField:{confidence:8,popularity:-3}},
+        outcome:"You go 7-for-12 over the next three games. Coach notices. So does Marcus, watching from the bench. The position might be yours permanently." },
+      { label:"Check on Marcus first, then earn the spot the right way", desc:"Compete clean.",
+        moral:"kind",
+        fx:{attrs:{contact:3,fielding:3}, offField:{reputation:10,popularity:8,confidence:5}},
+        outcome:"You visit him after practice. He's surprised. When he comes back, he plays harder — because you made him want to earn it back. The competition raises both of you." },
+      { label:"Keep your head down — just play your game", desc:"Don't overthink it.",
+        moral:"neutral",
+        fx:{attrs:{contact:4,fielding:3}, offField:{confidence:6}},
+        outcome:"No drama. You play well. Coach keeps you in even when Marcus returns. Your consistency wins over politics." }
+    ]
+  },
+
+  {
+    id:"moral_steal_signs",
+    families:["all"], condition:()=>careerStage==="Little League" && age>=11,
+    title:"You Can See the Catcher's Signs",
+    emoji:"🧠",
+    bannerGradient:"linear-gradient(135deg,#0a1628,#1e3a8a)",
+    narrative:"During warmups you realize you can see the opposing catcher's signs from your position in the dugout. Fastball, curve, changeup — perfectly readable. If you relay them to your teammates, you could win this game easily. Nobody would know. But you'd know.",
+    choices:[
+      { label:"Relay the signs. Win the game. That's baseball.", desc:"It's not against the rules at this level.",
+        moral:"selfish",
+        fx:{attrs:{contact:5,power:4}, offField:{recklessness:8,reputation:-6,confidence:6}},
+        outcome:"The team goes 8-for-10. Coach praises the offense but gives you a look like he suspects something. You hit a home run. It feels hollow." },
+      { label:"Say nothing — win or lose on your own merit", desc:"Respect the game.",
+        moral:"kind",
+        fx:{attrs:{contact:2,power:2}, offField:{reputation:12,intelligence:6,confidence:5}},
+        outcome:"You go 1-for-3 honestly. After the game an older coach watching says: 'I saw what you didn't do. That matters.' You don't understand it fully yet." },
+      { label:"Tell only yourself — use it to prepare mentally", desc:"Study it, don't exploit it.",
+        moral:"neutral",
+        fx:{attrs:{contact:3,power:3}, offField:{intelligence:8,confidence:5}},
+        outcome:"You prepare for pitches without telling anyone. Two hits. It still feels like a grey area, and the question sits with you." }
+    ]
+  },
+
+  {
+    id:"moral_new_kid_outsider",
+    families:["all"], condition:()=>careerStage==="Little League" && age>=9,
+    title:"The New Kid Nobody Talks To",
+    emoji:"😶",
+    bannerGradient:"linear-gradient(135deg,#1a1a2e,#16213e)",
+    narrative:"A kid transfers to the team mid-season. He's quiet, wears old beat-up cleats, and doesn't know anyone. The older kids on the team have been ignoring him — or worse, making comments. He hasn't complained. He just shows up every day and does the work.",
+    choices:[
+      { label:"Join in with the older kids — go along to fit in", desc:"Easier to belong than to stand apart.",
+        moral:"selfish",
+        fx:{attrs:{contact:3,power:2}, offField:{popularity:8,reputation:-12,confidence:4,recklessness:6}},
+        outcome:"The older kids accept you faster. On the field you're more relaxed, more yourself. The new kid doesn't come to the next two practices. Nobody mentions it." },
+      { label:"Walk over and introduce yourself", desc:"It costs you nothing. It costs him everything.",
+        moral:"kind",
+        fx:{offField:{reputation:12,popularity:4,confidence:6,intelligence:5}},
+        outcome:"He looks shocked. Then relieved. Turns out he's from the Dominican Republic and barely speaks English. You use hand signals and baseball to talk. By end of season he's your best friend on the team." },
+      { label:"Mind your own business — stay neutral", desc:"Don't add to it, don't engage.",
+        moral:"neutral",
+        fx:{offField:{confidence:3,intelligence:4}},
+        outcome:"You're not part of the problem. But you're not part of the solution either. He figures it out alone. You wonder later if you should have done more." }
+    ]
+  },
+
+  {
+    id:"moral_lie_to_coach",
+    families:["all"], condition:()=>careerStage==="Little League" && age>=10,
+    title:"Coach Asks Who Broke the Bat",
+    emoji:"🪵",
+    bannerGradient:"linear-gradient(135deg,#2a1a0a,#92400e)",
+    narrative:"Someone snapped the team's best aluminum bat messing around before practice. You saw exactly who did it — your friend Danny. Coach is furious. It's a $90 bat. He says if nobody speaks up, everyone runs extra laps after practice for a week. Danny is staring at the ground.",
+    choices:[
+      { label:"Say it was you — take the heat for Danny", desc:"He's your boy. You protect your people.",
+        moral:"selfish",
+        fx:{attrs:{speed:3,contact:2}, offField:{popularity:10,reputation:-4,aggression:3,recklessness:5}},
+        outcome:"Everyone thinks you're a stand-up guy — for the wrong reasons. Danny gets off clean. Coach makes you run extra. Something about that feels both right and wrong." },
+      { label:"Tell Coach the truth quietly after practice", desc:"Be honest. It's not a betrayal, it's the right thing.",
+        moral:"kind",
+        fx:{offField:{reputation:10,intelligence:6,confidence:5,popularity:-4}},
+        outcome:"Coach handles it privately. Danny is angry for two days, then apologizes. You're cleaner for it. Not everyone likes honest people — but the right ones do." },
+      { label:"Stay quiet — let Danny face it or stay silent", desc:"Not your problem.",
+        moral:"neutral",
+        fx:{attrs:{contact:2}, offField:{confidence:3,recklessness:4}},
+        outcome:"The team runs laps. Danny avoids eye contact. You avoid eye contact. Coach knows someone knows. The week passes." }
+    ]
+  },
+
+  {
+    id:"moral_spot_in_lineup",
+    families:["all"], condition:()=>careerStage==="Little League" && age>=11,
+    title:"Coach Asks Who Wants to Bat Cleanup",
+    emoji:"🏏",
+    bannerGradient:"linear-gradient(135deg,#0a1f0a,#166534)",
+    narrative:"Coach announces the 4-hole — cleanup — is open. It's the most important spot in the lineup. You want it badly. So does Richie, who is younger but has been hitting better than you the last two weeks. Both of you raise your hands. Coach says 'I'll decide by end of practice. Show me something.'",
+    choices:[
+      { label:"Ask Coach if Richie can have a turn hitting first — let the better hitter lead off", desc:"Put the team first.",
+        moral:"kind",
+        fx:{attrs:{contact:3,fielding:2}, offField:{reputation:12,confidence:4,popularity:6}},
+        outcome:"Coach stops and stares at you. Richie goes first. Richie gets the spot. But Coach pulls you aside: 'I don't usually see that. The kid who doesn't fight for himself still wins in the end.' You bat third." },
+      { label:"Volunteer to go first — perform, earn the spot on merit", desc:"Compete fair and square.",
+        moral:"neutral",
+        fx:{attrs:{contact:5,power:3}, offField:{confidence:8}},
+        outcome:"You go first, go 4-for-5 in the cage. Richie follows. It's close. Coach gives it to you by a hair. Merit won out — this time." },
+      { label:"Subtly trip Richie up — say you saw him swing differently yesterday, plant doubt in his head", desc:"Psychological. Not physical. But still a choice.",
+        moral:"selfish",
+        fx:{attrs:{contact:6,power:4}, offField:{confidence:9,recklessness:8,reputation:-8}},
+        outcome:"Richie hesitates in the cage, self-conscious. You perform clean. You get the spot. Richie doesn't speak to you for a week. You tell yourself it was just competition." }
+    ]
+  },
+
+  {
+    id:"moral_cheating_test",
+    families:["all"], condition:()=>careerStage==="Little League" && age>=10,
+    title:"A Teammate Offers You Answers to the Eligibility Test",
+    emoji:"📝",
+    bannerGradient:"linear-gradient(135deg,#1a1a0a,#3f3a1f)",
+    narrative:"The league requires a school eligibility form — you need a C average to play. You're borderline. Tommy, whose older brother works at the school office, slides you a folded paper under the bleachers. 'Already filled out.' He says everyone does it. But if you play on falsified grades and anyone checks, it's a forfeit and a ban.",
+    choices:[
+      { label:"Take it. Play. You worked too hard to sit out over a grade.", desc:"The risk is worth it.",
+        moral:"selfish",
+        fx:{attrs:{contact:6,power:5,speed:3}, offField:{recklessness:12,reputation:-10,intelligence:-5}},
+        outcome:"You play. You play well. Nobody checks this season. But you know. And Tommy knows. And somewhere in the back of your head, every hit has an asterisk." },
+      { label:"Refuse it — go talk to your teacher about extra credit", desc:"Earn your eligibility.",
+        moral:"kind",
+        fx:{offField:{intelligence:10,reputation:8,confidence:6}, grades:8},
+        outcome:"Your teacher gives you a makeup assignment. You miss two games grinding through it. You come back eligible and clean. Some things you carry the rest of your life — this won't be one of them." },
+      { label:"Refuse it but don't tell anyone Tommy offered it", desc:"Stay clean but protect your teammate.",
+        moral:"neutral",
+        fx:{offField:{intelligence:7,reputation:5,confidence:4}, grades:5},
+        outcome:"You study your way to a C-plus. You never tell. Tommy is grateful in the quiet way people are when you let something go." }
     ]
   },
 ];
@@ -3627,7 +4389,15 @@ function triggerStoryEvent(ev){
 
   let choicesHtml = availableChoices.map((c, i) => {
     let tags = fxTags(c.fx);
-    return `<button class="story-choice-btn" onclick="resolveStoryChoice(${i})">
+    let moral = c.moral || "neutral"; // "kind", "selfish", "neutral"
+    let moralbtn = "story-choice-btn moral-" + moral;
+    let badge = moral === "kind"
+      ? `<span class="story-moral-badge moral-badge-kind">🤝 Good Person</span>`
+      : moral === "selfish"
+      ? `<span class="story-moral-badge moral-badge-selfish">⚾ Ball Player</span>`
+      : "";
+    return `<button class="${moralbtn}" onclick="resolveStoryChoice(${i})">
+      ${badge}
       <span class="choice-letter">${letters[i]}</span>
       <div class="choice-text">
         <div class="choice-label">${c.label}</div>
@@ -3647,10 +4417,16 @@ function triggerStoryEvent(ev){
 function resolveStoryChoice(index){
   let ev = pendingStoryEventData;
   if(!ev) return;
-  // Use filtered choices if available (choices may have been filtered by condition)
   let choices = ev._filteredChoices || ev.choices;
   let choice = choices[index];
   if(!choice) return;
+
+  // Special action — hand off to a dedicated modal
+  if(choice.specialAction === "openTheftModal"){
+    document.getElementById("storyModal").classList.add("hidden");
+    openTheftModal();
+    return;
+  }
 
   // Apply effects
   let caughtSneak = false;
@@ -3711,6 +4487,34 @@ function closeStoryModal(){
 
 function advanceWeek(){
   if(isSimulating) return;
+
+  // Hard block: cannot play Little League at age 14+
+  if(careerStage === "Little League" && age >= 14){
+    showToast("You're 14 — time to move to High School!", "warning");
+    showStageAdvanceModal({
+      emoji:"🏫", gradient:"linear-gradient(135deg,#1a0a3e,#2563eb)",
+      tag:"LITTLE LEAGUE COMPLETE", title:"Time for High School",
+      subtitle:"You've turned 14. Little League is behind you.",
+      summaryFn:buildLLSummary,
+      prompt:"Choose your high school to begin the next chapter.",
+      btnLabel:"Choose Your High School →", action:"hs"
+    });
+    return;
+  }
+
+  // Block: suspended for rest of season
+  if(player.suspended && player.suspendedUntilSeason === seasonsPlayed){
+    setSpotlight("⛔ Suspended","You cannot play this season.",
+      "End the season to move on. The suspension lifts next year.", "warning");
+    showToast("You're suspended — end the season.", "warning");
+    return;
+  }
+
+  // Block: grounded by parents until required activity is done
+  if(isParentBlocked()){
+    showParentBlockedToast();
+    return;
+  }
 
   // Block: must resolve story event first
   if(pendingStoryEvent){
@@ -4307,13 +5111,10 @@ function showHSChoiceModal(){
   let isPoorBackground = (player.parents === "poor" || player.parents === "absent");
   let isSportsFamily = (player.parents === "sports");
 
-  document.getElementById("hsModal").classList.remove("hidden");
-  document.getElementById("hsLoadingCity").textContent = player.town || "your hometown";
-
   // Build subtitle based on career
   let subtitle = "";
   if(evaluation.score >= 60){
-    subtitle = `Your ${evaluation.totalCareerHR} home runs and .${fmtAVG(evaluation.totalCareerAVG)} average in Little League have scouts talking. You have options.`;
+    subtitle = `Your ${evaluation.totalCareerHR} HR and .${fmtAVG(evaluation.totalCareerAVG)} AVG in Little League have scouts talking. You have options.`;
   } else if(evaluation.score >= 30){
     subtitle = `A solid Little League career. You've earned a look from a few schools. Choose wisely.`;
   } else {
@@ -4321,7 +5122,22 @@ function showHSChoiceModal(){
   }
   document.getElementById("hsModalSubtitle").textContent = subtitle;
 
-  // Use AI to generate contextual high schools
+  // Show loading state immediately so player knows something is happening
+  let body = document.getElementById("hsModalBody");
+  body.innerHTML = `<div style="text-align:center;padding:40px 20px;">
+    <div style="font-size:2.5rem;margin-bottom:16px;">🏫</div>
+    <div style="font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:8px;">Finding schools near <span id="hsLoadingCity">${player.town||"your hometown"}</span>…</div>
+    <div style="font-size:0.82rem;color:var(--muted);margin-bottom:20px;">Generating realistic options based on your background and career.</div>
+    <div style="display:flex;justify-content:center;gap:6px;">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:pulse 1s infinite 0s;"></div>
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:pulse 1s infinite 0.2s;"></div>
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:pulse 1s infinite 0.4s;"></div>
+    </div>
+  </div>`;
+
+  document.getElementById("hsModal").classList.remove("hidden");
+
+  // Fetch school options
   fetchHSOptions(player.townFull || player.town, evaluation, isAffluentBackground, isPoorBackground, isSportsFamily);
 }
 
@@ -4572,13 +5388,15 @@ function selectHS(index){
   // Handle tuition for private schools
   if(school.tuitionRequired > 0 && school.type === "private"){
     if(school.canScholarship){
-      // Free on scholarship
       player.scholarship = true;
       addFeed("Scholarship!", `${school.name} offered a full scholarship!`, "success");
     } else {
-      // Deduct first year tuition
+      if(player.money < school.tuitionRequired){
+        showToast("You can't afford the tuition for " + school.name + ".", "warning");
+        return;
+      }
       player.money = Math.max(0, player.money - school.tuitionRequired);
-      addFeed("Tuition Paid", `$${fmt(school.tuitionRequired)} tuition for ${school.name}`, "warning");
+      addFeed("Tuition Paid", `$${fmt(school.tuitionRequired)} tuition for ${school.name}.`, "warning");
     }
   }
   if(school.scholarship) player.scholarship = true;
@@ -4593,25 +5411,13 @@ function selectHS(index){
   player.popularity = Math.min(100, player.popularity + (school.popularityBonus||0));
   if(school.moneyEffect && school.type === "scholarship") player.money = Math.max(0, player.money + school.moneyEffect);
   player.eligibility = player.grades >= 60;
-
   player.highSchool = school.name;
   player.highSchoolType = school.type;
 
   addFeed("High School Choice", `Enrolled at ${school.name} (${school.type}). ${school.flavor}`, "success");
   setSpotlight("New Chapter", school.name, school.flavor, "success");
-  showToast(`Welcome to ${school.name}!`, "success");
+  showToast(`Welcome to ${school.name}! 🏫`, "success");
 
-  closeHSModal();
-  completeCareerAdvance();
-}
-
-function skipHSChoice(){
-  // Pick first (local public) school by default
-  if(hsChoiceData && hsChoiceData.length){
-    let school = hsChoiceData[0];
-    player.highSchool = school.name;
-    player.highSchoolType = "public";
-  }
   closeHSModal();
   completeCareerAdvance();
 }
@@ -4672,14 +5478,19 @@ const MLB_TEAMS = [
   {name:"Washington Nationals", city:"Washington",   state:"DC", abbr:"WSH", emoji:"🦅", color1:"#AB0003",color2:"#14225A", division:"NL East",   prestige:6,  marketSize:"large"},
 ];
 
+// Real 2024 MLB Draft slot values (approximate ranges for simulation)
+// Source: MLB.com official slot allocations
 const DRAFT_SLOT_VALUES = {
-  1: {min:2000000,  max:9500000,  years:4},
-  2: {min:800000,   max:2000000,  years:4},
-  3: {min:400000,   max:800000,   years:4},
-  4: {min:200000,   max:400000,   years:4},
-  5: {min:100000,   max:200000,   years:4},
-  supp: {min:500000, max:1800000, years:4},
+  1:    {min:4000000,  max:10200000, years:4},  // 1st round: #1 pick ~$10.2M, late 1st ~$4M
+  supp: {min:1700000,  max:3200000,  years:4},  // Supplemental 1st: ~$1.7M–$3.2M
+  2:    {min:800000,   max:1700000,  years:4},  // 2nd round: ~$800k–$1.7M
+  3:    {min:450000,   max:800000,   years:4},  // 3rd round: ~$450k–$800k
+  4:    {min:250000,   max:450000,   years:4},  // 4th round: ~$250k–$450k
+  5:    {min:125000,   max:250000,   years:4},  // 5th round: ~$125k–$250k
 };
+
+// Minimum score to receive any draft offer at all
+const MIN_DRAFT_SCORE = 420;
 
 // ===================== COLLEGE RECRUITMENT =====================
 let collegeChoiceData = null;
@@ -4697,14 +5508,27 @@ function evaluateHSCareer(){
 
 function showCollegeRecruitmentModal(){
   let ev = evaluateHSCareer();
-  document.getElementById("collegeModal").classList.remove("hidden");
-  document.getElementById("collegeLoadingCity").textContent = player.town||"your hometown";
   let subtitle = ev.score>=70
     ? `A .${fmtAVG(ev.avgAVG)} average and ${ev.totalHR} HR in high school. Programs across the country want you.`
     : ev.score>=40
     ? "A solid high school career. Several programs are ready to invest in your development."
     : "You've earned your spot at the next level. Here are the programs offering you a place.";
   document.getElementById("collegeModalSubtitle").textContent = subtitle;
+
+  // Show loading state while AI fetches offers
+  document.getElementById("collegeModalBody").innerHTML = `
+    <div style="text-align:center;padding:40px 20px;">
+      <div style="font-size:2.5rem;margin-bottom:16px;">🎓</div>
+      <div style="font-size:1rem;font-weight:700;color:var(--ink);margin-bottom:8px;">Scouting programs near <span id="collegeLoadingCity">${player.town||"your hometown"}</span>…</div>
+      <div style="font-size:0.82rem;color:var(--muted);margin-bottom:20px;">Finding the best fit based on your career and background.</div>
+      <div style="display:flex;justify-content:center;gap:6px;">
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:pulse 1s infinite 0s;"></div>
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:pulse 1s infinite 0.2s;"></div>
+        <div style="width:8px;height:8px;border-radius:50%;background:var(--accent2);animation:pulse 1s infinite 0.4s;"></div>
+      </div>
+    </div>`;
+
+  document.getElementById("collegeModal").classList.remove("hidden");
   fetchCollegeOffers(player.townFull || player.town, ev);
 }
 
@@ -4806,14 +5630,7 @@ let draftOffer = null;
 let draftIsRedraft = false;
 
 function calculateDraftRound(fromCollege){
-  let attrSum = Object.values(attributes).reduce((a,b)=>a+b,0);
-  let careerHR = player.career.reduce((a,s)=>a+(s.stats.HR||0),0)+player.stats.HR;
-  let careerAVG = player.career.length ? player.career.reduce((a,s)=>a+(isFinite(s.stats.AVG)?s.stats.AVG:0),0)/player.career.length : (player.stats.AVG||0);
-  let score = attrSum;
-  if(careerAVG>0.350) score+=40; else if(careerAVG>0.280) score+=20;
-  if(careerHR>30) score+=35; else if(careerHR>15) score+=20;
-  if(player.levelTier>5) score+=20;
-  if(fromCollege) score+=30;
+  let score = calculateDraftScore(fromCollege);
   if(score>620) return {round:1,supp:false};
   if(score>580) return {round:1,supp:true};
   if(score>540) return {round:2,supp:false};
@@ -5078,14 +5895,29 @@ function checkForStageAdvance(){
   }
   if(careerStage === "High School"){
     if(age >= 18){
-      showStageAdvanceModal({
-        emoji:"🎓", gradient:"linear-gradient(135deg,#0f2040,#166534)",
-        tag:"HIGH SCHOOL COMPLETE", title:"Draft Day Approaches",
-        subtitle:"Your high school career is over. MLB scouts are watching. What's next?",
-        summaryFn:buildHSSummary,
-        prompt:"Ready to enter the MLB Draft?",
-        btnLabel:"Enter the Draft →", action:"draft_hs"
-      });
+      // Check if player is draftable or must go to college
+      let draftScore = calculateDraftScore(false);
+      let isDraftable = draftScore >= MIN_DRAFT_SCORE;
+      if(isDraftable){
+        showStageAdvanceModal({
+          emoji:"🎓", gradient:"linear-gradient(135deg,#0f2040,#166534)",
+          tag:"HIGH SCHOOL COMPLETE · AGE 18", title:"The Crossroads",
+          subtitle:"Your high school career is over. MLB scouts are watching. You have a decision to make.",
+          summaryFn:buildHSSummary,
+          prompt:"You have a draft offer. Sign pro or go to college?",
+          btnLabel:"See Your Draft Offer →", action:"draft_hs"
+        });
+      } else {
+        // Not good enough to be drafted — must go to college
+        showStageAdvanceModal({
+          emoji:"🎓", gradient:"linear-gradient(135deg,#0f2040,#1e3a8a)",
+          tag:"HIGH SCHOOL COMPLETE · AGE 18", title:"College Bound",
+          subtitle:"No MLB team came calling — not yet. College is the path. Develop for 4 years and re-enter the draft.",
+          summaryFn:buildHSSummary,
+          prompt:"Time to choose your college program.",
+          btnLabel:"Choose Your College →", action:"college_forced"
+        });
+      }
       return true;
     }
     return false;
@@ -5093,21 +5925,33 @@ function checkForStageAdvance(){
   if(careerStage === "College"){
     collegeSeasonsPlayed++;
     if(player.nilDeal) player.money += player.nilDeal;
+    // Assign year name based on age
+    let yearNames = {18:"Freshman",19:"Freshman",20:"Sophomore",21:"Junior",22:"Senior"};
+    let yearName  = yearNames[age] || ("Year " + collegeSeasonsPlayed);
+    let yearEmojis = {Freshman:"🟢",Sophomore:"🔵",Junior:"🟡",Senior:"🏆"};
+    let yearEmoji = yearEmojis[yearName] || "📚";
+
     if(collegeSeasonsPlayed >= 4){
       showStageAdvanceModal({
-        emoji:"⚾", gradient:"linear-gradient(135deg,#0d1f3c,#78350f)",
-        tag:"COLLEGE CAREER COMPLETE", title:"Four Years Done",
-        subtitle:"You've played 4 seasons at " + (player.college||"college") + ". The professional draft awaits.",
+        emoji:"🏆", gradient:"linear-gradient(135deg,#0d1f3c,#78350f)",
+        tag:"SENIOR YEAR COMPLETE · AGE 22",
+        title:"Four Years Done — The Draft Awaits",
+        subtitle:"You've finished your Senior year at " + (player.college||"college") + ". The professional draft awaits.",
         summaryFn:buildCollegeSummary,
-        prompt:"Ready to re-enter the MLB Draft?",
-        btnLabel:"Enter the Draft →", action:"draft_college"
+        prompt:"Re-enter the MLB Draft as a college senior.",
+        btnLabel:"Enter the MLB Draft →", action:"draft_college"
       });
       return true;
     }
+    // Between college years — show year name in spotlight
+    let nextYearName = {1:"Sophomore",2:"Junior",3:"Senior"}[collegeSeasonsPlayed] || "";
+    setSpotlight(yearEmoji + " " + yearName + " Year Complete",
+      (player.college||"College") + " — Season " + collegeSeasonsPlayed + " of 4",
+      nextYearName ? nextYearName + " year begins next season. " + (4-collegeSeasonsPlayed) + " season(s) remaining." : "",
+      "success");
+    addFeed(yearName + " Year Done", player.name + " completes " + yearName + " year at " + (player.college||"college") + ".", "success");
+    showToast(yearEmoji + " " + yearName + " year complete! Next: " + nextYearName, "success");
     gamesPlayed = 0;
-    setSpotlight("College Year " + collegeSeasonsPlayed, "Season " + collegeSeasonsPlayed + " of 4 complete.",
-      (4-collegeSeasonsPlayed) + " season(s) remaining at " + (player.college||"college") + ".","success");
-    showToast("College Year " + collegeSeasonsPlayed + "/4 done.","success");
     return false;
   }
   const minorPromotions = {"Single-A":"Double-A","Double-A":"Triple-A","Triple-A":"MLB"};
@@ -5194,6 +6038,9 @@ function showStageAdvanceModal(cfg){
   document.getElementById("stageAdvanceSummary").innerHTML = cfg.summaryFn ? cfg.summaryFn() : "";
   document.getElementById("stageAdvancePrompt").textContent = cfg.prompt;
   document.getElementById("stageAdvanceBtn").textContent = cfg.btnLabel;
+  // Hide "Not Yet" for mandatory transitions (HS at age 14, college-forced are required)
+  let postponeBtn = modal.querySelector('[onclick="postponeStageAdvance()"]');
+  if(postponeBtn) postponeBtn.style.display = (cfg.action === "hs" || cfg.action === "college_forced") ? "none" : "";
   modal.classList.remove("hidden");
 }
 
@@ -5206,7 +6053,7 @@ function confirmStageAdvance(){
 
   if(cfg.action === "hs"){
     careerStage = "High School";
-    gamesPlayed = 0; age = Math.max(age,14);
+    gamesPlayed = 0; age = Math.max(age, 14);
     growPlayer(); generateLeague();
     pendingHSTransition = true;
     showHSChoiceModal();
@@ -5214,6 +6061,11 @@ function confirmStageAdvance(){
     growPlayer(); triggerMLBDraft(false);
   } else if(cfg.action === "draft_college"){
     growPlayer(); triggerMLBDraft(true);
+  } else if(cfg.action === "college_forced"){
+    // Not good enough to be drafted — college is required
+    careerStage = "College"; age = Math.max(age, 18); gamesPlayed = 0; collegeSeasonsPlayed = 0;
+    growPlayer(); generateLeague();
+    showCollegeRecruitmentModal();
   } else if(cfg.action === "minor_promote"){
     const promotions = {"Single-A":"Double-A","Double-A":"Triple-A","Triple-A":"MLB"};
     let next = promotions[careerStage];
@@ -5223,6 +6075,21 @@ function confirmStageAdvance(){
     growPlayer(); generateLeague();
     completeCareerAdvance();
   }
+}
+
+// Shared draft score calculation — used by both checkForStageAdvance and getDraftBonus
+function calculateDraftScore(fromCollege){
+  let attrSum = Object.values(attributes).reduce((a,b)=>a+b,0);
+  let careerHR = player.career.reduce((a,s)=>a+(s.stats.HR||0),0)+player.stats.HR;
+  let careerAVG = player.career.length
+    ? player.career.reduce((a,s)=>a+(isFinite(s.stats.AVG)?s.stats.AVG:0),0)/player.career.length
+    : (player.stats.AVG||0);
+  let score = attrSum;
+  if(careerAVG>0.350) score+=40; else if(careerAVG>0.280) score+=20;
+  if(careerHR>30) score+=35; else if(careerHR>15) score+=20;
+  if(player.levelTier>5) score+=20;
+  if(fromCollege) score+=30; // college players are more polished
+  return score;
 }
 
 function postponeStageAdvance(){
@@ -5236,116 +6103,311 @@ function postponeStageAdvance(){
 // ===================== OFF-SEASON SYSTEM =====================
 
 const OFFSEASON_ACTIVITIES = [
-  // ── ALWAYS AVAILABLE ──
+  // ── UNIVERSAL ──
   {
     key:"training",    emoji:"⚾", name:"Baseball Training",
-    desc:"Hit the cages all off-season. Pure grind.",
+    desc:"Hit the cages all off-season. Pure grind — but overuse is a real risk.",
     fx:{attrs:{contact:4,power:3,fielding:2,speed:1}, offField:{recklessness:-3}},
-    families:["all"], cost:0,
+    injuryRisk:0.10, families:["all"], cost:0,
+    category:"baseball",
   },
   {
-    key:"school",      emoji:"📚", name:"Hit the Books",
-    desc:"Focus on academics. GPA climbs. Scouts like smart players.",
-    fx:{grades:12, offField:{intelligence:8,reputation:4}, attrs:{contact:-1}},
-    families:["all"], cost:0,
+    key:"school",      emoji:"📚", name:"Focus on School",
+    desc:"Hit the books hard. GPA climbs. Physical edge dulls slightly.",
+    fx:{grades:14, offField:{intelligence:10,reputation:5}, attrs:{contact:-1,power:-1}},
+    families:["all"], cost:0, category:"school",
   },
   {
-    key:"basketball",  emoji:"🏀", name:"Play Basketball",
-    desc:"Great cross-training. Improves footwork and explosiveness.",
-    fx:{attrs:{speed:4,contact:2,fielding:2}, offField:{popularity:6,confidence:5,aggression:3}},
-    families:["all"], cost:0,
+    key:"friends",     emoji:"🎉", name:"Hang with Friends",
+    desc:"Social capital goes up. The gym misses you.",
+    fx:{offField:{popularity:10,confidence:6,aggression:-3}, attrs:{contact:-1,speed:-1}, grades:-4},
+    families:["all"], cost:0, category:"social",
   },
   {
-    key:"football",    emoji:"🏈", name:"Play Football",
-    desc:"Builds toughness and power. Injury risk is real though.",
-    fx:{attrs:{power:5,arm:3,speed:2,contact:-1}, offField:{aggression:8,confidence:5,recklessness:5}},
-    injuryRisk:0.12, families:["all"], cost:0,
-  },
-  {
-    key:"hockey",      emoji:"🏒", name:"Play Hockey",
-    desc:"Balance, edge work, toughness. Great for catchers.",
-    fx:{attrs:{fielding:3,speed:3,power:2}, offField:{aggression:6,confidence:4}},
-    families:["all"], cost:0,
-  },
-  {
-    key:"soccer",      emoji:"⚽", name:"Play Soccer",
-    desc:"Elite cardio and footwork. Legs like springs.",
-    fx:{attrs:{speed:5,fielding:3,contact:1}, offField:{popularity:4,confidence:4}},
-    families:["all"], cost:0,
-  },
-  {
-    key:"videogames",  emoji:"🎮", name:"Play Video Games",
-    desc:"Relax and recharge. Hand-eye coordination bonus, but lazy.",
-    fx:{attrs:{contact:1}, offField:{recklessness:4,popularity:3,intelligence:-3}, grades:-5},
-    families:["all"], cost:0,
-  },
-  {
-    key:"reading",     emoji:"📖", name:"Read Books",
-    desc:"Broaden your mind. IQ up, reading the field improves.",
-    fx:{grades:8, offField:{intelligence:10,reputation:5,confidence:3}},
-    families:["all"], cost:0,
-  },
-  {
-    key:"instrument",  emoji:"🎸", name:"Learn an Instrument",
-    desc:"Patience, discipline, finger dexterity. Coaches love well-rounded kids.",
-    fx:{attrs:{contact:2}, grades:5, offField:{intelligence:6,reputation:8,popularity:4,aggression:-4}},
-    families:["all"], cost:0,
-  },
-  {
-    key:"volunteer",   emoji:"🤝", name:"Volunteer in the Community",
-    desc:"Give back. Your reputation in town grows.",
-    fx:{offField:{reputation:12,popularity:6,confidence:4,religiousness:4}},
-    families:["all"], cost:0,
+    key:"volunteer",   emoji:"🤝", name:"Volunteer",
+    desc:"Give back to the community. Reputation and character build quietly.",
+    fx:{offField:{reputation:12,popularity:5,confidence:4,religiousness:3}, grades:3},
+    families:["all"], cost:0, category:"social",
   },
   {
     key:"rest",        emoji:"😴", name:"Rest & Recover",
-    desc:"Do nothing. Fully heal. Sometimes the body just needs a break.",
-    fx:{attrs:{contact:1,power:1,speed:1}, offField:{confidence:3}, grades:0},
-    families:["all"], cost:0, healInjury:true,
+    desc:"Full rest. Heals injuries. The body comes back sharper.",
+    fx:{attrs:{contact:1,power:1,speed:1}, offField:{confidence:3}},
+    families:["all"], cost:0, healInjury:true, category:"school",
   },
 
-  // ── WEALTHY FAMILY EXCLUSIVES ──
+  // ── MIDDLE CLASS & BELOW: OTHER SPORTS ──
   {
-    key:"tennis",      emoji:"🎾", name:"Private Tennis",
-    desc:"Exclusive club. Footwork, hand-eye, social status.",
-    fx:{attrs:{contact:3,fielding:3,speed:2}, offField:{attractiveness:5,reputation:8,popularity:5,confidence:5}},
-    families:["wealthy"], cost:2000,
-    lockLabel:"💰 Wealthy",
+    key:"football_os", emoji:"🏈", name:"Play Football",
+    desc:"Toughness and power through hard contact sport. Real injury risk.",
+    fx:{attrs:{power:6,arm:4,speed:3,contact:-1}, offField:{aggression:8,confidence:6,recklessness:6}},
+    injuryRisk:0.15, families:["all"], cost:0, category:"sport",
   },
+  {
+    key:"basketball_os",emoji:"🏀", name:"Play Basketball",
+    desc:"Explosive footwork, hand-eye, conditioning. Best cross-training for baseball.",
+    fx:{attrs:{speed:5,contact:3,fielding:3}, offField:{popularity:8,confidence:5,aggression:2}},
+    families:["all"], cost:0, category:"sport",
+  },
+  {
+    key:"track",       emoji:"🏃", name:"Track & Field",
+    desc:"Pure athletic development. Speed, explosiveness, discipline.",
+    fx:{attrs:{speed:6,power:3,fielding:2}, offField:{confidence:5,intelligence:4,aggression:-2}},
+    families:["middle","poor","sports","strict","absent","immigrant","religious","add"], cost:0,
+    lockLabel:"Middle class & below", category:"sport",
+  },
+  {
+    key:"wrestling",   emoji:"🤼", name:"Wrestling",
+    desc:"Core strength, explosiveness, mental toughness. Grappling builds a different kind of hard.",
+    fx:{attrs:{power:5,speed:2,arm:3}, offField:{aggression:6,confidence:7,recklessness:3}},
+    families:["middle","poor","sports","strict","absent","immigrant","religious","add"], cost:0,
+    lockLabel:"Middle class & below", category:"sport",
+  },
+  {
+    key:"soccer_os",   emoji:"⚽", name:"Play Soccer",
+    desc:"Elite cardio and footwork. Legs like springs, lungs like bellows.",
+    fx:{attrs:{speed:5,fielding:3,contact:1}, offField:{popularity:5,confidence:4}},
+    families:["all"], cost:0, category:"sport",
+  },
+
+  // ── WEALTHY FAMILY: ELITE SPORTS ──
   {
     key:"skiing",      emoji:"⛷️", name:"Skiing / Snowboarding",
-    desc:"Winter sport. Improves balance and reflexes. Great story.",
-    fx:{attrs:{speed:3,fielding:2}, offField:{attractiveness:6,popularity:5,confidence:6,recklessness:5}},
-    families:["wealthy"], cost:3000,
-    lockLabel:"💰 Wealthy",
-  },
-  {
-    key:"polo",        emoji:"🐴", name:"Polo",
-    desc:"The sport of royalty. Discipline, coordination, prestige.",
-    fx:{attrs:{fielding:2,arm:2}, offField:{reputation:10,attractiveness:5,confidence:6,popularity:3}},
-    families:["wealthy"], cost:5000,
-    lockLabel:"💰 Wealthy",
+    desc:"Mountain reflexes, balance, cold-weather toughness. The ultimate flex.",
+    fx:{attrs:{speed:4,fielding:3,contact:1}, offField:{attractiveness:8,popularity:6,confidence:7,recklessness:5}},
+    families:["wealthy"], cost:3500, lockLabel:"💰 Wealthy", category:"sport",
   },
   {
     key:"lacrosse",    emoji:"🥍", name:"Lacrosse",
-    desc:"Elite hand-eye sport beloved by college coaches.",
-    fx:{attrs:{contact:4,arm:4,fielding:3,speed:2}, offField:{reputation:5,popularity:5,confidence:5}},
-    families:["wealthy"], cost:800,
-    lockLabel:"💰 Wealthy",
+    desc:"Elite hand-eye and arm strength. College coaches love two-sport athletes.",
+    fx:{attrs:{contact:5,arm:5,fielding:3,speed:3}, offField:{reputation:6,popularity:6,confidence:5}},
+    families:["wealthy"], cost:1200, lockLabel:"💰 Wealthy", category:"sport",
   },
-
-  // ── SPORTS FAMILY EXCLUSIVE ──
   {
-    key:"private_lessons", emoji:"🎯", name:"Private Baseball Lessons",
-    desc:"Elite instruction all off-season. Every baseball skill up. But at a cost to who you are.",
-    fx:{attrs:{contact:6,power:5,fielding:4,arm:4,speed:3,control:3},
-        offField:{confidence:-5,popularity:-6,recklessness:3,aggression:5}},
-    families:["sports"], cost:1500,
-    lockLabel:"⚾ Sports Family",
+    key:"fencing",     emoji:"🤺", name:"Fencing",
+    desc:"Reaction time, footwork, precision. The most mental sport there is.",
+    fx:{attrs:{contact:5,speed:4,fielding:3}, offField:{intelligence:8,confidence:6,attractiveness:4}},
+    families:["wealthy"], cost:2000, lockLabel:"💰 Wealthy", category:"sport",
+  },
+  {
+    key:"ice_hockey",  emoji:"🏒", name:"Ice Hockey",
+    desc:"Balance, edge work, aggression. Pure athletic power from the ice.",
+    fx:{attrs:{power:5,speed:4,arm:3,fielding:2}, offField:{aggression:7,confidence:6,popularity:4}},
+    families:["wealthy"], cost:4000, lockLabel:"💰 Wealthy", category:"sport",
+  },
+  {
+    key:"tennis",      emoji:"🎾", name:"Private Tennis",
+    desc:"Footwork, hand-eye, social capital. Every country club kid plays.",
+    fx:{attrs:{contact:4,fielding:3,speed:3}, offField:{attractiveness:5,reputation:8,popularity:5,confidence:5}},
+    families:["wealthy"], cost:2500, lockLabel:"💰 Wealthy", category:"sport",
   },
 ];
 
-// LL age-group promotion thresholds
+// ===================== PRIVATE COACH SYSTEM =====================
+
+// Known MLB players by region with career stats (1992-2026 era)
+// Used when parents are wealthy for a real coaching chance
+const MLB_COACHES_BY_REGION = {
+  northeast: [
+    {name:"Derek Jeter",        pos:"SS", team:"New York Yankees",   era:"1995-2014", WAR:71.8,  cost:12000, tier:"legend",   desc:"Captain. 3,465 hits. Winner.",            bonus:{contact:8,fielding:5,speed:3}},
+    {name:"Pedro Martinez",     pos:"P",  team:"Boston Red Sox",     era:"1992-2009", WAR:86.0,  cost:15000, tier:"HOF",      desc:"Greatest pitcher of his era.",            bonus:{arm:8,control:8,power:2}},
+    {name:"David Ortiz",        pos:"DH", team:"Boston Red Sox",     era:"1997-2016", WAR:55.3,  cost:10000, tier:"star",     desc:"Big Papi. The most clutch hitter ever.",  bonus:{power:8,contact:5,confidence:6}},
+    {name:"Mariano Rivera",     pos:"P",  team:"New York Yankees",   era:"1995-2013", WAR:56.6,  cost:13000, tier:"HOF",      desc:"The greatest closer of all time.",        bonus:{arm:6,control:10,confidence:5}},
+    {name:"Mike Piazza",        pos:"C",  team:"New York Mets",      era:"1992-2007", WAR:59.4,  cost:9000,  tier:"HOF",      desc:"Greatest hitting catcher ever.",          bonus:{power:7,contact:6,confidence:4}},
+  ],
+  southeast: [
+    {name:"Chipper Jones",      pos:"3B", team:"Atlanta Braves",     era:"1993-2012", WAR:85.2,  cost:13000, tier:"HOF",      desc:"Switch-hitting legend. Career .303.",      bonus:{contact:8,power:5,fielding:5}},
+    {name:"Greg Maddux",        pos:"P",  team:"Atlanta Braves",     era:"1992-2004", WAR:104.0, cost:20000, tier:"HOF",      desc:"Most precise pitcher of any era.",         bonus:{control:10,arm:5,intelligence:8}},
+    {name:"Tom Glavine",        pos:"P",  team:"Atlanta Braves",     era:"1992-2008", WAR:74.3,  cost:11000, tier:"HOF",      desc:"Masterclass in location and change.",      bonus:{arm:6,control:9,confidence:4}},
+    {name:"John Smoltz",        pos:"P",  team:"Atlanta Braves",     era:"1992-2009", WAR:66.5,  cost:9000,  tier:"HOF",      desc:"Starter AND closer. Rare.",                bonus:{arm:7,control:7,power:3}},
+    {name:"Fred McGriff",       pos:"1B", team:"Atlanta Braves",     era:"1992-2004", WAR:52.0,  cost:7000,  tier:"HOF",      desc:"Crime Dog. Consistent power hitter.",      bonus:{power:7,contact:5,confidence:3}},
+  ],
+  midwest: [
+    {name:"Albert Pujols",      pos:"1B", team:"St. Louis Cardinals",era:"2001-2022", WAR:100.7, cost:20000, tier:"legend",   desc:"The Machine. Best right-handed hitter.",  bonus:{contact:9,power:9,fielding:4}},
+    {name:"Ken Griffey Jr.",    pos:"CF", team:"Cincinnati Reds",    era:"1992-2010", WAR:83.8,  cost:18000, tier:"HOF",      desc:"The Kid. Perfect swing. Legend.",          bonus:{contact:8,power:8,speed:6}},
+    {name:"Frank Thomas",       pos:"1B", team:"Chicago White Sox",  era:"1992-2008", WAR:73.6,  cost:12000, tier:"HOF",      desc:"The Big Hurt. Pure power approach.",       bonus:{power:9,contact:6,confidence:5}},
+    {name:"Jim Thome",          pos:"1B", team:"Cleveland Indians",  era:"1992-2012", WAR:72.9,  cost:10000, tier:"HOF",      desc:"612 home runs. Old-school power.",         bonus:{power:9,contact:4,confidence:6}},
+    {name:"Tony Gwynn",         pos:"RF", team:"San Diego Padres",   era:"1992-2001", WAR:69.2,  cost:11000, tier:"HOF",      desc:"Hit .394 in '94. Greatest pure hitter.",  bonus:{contact:10,speed:3,fielding:3}},
+  ],
+  southwest: [
+    {name:"Nolan Ryan",         pos:"P",  team:"Texas Rangers",      era:"1992-1993", WAR:81.5,  cost:15000, tier:"legend",   desc:"7 no-hitters. Fastest ever. Still throws.", bonus:{arm:10,power:5,control:6}},
+    {name:"Craig Biggio",       pos:"2B", team:"Houston Astros",     era:"1992-2007", WAR:65.2,  cost:9000,  tier:"HOF",      desc:"3,060 hits. Versatile. Lead by example.", bonus:{contact:7,speed:5,fielding:5}},
+    {name:"Jeff Bagwell",       pos:"1B", team:"Houston Astros",     era:"1992-2005", WAR:79.6,  cost:12000, tier:"HOF",      desc:"Crouch stance. Dominant power hitter.",   bonus:{power:8,contact:7,fielding:3}},
+    {name:"Ivan Rodriguez",     pos:"C",  team:"Texas Rangers",      era:"1992-2011", WAR:67.5,  cost:10000, tier:"HOF",      desc:"Best defensive catcher of the era.",      bonus:{fielding:9,arm:8,contact:5}},
+    {name:"Randy Johnson",      pos:"P",  team:"Arizona Diamondbacks",era:"1993-2009",WAR:101.1, cost:20000, tier:"legend",   desc:"Big Unit. Most dominant LHP ever.",       bonus:{arm:10,control:7,power:4}},
+  ],
+  west: [
+    {name:"Barry Bonds",        pos:"LF", team:"San Francisco Giants",era:"1992-2007",WAR:162.4, cost:25000, tier:"legend",   desc:"Best hitter statistically. Complicated.",  bonus:{power:10,contact:9,speed:4}},
+    {name:"Mike Mussina",       pos:"P",  team:"Baltimore Orioles",   era:"1992-2008",WAR:82.7,  cost:11000, tier:"HOF",      desc:"Elite command. The MOOSE.",                bonus:{arm:6,control:9,fielding:3}},
+    {name:"Trevor Hoffman",     pos:"P",  team:"San Diego Padres",    era:"1993-2010",WAR:28.1,  cost:8000,  tier:"HOF",      desc:"601 saves. Change-up was deadly.",         bonus:{arm:5,control:10,confidence:5}},
+    {name:"Edgar Martinez",     pos:"DH", team:"Seattle Mariners",    era:"1992-2004",WAR:68.4,  cost:10000, tier:"HOF",      desc:"Defined the DH position. .312 career avg.",bonus:{contact:9,power:6,confidence:4}},
+    {name:"Mike Trout",         pos:"CF", team:"Los Angeles Angels",  era:"2011-2024",WAR:83.4,  cost:30000, tier:"legend",   desc:"Best baseball player of his generation.",  bonus:{contact:8,power:8,speed:8}},
+  ],
+  south: [
+    {name:"Cal Ripken Jr.",     pos:"SS", team:"Baltimore Orioles",   era:"1992-2001",WAR:95.9,  cost:14000, tier:"HOF",      desc:"2,632 consecutive games. Iron Man.",      bonus:{fielding:8,contact:6,power:5,confidence:7}},
+    {name:"Roberto Alomar",     pos:"2B", team:"Baltimore Orioles",   era:"1992-2004",WAR:67.3,  cost:9000,  tier:"HOF",      desc:"Best all-around second baseman ever.",    bonus:{contact:7,fielding:8,speed:5}},
+    {name:"Gary Sheffield",     pos:"RF", team:"Florida Marlins",     era:"1992-2009",WAR:60.5,  cost:8000,  tier:"star",     desc:"Violent swing. Feared hitter.",           bonus:{power:7,contact:7,aggression:5}},
+    {name:"Andruw Jones",       pos:"CF", team:"Atlanta Braves",      era:"1996-2012",WAR:62.8,  cost:9000,  tier:"star",     desc:"Best defensive outfielder of the era.",   bonus:{fielding:10,arm:7,speed:5}},
+    {name:"Hank Aaron",         pos:"RF", team:"Atlanta Braves",      era:"historic", WAR:143.0, cost:50000, tier:"immortal", desc:"755. All-time HR king. Living legend.",    bonus:{power:10,contact:10,confidence:8}},
+  ],
+};
+
+// Map player's state/region to MLB coach pool
+function getRegionForLocation(){
+  let state = (player.state||"").toUpperCase();
+  let town  = (player.town||"").toLowerCase();
+  let regions = {
+    northeast: ["ME","NH","VT","MA","RI","CT","NY","NJ","PA","DE","MD"],
+    southeast: ["VA","WV","NC","SC","GA","FL","AL","MS","TN","KY"],
+    midwest:   ["OH","IN","IL","MI","WI","MN","IA","MO","ND","SD","NE","KS"],
+    southwest: ["TX","OK","AR","LA","NM","AZ"],
+    west:      ["CA","OR","WA","NV","ID","MT","WY","CO","UT","AK","HI"],
+    south:     ["FL","GA","AL","MS","LA","SC","NC"],
+  };
+  for(let [region, states] of Object.entries(regions)){
+    if(states.includes(state)) return region;
+  }
+  // Fallback: check town name
+  if(town.includes("new york")||town.includes("boston")||town.includes("philadelphia")) return "northeast";
+  if(town.includes("atlanta")||town.includes("miami")) return "southeast";
+  if(town.includes("chicago")||town.includes("cleveland")||town.includes("detroit")) return "midwest";
+  if(town.includes("houston")||town.includes("dallas")||town.includes("phoenix")) return "southwest";
+  if(town.includes("los angeles")||town.includes("san francisco")||town.includes("seattle")) return "west";
+  return ["northeast","southeast","midwest","southwest","west","south"][Math.floor(Math.random()*6)];
+}
+
+function rollPrivateCoachEvent(){
+  if(!["middle","wealthy","sports"].includes(player.parents)) return false;
+  if(!["Little League","High School","College"].includes(careerStage)) return false;
+  if(player.hadCoachThisSeason) return false;
+  let chance = player.parents==="wealthy" ? 0.45 : 0.28;
+  return Math.random() < chance;
+}
+
+async function showPrivateCoachModal(){
+  player.hadCoachThisSeason = true;
+  let isWealthy = player.parents === "wealthy";
+  let region = getRegionForLocation();
+  let coachPool = MLB_COACHES_BY_REGION[region] || MLB_COACHES_BY_REGION.midwest;
+
+  let banner = document.getElementById("coachBanner");
+  let title  = document.getElementById("coachTitle");
+  let subtitle = document.getElementById("coachSubtitle");
+  let body   = document.getElementById("coachBody");
+  let btns   = document.getElementById("coachButtons");
+
+  if(isWealthy){
+    // Wealthy: chance of real former MLB player
+    // Weight by tier (legends appear less often)
+    let weights = coachPool.map(c => c.tier==="immortal"?1:c.tier==="legend"?3:c.tier==="HOF"?6:8);
+    let total = weights.reduce((a,b)=>a+b,0);
+    let r = Math.random()*total, cum=0, pickedIdx=0;
+    for(let i=0;i<weights.length;i++){ cum+=weights[i]; if(r<cum){pickedIdx=i;break;} }
+    let coach = coachPool[pickedIdx];
+
+    banner.style.background = "linear-gradient(135deg,#0a1628,#78350f)";
+    document.getElementById("coachTag").textContent = "🌟 FORMER MLB PLAYER OFFER";
+    title.textContent = coach.name + " Wants to Work With You";
+    subtitle.textContent = coach.pos + " · " + coach.team + " · " + coach.era;
+
+    // Use AI to generate a personal coaching pitch
+    let pitch = "";
+    try {
+      let prompt = `Write a 2-sentence coaching pitch from former MLB player ${coach.name} (${coach.pos}, ${coach.team}) to a young baseball player named ${player.name} from ${player.town}. Make it personal — reference a specific skill ${coach.name} was known for and how it will help ${player.name}. Be direct and inspiring. No quotes or labels.`;
+      let resp = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:120,messages:[{role:"user",content:prompt}]})});
+      let data = await resp.json();
+      pitch = data.content.map(c=>c.text||"").join("").trim();
+    } catch(e){
+      pitch = `${coach.name} has agreed to personally work with you this off-season. His experience at the highest level will sharpen exactly what you need.`;
+    }
+
+    let tierColor = {immortal:"var(--accent)",legend:"var(--accent)",HOF:"var(--green)",star:"var(--accent2)"}[coach.tier]||"var(--muted)";
+    let bonusHtml = Object.entries(coach.bonus).map(([k,v])=>`<span class="story-eff-tag pos">+${v} ${k.charAt(0).toUpperCase()+k.slice(1)}</span>`).join("");
+
+    body.innerHTML = `
+      <div style="display:flex;gap:14px;align-items:flex-start;margin-bottom:16px;">
+        <div style="width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#1a3a6e,#c8a84b);display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;">⚾</div>
+        <div>
+          <div style="font-size:0.68rem;font-weight:800;color:${tierColor};text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;">${coach.tier.toUpperCase()} · WAR ${coach.WAR}</div>
+          <div style="font-weight:700;font-size:1rem;color:var(--ink);">${coach.name}</div>
+          <div style="font-size:0.78rem;color:var(--muted);">${coach.desc}</div>
+        </div>
+      </div>
+      <div style="font-style:italic;font-size:0.85rem;color:var(--muted);border-left:3px solid rgba(230,160,32,0.4);padding-left:12px;margin-bottom:14px;line-height:1.6;">"${pitch}"</div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:4px;">
+        <div style="font-size:0.7rem;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Season-Long Coaching Benefits</div>
+        <div>${bonusHtml}</div>
+        <div style="margin-top:8px;font-size:0.78rem;color:var(--accent);">💰 Cost: $${coach.cost.toLocaleString()} for the season</div>
+      </div>`;
+
+    btns.innerHTML = player.money >= coach.cost
+      ? `<button class="action-btn primary" style="flex:1;padding:12px;" onclick="hireCoach(${JSON.stringify(coach).split('"').join("'")})">✅ Hire — $${coach.cost.toLocaleString()}</button>
+         <button class="action-btn" style="flex:1;padding:12px;color:var(--muted);" onclick="closeCoachModal()">Pass →</button>`
+      : `<div style="width:100%;text-align:center;font-size:0.82rem;color:var(--red);padding:10px;">💸 You need $${(coach.cost-player.money).toLocaleString()} more to afford this.</div>
+         <button class="action-btn" style="width:100%;padding:12px;color:var(--muted);" onclick="closeCoachModal()">Pass →</button>`;
+
+  } else {
+    // Middle class: generic local coach, decent boost
+    let coachNames = ["Coach Rodriguez","Coach Williams","Coach Davis","Coach Kowalski","Coach Nguyen","Coach Jackson"];
+    let cName = coachNames[Math.floor(Math.random()*coachNames.length)];
+    let cost = 800 + Math.floor(Math.random()*400);
+    let bonus = {contact:3,power:2,fielding:2,arm:2};
+
+    banner.style.background = "linear-gradient(135deg,#0a1628,#1e3a8a)";
+    document.getElementById("coachTag").textContent = "🧢 PRIVATE COACH OFFER";
+    title.textContent = cName + " Is Available This Off-Season";
+    subtitle.textContent = "A local coach with a strong track record reached out.";
+
+    let bonusHtml = Object.entries(bonus).map(([k,v])=>`<span class="story-eff-tag pos">+${v} ${k.charAt(0).toUpperCase()+k.slice(1)}</span>`).join("");
+    let quotes = [
+      `"I've worked with dozens of kids your age. I see something in you worth developing."`,
+      `"Six weeks, one-on-one, three days a week. I'll get your mechanics right."`,
+      `"The players who make it aren't always the most talented. They're the ones who put in extra work when nobody's watching."`,
+    ];
+    let quote = quotes[Math.floor(Math.random()*quotes.length)];
+
+    body.innerHTML = `
+      <div style="font-style:italic;font-size:0.85rem;color:var(--muted);border-left:3px solid rgba(59,158,255,0.4);padding-left:12px;margin-bottom:14px;line-height:1.6;">${quote}</div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:12px;padding:12px 14px;margin-bottom:4px;">
+        <div style="font-size:0.7rem;font-weight:800;color:var(--muted);text-transform:uppercase;margin-bottom:8px;">Coaching Benefits</div>
+        <div>${bonusHtml}</div>
+        <div style="margin-top:8px;font-size:0.78rem;color:var(--accent2);">💰 Cost: $${cost.toLocaleString()} for the season</div>
+      </div>`;
+
+    let localCoach = {name:cName, cost, bonus, tier:"local"};
+    btns.innerHTML = player.money >= cost
+      ? `<button class="action-btn primary" style="flex:1;padding:12px;" onclick='hireCoach(${JSON.stringify(localCoach).split('"').join("'")})'>✅ Hire — $${cost.toLocaleString()}</button>
+         <button class="action-btn" style="flex:1;padding:12px;color:var(--muted);" onclick="closeCoachModal()">Pass →</button>`
+      : `<div style="width:100%;text-align:center;font-size:0.82rem;color:var(--red);padding:10px;">💸 Can't afford this right now.</div>
+         <button class="action-btn" style="width:100%;padding:12px;color:var(--muted);" onclick="closeCoachModal()">Pass →</button>`;
+  }
+
+  document.getElementById("privateCoachModal").classList.remove("hidden");
+}
+
+function hireCoach(coach){
+  document.getElementById("privateCoachModal").classList.add("hidden");
+  player.money -= coach.cost;
+  // Apply bonus attrs
+  for(let [k,v] of Object.entries(coach.bonus||{})){
+    if(attributes[k] !== undefined) attributes[k] = Math.min(99, attributes[k] + v);
+    else if(player.offField && player.offField[k] !== undefined)
+      player.offField[k] = Math.min(100, player.offField[k] + v);
+  }
+  let bonusText = Object.entries(coach.bonus||{}).map(([k,v])=>"+"+v+" "+k).join(", ");
+  addFeed("🌟 Private Coach Hired", (coach.name||"Coach") + " — $" + fmt(coach.cost) + " · " + bonusText, "success");
+  showToast("Hired " + (coach.name||"coach") + "! " + bonusText, "success");
+  clampAttrs(); updateUI();
+  // Continue to off-season modal
+  showOffseasonModal();
+}
+
+function closeCoachModal(){
+  document.getElementById("privateCoachModal").classList.add("hidden");
+  showOffseasonModal();
+}
+
+
 function getLLPromotion(currentAge, stats, careerData){
   if(currentAge >= 13) return null; // already at 13U max, goes to HS via advanceCareer
   // Check if this season was strong enough for an early promotion
@@ -5356,14 +6418,492 @@ function getLLPromotion(currentAge, stats, careerData){
   return currentAge + 1; // normal +1
 }
 
-function showOffseasonModal(){
-  let newAge = age;
-  let prevDiv = getLLDivision(newAge - 1);
-  // Use effective division (may be ahead of age) for current
-  let newDiv  = getEffectiveLLDivision();
-  let promoted = careerStage === "Little League" && newDiv !== getLLDivision(newAge - 1);
+// ===================== THEFT EVENT SYSTEM =====================
 
-  // Build gradient based on stage
+// Risk of getting caught by item tier
+const THEFT_CATCH_RISK = { 1: 0.15, 2: 0.35, 3: 0.55, 4: 0.75 };
+
+function openTheftModal(){
+  // Pick 6 items across tiers from various slots to offer as choices
+  let offerings = [];
+  let slotsToOffer = ["bat","glove","cleats","battingGloves","elbowGuard","slidingMitt"];
+  for(let slot of slotsToOffer){
+    let cat = EQUIPMENT_CATALOG[slot];
+    if(!cat || !cat.items) continue;
+    // One item per tier from this slot (tier 1, 2, 3 — skip free/team)
+    [1,2,3].forEach(tier => {
+      let item = cat.items.find(i => i.tier === tier);
+      if(item) offerings.push({slot, item, cat});
+    });
+  }
+  // Shuffle and cap at 8
+  offerings.sort(()=>Math.random()-0.5);
+  offerings = offerings.slice(0, 8);
+
+  // Build item grid
+  let grid = document.getElementById("theftItemGrid");
+  grid.innerHTML = offerings.map((o, idx) => {
+    let risk = THEFT_CATCH_RISK[o.item.tier] || 0.5;
+    let riskLabel = risk <= 0.2 ? "Low risk" : risk <= 0.4 ? "Medium risk" : risk <= 0.6 ? "High risk" : "Very high risk";
+    let riskColor = risk <= 0.2 ? "var(--green)" : risk <= 0.4 ? "var(--accent)" : risk <= 0.6 ? "var(--red)" : "#ff0000";
+    return `<div class="equip-card" style="cursor:pointer;padding:10px;" onclick="attemptTheft(${idx})">
+      <div class="ec-brand" style="font-size:0.62rem;">${EQUIP_EMOJI[o.slot]} ${o.cat.label}</div>
+      <div class="ec-model" style="font-size:0.82rem;">${o.item.brand} ${o.item.model}</div>
+      <div style="font-size:0.72rem;color:var(--muted);margin:3px 0;">Retail $${o.item.price}</div>
+      <div style="font-size:0.68rem;font-weight:800;color:${riskColor};">⚠ ${riskLabel} (${Math.round(risk*100)}%)</div>
+    </div>`;
+  }).join("");
+
+  // Store offerings for resolution
+  window._theftOfferings = offerings;
+
+  // Set narrative
+  document.getElementById("theftNarrativeBox").innerHTML = `
+    <p style="font-size:0.85rem;color:var(--muted);line-height:1.6;margin-bottom:14px;font-style:italic;">
+      "Pick what you want," Danny says. "Expensive stuff is harder. He wraps it in his jacket. 
+      If anyone asks — you found it, okay?"
+    </p>`;
+
+  document.getElementById("theftPickerSection").style.display = "block";
+  document.getElementById("theftOutcomeSection").style.display = "none";
+  document.getElementById("theftModal").classList.remove("hidden");
+}
+
+function attemptTheft(idx){
+  let offering = window._theftOfferings[idx];
+  if(!offering) return;
+  let risk = THEFT_CATCH_RISK[offering.item.tier] || 0.5;
+  let caught = Math.random() < risk;
+
+  document.getElementById("theftPickerSection").style.display = "none";
+  document.getElementById("theftOutcomeSection").style.display = "block";
+
+  let outEl = document.getElementById("theftOutcomeBox");
+
+  if(caught){
+    // Caught — suspended rest of season
+    let cap = getCurrentSeasonCap();
+    let remaining = Math.max(0, cap - gamesPlayed);
+
+    // Apply suspension
+    player.suspended = true;
+    player.suspendedUntilSeason = seasonsPlayed;
+    while(gamesPlayed < cap){ gamesPlayed++; careerGamesTotal++; }
+
+    // Reputation/popularity hit
+    player.offField.reputation  = Math.max(0, (player.offField.reputation||50)  - 18);
+    player.offField.confidence  = Math.max(0, (player.offField.confidence||50)  - 10);
+    player.popularity           = Math.max(0, player.popularity - 15);
+    player.offField.popularity  = player.popularity;
+
+    addFeed("⛔ Caught Shoplifting", `${player.name} was caught stealing a ${offering.item.brand} ${offering.item.model}. Suspended for ${remaining} game${remaining!==1?"s":""}.`, "warning");
+
+    outEl.innerHTML = `
+      <div style="background:rgba(239,68,68,0.06);border:2px solid rgba(239,68,68,0.3);border-radius:16px;padding:16px;">
+        <div style="font-size:1.5rem;margin-bottom:8px;">🚨</div>
+        <div style="font-weight:900;color:var(--red);font-size:1rem;margin-bottom:8px;">Caught.</div>
+        <p style="font-size:0.85rem;color:var(--ink);line-height:1.6;margin-bottom:12px;">
+          The store manager grabs Danny's uncle at the door. Then the police come. 
+          Then your coach. Then your parents.<br><br>
+          You are suspended for the rest of the season — <strong>${remaining} game${remaining!==1?"s":""}</strong>. 
+          The ${offering.item.brand} ${offering.item.model} goes back on the shelf. 
+          You go home in the back of a police car.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;">
+          <span class="story-eff-tag neg">⛔ Suspended — ${remaining} games</span>
+          <span class="story-eff-tag neg">−18 Reputation</span>
+          <span class="story-eff-tag neg">−15 Popularity</span>
+          <span class="story-eff-tag neg">−10 Confidence</span>
+        </div>
+      </div>`;
+
+    player.storyEventLog.push({id:"theft_caught", title:"Caught Shoplifting", choice:"Attempted theft", outcome:"Caught and suspended for " + remaining + " games.", week:currentWeek});
+
+  } else {
+    // Got away with it — apply equipment and small attr boost
+    let eq = getPlayerEquip();
+    eq[offering.slot] = offering.item;
+    player.equipment = eq;
+    applyEquipmentBonuses();
+
+    // Guilt and recklessness
+    player.offField.recklessness = Math.min(100,(player.offField.recklessness||20)+12);
+    player.offField.confidence   = Math.min(100,(player.offField.confidence||50)+5);
+    player.offField.reputation   = Math.max(0,(player.offField.reputation||50)-4);
+
+    addFeed("Stolen Gear", `${player.name} now has a ${offering.item.brand} ${offering.item.model}. Nobody's talking.`, "warning");
+
+    outEl.innerHTML = `
+      <div style="background:rgba(34,197,94,0.04);border:2px solid rgba(34,197,94,0.2);border-radius:16px;padding:16px;">
+        <div style="font-size:1.5rem;margin-bottom:8px;">😮‍💨</div>
+        <div style="font-weight:900;color:var(--green);font-size:1rem;margin-bottom:8px;">Got away clean.</div>
+        <p style="font-size:0.85rem;color:var(--ink);line-height:1.6;margin-bottom:12px;">
+          Danny's uncle walks out calm. Hands it to you two blocks away without even looking at you. 
+          You put on the <strong>${offering.item.brand} ${offering.item.model}</strong> before the next practice.<br><br>
+          Nobody asks. Nobody knows. You know.
+        </p>
+        <div style="display:flex;flex-wrap:wrap;gap:5px;">
+          <span class="story-eff-tag pos">${EQUIP_EMOJI[offering.slot]} ${offering.item.model} equipped</span>
+          <span class="story-eff-tag pos">+5 Confidence</span>
+          <span class="story-eff-tag neg">+12 Recklessness</span>
+          <span class="story-eff-tag neg">−4 Reputation</span>
+        </div>
+        <p style="font-size:0.72rem;color:var(--muted);margin-top:10px;font-style:italic;">
+          The gear helps. The question of who you're becoming follows you to every practice.
+        </p>
+      </div>`;
+
+    player.storyEventLog.push({id:"theft_success", title:"Stolen Gear", choice:"Stole a " + offering.item.brand + " " + offering.item.model, outcome:"Got away with it. Equipped.", week:currentWeek});
+  }
+
+  pendingStoryEvent = false;
+  pendingStoryEventData = null;
+  updateUI();
+}
+
+function declineTheft(){
+  document.getElementById("theftModal").classList.add("hidden");
+  pendingStoryEvent = false;
+  pendingStoryEventData = null;
+  addFeed("Turned It Down", "Walked away from Danny's offer. Clean hands.", "success");
+  showToast("Good call. Clean hands.", "success");
+  player.offField.reputation  = Math.min(100,(player.offField.reputation||50)+5);
+  player.offField.intelligence= Math.min(100,(player.offField.intelligence||50)+4);
+  updateUI();
+}
+
+function closeTheftModal(){
+  document.getElementById("theftModal").classList.add("hidden");
+  pendingStoryEvent = false;
+  pendingStoryEventData = null;
+  if(careerStage === "Little League" && gamesPlayed < getCurrentSeasonCap() && !offTimeAvailable){
+    showOfftimePicker(currentWeek-1, isInjured());
+  }
+  updateUI();
+}
+
+
+
+let _xmasGiftItem   = null; // the chosen gift item
+let _xmasGiftSlot   = null; // which equipment slot it goes in
+
+// Families eligible for a Christmas gift (middle class and below)
+const XMAS_ELIGIBLE_FAMILIES = ["middle","poor","sports","strict","absent","immigrant","religious","add"];
+// Only during younger career stages (not once playing pro ball)
+const XMAS_ELIGIBLE_STAGES   = ["Little League","High School","College"];
+
+function isXmasEligible(){
+  if(!XMAS_ELIGIBLE_FAMILIES.includes(player.parents)) return false;
+  if(!XMAS_ELIGIBLE_STAGES.includes(careerStage)) return false;
+  // Don't gift again if already received this season (track via flag)
+  if(player.xmasGiftThisSeason) return false;
+  // ~65% chance each off-season so it's not guaranteed every year
+  return Math.random() < 0.65;
+}
+
+function pickXmasGift(){
+  // Pick a slot the player doesn't already have a good item in
+  let eq = getPlayerEquip();
+  let candidates = [];
+  for(let slot of EQUIP_SLOTS){
+    let current = eq[slot];
+    let cat = EQUIPMENT_CATALOG[slot];
+    // Skip bat and glove (team-provided), skip if already have tier 3+
+    if(slot === "bat" || slot === "glove") continue;
+    if(current && current.tier >= 3) continue;
+    // Pick a tier-2 item for the slot (affordable-feeling but meaningful)
+    let tier2items = cat.items.filter(i => i.tier === 2);
+    if(tier2items.length > 0){
+      candidates.push({slot, item: tier2items[Math.floor(Math.random()*tier2items.length)]});
+    }
+  }
+  if(!candidates.length) return null;
+  // Prioritise protective gear for lower-income families (safety-conscious)
+  let protective = candidates.filter(c => EQUIPMENT_CATALOG[c.slot].protective);
+  let pool = protective.length > 0 && Math.random() < 0.4 ? protective : candidates;
+  return pool[Math.floor(Math.random()*pool.length)];
+}
+
+function showXmasModal(){
+  let gift = pickXmasGift();
+  if(!gift){ showOffseasonModal(); return; }
+
+  _xmasGiftItem = gift.item;
+  _xmasGiftSlot = gift.slot;
+
+  let cat = EQUIPMENT_CATALOG[gift.slot];
+  let isPoor = player.parents === "poor" || player.parents === "absent" || player.parents === "immigrant";
+  let subtitle = isPoor
+    ? "They scraped together every spare dollar to get you this. It wasn't easy."
+    : "They saw how hard you worked this season. This is their way of saying they noticed.";
+  document.getElementById("xmasSubtitle").textContent = subtitle;
+
+  // Parent flavour message
+  let parentMsgs = {
+    middle:    "Your mom wrapped it herself. Your dad pretends he didn't notice the price tag.",
+    poor:      "Your mom saved a little each week since August. She doesn't say that. You'll figure it out.",
+    sports:    "Dad went to three stores before finding this exact model. He knows his gear.",
+    strict:    "A note is taped to it: 'Work harder than last season. — Dad'",
+    absent:    "It showed up with a card — no return address. Just your name in familiar handwriting.",
+    immigrant: "Your parents asked the store clerk three times to make sure they were getting the right thing.",
+    religious: "It's wrapped in newspaper with a Bible verse on the tag. God and baseball, always together.",
+    add:       "Your mom spent an hour on the internet reading reviews. She got it right.",
+  };
+  let parentMsg = parentMsgs[player.parents] || "A gift from the family.";
+
+  let isProtective = cat.protective;
+  let effTags = [];
+  if(cat.attrBonus) Object.entries(cat.attrBonus).forEach(([k,v])=> effTags.push(`<span class="ec-tag pos">+${v} ${k[0].toUpperCase()+k.slice(1)}</span>`));
+  if(cat.injuryReduction) effTags.push(`<span class="ec-tag prot">−${Math.round(cat.injuryReduction*100)}% Injury Risk</span>`);
+
+  document.getElementById("xmasBody").innerHTML = `
+    <div style="text-align:center;margin-bottom:18px;">
+      <div style="font-size:3rem;margin-bottom:8px;">${EQUIP_EMOJI[gift.slot]}</div>
+      <div style="font-size:0.7rem;font-weight:800;color:var(--accent2);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:4px;">${gift.item.brand}</div>
+      <div style="font-size:1.2rem;font-weight:900;color:var(--ink);margin-bottom:4px;">${gift.item.model}</div>
+      <div style="font-size:0.82rem;color:var(--muted);margin-bottom:10px;">${cat.label} · Retail $${gift.item.price}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:5px;justify-content:center;margin-bottom:14px;">${effTags.join("")}</div>
+      <div style="font-size:0.78rem;color:var(--ink);line-height:1.5;margin-bottom:16px;font-style:italic;">"${gift.item.desc}"</div>
+    </div>
+    <div style="background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:12px;padding:12px 16px;font-size:0.82rem;color:var(--muted);line-height:1.5;font-style:italic;">
+      ${parentMsg}
+    </div>`;
+
+  document.getElementById("xmasModal").classList.remove("hidden");
+  player.xmasGiftThisSeason = true;
+}
+
+function acceptXmasGift(){
+  document.getElementById("xmasModal").classList.add("hidden");
+  if(!_xmasGiftItem || !_xmasGiftSlot) { showOffseasonModal(); return; }
+
+  // Apply the gift to equipment
+  let eq = getPlayerEquip();
+  eq[_xmasGiftSlot] = _xmasGiftItem;
+  player.equipment = eq;
+  applyEquipmentBonuses();
+
+  let cat = EQUIPMENT_CATALOG[_xmasGiftSlot];
+  addFeed("🎄 Christmas Gift!", "Received " + _xmasGiftItem.brand + " " + _xmasGiftItem.model + " (" + cat.label + ") — worth $" + _xmasGiftItem.price + ".", "success");
+  showToast("🎁 " + _xmasGiftItem.model + " equipped!", "success");
+  _xmasGiftItem = null; _xmasGiftSlot = null;
+  showOffseasonModal();
+}
+
+function declineXmasGift(){
+  document.getElementById("xmasModal").classList.add("hidden");
+  addFeed("Christmas Gift Passed", "Chose not to take the gift.", "success");
+  _xmasGiftItem = null; _xmasGiftSlot = null;
+  showOffseasonModal();
+}
+// ===================== BIRTHDAY SYSTEM =====================
+
+// Birthday money by family background
+const BIRTHDAY_MONEY = {
+  wealthy:   { min:200,  max:500,  msg:"Your parents handed you a thick envelope. Crisp bills." },
+  middle:    { min:50,   max:150,  msg:"Grandma sent a card with cash taped inside. Every year, without fail." },
+  sports:    { min:40,   max:120,  msg:"Dad gave you cash and said 'buy something for the game.'" },
+  strict:    { min:30,   max:80,   msg:"A small gift from the family. Practical, not extravagant." },
+  religious: { min:30,   max:100,  msg:"The church family pitched in a little. A blessed day." },
+  poor:      { min:10,   max:40,   msg:"Mom scraped together what she could. The card said more than the cash." },
+  absent:    { min:0,    max:50,   msg:"A crumpled twenty in the mailbox. No note. You know whose handwriting it is." },
+  immigrant: { min:20,   max:80,   msg:"Your parents cooked your favorite meal. The money came from the jar under the counter." },
+  add:       { min:25,   max:75,   msg:"Your family made a big deal of it. More energy than money." },
+};
+
+function triggerBirthday(){
+  let bd = BIRTHDAY_MONEY[player.parents] || BIRTHDAY_MONEY.middle;
+  let amount = Math.floor(bd.min + Math.random()*(bd.max - bd.min + 1));
+
+  // LL players get personal pocket money; older players get it added to balance
+  if(careerStage === "Little League" || careerStage === "High School"){
+    player.playerMoney = (player.playerMoney||0) + amount;
+  } else {
+    player.money += amount;
+  }
+
+  if(amount === 0) return; // absent family — no show if nothing sent
+
+  showBirthdayModal(amount, bd.msg);
+}
+
+function showBirthdayModal(amount, msg){
+  let ageStr = age;
+  let html = `
+    <div style="text-align:center;padding:10px 0 4px;">
+      <div style="font-size:3rem;margin-bottom:10px;">🎂</div>
+      <div style="font-size:0.65rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">HAPPY BIRTHDAY</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:900;color:white;margin-bottom:6px;">Age ${ageStr} 🎉</h2>
+      <p style="font-size:0.85rem;color:rgba(255,255,255,0.7);line-height:1.5;margin-bottom:16px;font-style:italic;">"${msg}"</p>
+      <div style="background:rgba(34,197,94,0.12);border:1px solid rgba(34,197,94,0.3);border-radius:14px;padding:16px;margin-bottom:4px;">
+        <div style="font-size:0.72rem;color:var(--muted);margin-bottom:4px;">Birthday money received</div>
+        <div style="font-size:2rem;font-weight:900;color:var(--green);">+$${amount}</div>
+      </div>
+    </div>`;
+
+  document.getElementById("birthdayModalBody").innerHTML = html;
+  document.getElementById("birthdayModal").classList.remove("hidden");
+  addFeed("🎂 Birthday!", `Age ${ageStr} — received $${amount} as a birthday gift.`, "success");
+}
+
+// ===================== HOLIDAY GIFT SYSTEM =====================
+
+// Religion → holiday name + emoji + timing (which off-season)
+const RELIGION_HOLIDAYS = {
+  "Catholic":               { name:"Christmas",     emoji:"🎄", giftChance:0.60 },
+  "Evangelical Protestant": { name:"Christmas",     emoji:"🎄", giftChance:0.65 },
+  "Mainline Protestant":    { name:"Christmas",     emoji:"🎄", giftChance:0.55 },
+  "Baptist":                { name:"Christmas",     emoji:"🎄", giftChance:0.60 },
+  "Mormon/LDS":             { name:"Christmas",     emoji:"🎄", giftChance:0.60 },
+  "Jewish":                 { name:"Hanukkah",      emoji:"🕎", giftChance:0.65 },
+  "Muslim":                 { name:"Eid al-Fitr",   emoji:"🌙", giftChance:0.55 },
+  "Hindu":                  { name:"Diwali",        emoji:"🪔", giftChance:0.55 },
+  "Buddhist":               { name:"Vesak",         emoji:"🪷", giftChance:0.40 },
+  "Orthodox Christian":     { name:"Orthodox Christmas", emoji:"☦️", giftChance:0.55 },
+  "None / Secular":         { name:null, emoji:null, giftChance:0 },
+  "Other":                  { name:"a holiday",     emoji:"🎁", giftChance:0.35 },
+};
+
+function checkHolidayGift(){
+  if(!player.religion || player.religion === "None / Secular") return false;
+  if(!["Little League","High School","College"].includes(careerStage)) return false;
+  if(player.holidayGiftThisSeason) return false;
+
+  let hol = RELIGION_HOLIDAYS[player.religion];
+  if(!hol || !hol.name) return false;
+  if(Math.random() > hol.giftChance) return false;
+
+  return hol;
+}
+
+function showHolidayGiftModal(hol){
+  player.holidayGiftThisSeason = true;
+
+  // Pick a random tier-2 item from any slot
+  let offerings = [];
+  for(let slot of EQUIP_SLOTS){
+    if(slot === "bat" || slot === "glove") continue;
+    let cat = EQUIPMENT_CATALOG[slot];
+    let item = cat.items.find(i => i.tier === 2);
+    if(item) offerings.push({slot, item, cat});
+  }
+  if(!offerings.length) return;
+
+  let pick = offerings[Math.floor(Math.random()*offerings.length)];
+  let eq = getPlayerEquip();
+  // Only gift if they don't already have something better
+  let current = eq[pick.slot];
+  if(current && current.tier >= 2){
+    // Try a different slot
+    let alt = offerings.filter(o => {
+      let c = eq[o.slot]; return !c || c.tier < 2;
+    });
+    if(alt.length) pick = alt[Math.floor(Math.random()*alt.length)];
+    else return; // already well-equipped, no gift needed
+  }
+
+  eq[pick.slot] = pick.item;
+  player.equipment = eq;
+  applyEquipmentBonuses();
+
+  let html = `
+    <div style="text-align:center;padding:10px 0 4px;">
+      <div style="font-size:2.5rem;margin-bottom:8px;">${hol.emoji}</div>
+      <div style="font-size:0.65rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:6px;">${hol.name.toUpperCase()}</div>
+      <h2 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:white;margin-bottom:6px;">A Gift This ${hol.name}</h2>
+      <p style="font-size:0.82rem;color:rgba(255,255,255,0.7);line-height:1.5;margin-bottom:14px;">
+        Your family got you something special for the holiday.
+      </p>
+      <div style="background:rgba(230,160,32,0.1);border:1px solid rgba(230,160,32,0.3);border-radius:14px;padding:14px;">
+        <div style="font-size:1.8rem;margin-bottom:6px;">${EQUIP_EMOJI[pick.slot]}</div>
+        <div style="font-size:0.7rem;font-weight:800;color:var(--accent2);text-transform:uppercase;letter-spacing:0.08em;">${pick.item.brand}</div>
+        <div style="font-size:1rem;font-weight:900;color:var(--ink);margin:3px 0;">${pick.item.model}</div>
+        <div style="font-size:0.75rem;color:var(--muted);">${pick.cat.label} · Retail $${pick.item.price}</div>
+      </div>
+    </div>`;
+
+  document.getElementById("birthdayModalBody").innerHTML = html;
+  document.getElementById("birthdayModal").classList.remove("hidden");
+  addFeed(`${hol.emoji} ${hol.name} Gift!`, `Received ${pick.item.brand} ${pick.item.model} (${pick.cat.label}).`, "success");
+  showToast(`${hol.emoji} ${hol.name} — ${pick.item.model} equipped!`, "success");
+}
+
+// ===================== END SEASON CONFIRMATION =====================
+
+function confirmEndSeason(){
+  let cap = getCurrentSeasonCap();
+  let remaining = cap - gamesPlayed;
+  let seasonProgress = Math.round(gamesPlayed/cap*100);
+  let body = document.getElementById("endSeasonConfirmBody");
+  body.innerHTML = `
+    <div style="margin-bottom:14px;">
+      <div style="display:flex;justify-content:space-between;margin-bottom:6px;">
+        <span style="font-size:0.82rem;color:var(--muted);">Season progress</span>
+        <span style="font-size:0.82rem;font-weight:700;color:var(--ink);">${gamesPlayed} / ${cap} games (${seasonProgress}%)</span>
+      </div>
+      <div style="height:6px;background:rgba(255,255,255,0.06);border-radius:999px;overflow:hidden;">
+        <div style="width:${seasonProgress}%;height:6px;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:999px;"></div>
+      </div>
+    </div>
+    ${remaining>0
+      ? `<div style="background:rgba(230,160,32,0.08);border:1px solid rgba(230,160,32,0.25);border-radius:12px;padding:10px 14px;font-size:0.82rem;color:var(--accent);">⚡ <strong>${remaining} game${remaining!==1?"s":""}</strong> will be auto-simulated.</div>`
+      : `<div style="background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.25);border-radius:12px;padding:10px 14px;font-size:0.82rem;color:var(--green);">✅ All ${cap} games complete.</div>`}`;
+  let gradients = {"Little League":"linear-gradient(135deg,#0a2240,#14532d)","High School":"linear-gradient(135deg,#1a0a3e,#2563eb)","College":"linear-gradient(135deg,#0d1f3c,#1e3a6e)","Single-A":"linear-gradient(135deg,#0a1a0a,#166534)","Double-A":"linear-gradient(135deg,#0a0a2e,#1a2d6e)","Triple-A":"linear-gradient(135deg,#1a0a2e,#5b21b6)","MLB":"linear-gradient(135deg,#0a0808,#7f1d1d)"};
+  document.getElementById("endSeasonConfirmBanner").style.background = gradients[careerStage]||gradients["Little League"];
+  document.getElementById("endSeasonConfirmTitle").textContent = "End " + careerStage + " Season?";
+  document.getElementById("endSeasonConfirmSubtitle").textContent = "Age " + age + " · Season " + (seasonsPlayed+1);
+  document.getElementById("endSeasonConfirmModal").classList.remove("hidden");
+}
+
+function closeEndSeasonConfirm(){
+  document.getElementById("endSeasonConfirmModal").classList.add("hidden");
+}
+
+function doEndSeason(){
+  document.getElementById("endSeasonConfirmModal").classList.add("hidden");
+  endSeason();
+}
+
+function closeBirthdayModal(){
+  document.getElementById("birthdayModal").classList.add("hidden");
+  // Continue to off-season modal (which will check holiday gift next)
+  showOffseasonModal();
+}
+
+function showOffseasonModal(){
+  // 1. Birthday check — trigger once per year
+  if(!player.birthdaySeenThisSeason){
+    player.birthdaySeenThisSeason = true;
+    triggerBirthday();
+    // Birthday modal will call showOffseasonModal() when closed
+    return;
+  }
+
+  // 2. Holiday gift check (religion-based)
+  if(!player.holidayGiftThisSeason){
+    let hol = checkHolidayGift();
+    if(hol){
+      showHolidayGiftModal(hol);
+      // Holiday modal calls showOffseasonModal() when closed
+      return;
+    }
+  }
+
+  // 3. Private coach event (middle class+ families, random)
+  if(rollPrivateCoachEvent()){
+    showPrivateCoachModal();
+    return;
+  }
+
+  // 4. Christmas gift for non-wealthy families (already existing system)
+  if(isXmasEligible()){
+    showXmasModal();
+    return;
+  }
+
+  let newDiv  = getEffectiveLLDivision();
+  let promoted = careerStage === "Little League" && newDiv !== getLLDivision(age - 1);
+
   let gradients = {
     "Little League": "linear-gradient(135deg,#1a3a6e,#166534)",
     "High School":   "linear-gradient(135deg,#1a0a3e,#2d1b5e)",
@@ -5376,7 +6916,7 @@ function showOffseasonModal(){
   let grad = gradients[careerStage] || gradients["Little League"];
   document.getElementById("offseasonHeader").style.background = grad;
   document.getElementById("offseasonTag").textContent = careerStage.toUpperCase() + " · OFF-SEASON";
-  document.getElementById("offseasonTitle").textContent = "Age " + (newAge) + " Off-Season";
+  document.getElementById("offseasonTitle").textContent = "Age " + age + " Off-Season";
 
   let subtitle = "Year " + seasonsPlayed + " is behind you. How will you spend the break?";
   if(promoted){
@@ -5386,16 +6926,19 @@ function showOffseasonModal(){
   document.getElementById("offseasonSubtitle").textContent = subtitle;
   document.getElementById("offseasonEmoji").textContent = promoted ? "🏆" : "☀️";
 
-  // Build activity cards
-  let grid = document.getElementById("offseasonGrid");
-  grid.innerHTML = OFFSEASON_ACTIVITIES.map(act => {
-    // Check if available to this family
-    let available = act.families.includes("all") || act.families.includes(player.parents);
-    let canAfford  = !act.cost || player.money >= act.cost;
-    let locked = !available;
-    let cantAfford = available && !canAfford;
+  // ── Build activity grid — group by availability for this family ──
+  let familyLabel = {
+    wealthy:"💰 Wealthy",middle:"🏡 Middle Class",poor:"💪 Working Class",
+    sports:"⚾ Sports Family",strict:"📏 Strict Family",absent:"🏠 Absent Parent",
+    immigrant:"🌍 Immigrant Family",religious:"🙏 Religious Family",add:"⚡ ADD Family"
+  }[player.parents] || "Family";
 
-    // Build effect tags
+  let available  = OFFSEASON_ACTIVITIES.filter(a => a.families.includes("all") || a.families.includes(player.parents));
+  let locked     = OFFSEASON_ACTIVITIES.filter(a => !a.families.includes("all") && !a.families.includes(player.parents));
+
+  function buildCard(act, isLocked){
+    let canAfford  = !act.cost || player.money >= act.cost;
+    let cantAfford = !isLocked && !canAfford;
     let tags = [];
     if(act.fx.attrs)    Object.entries(act.fx.attrs).forEach(([k,v])=>tags.push({t:(v>0?"+":"")+v+" "+k[0].toUpperCase()+k.slice(1),p:v>0}));
     if(act.fx.offField) Object.entries(act.fx.offField).forEach(([k,v])=>tags.push({t:(v>0?"+":"")+v+" "+k[0].toUpperCase()+k.slice(1),p:v>0}));
@@ -5403,22 +6946,35 @@ function showOffseasonModal(){
     if(act.injuryRisk)  tags.push({t:"⚠ Injury risk",p:false});
     if(act.healInjury)  tags.push({t:"✓ Heals injury",p:true});
     if(act.cost)        tags.push({t:"-$"+fmt(act.cost)+" cost",p:false});
-
     let tagHtml = tags.map(t=>`<span class="os-fx-tag ${t.p?"pos":"neg"}">${t.t}</span>`).join("");
-    let lockBadge = locked ? `<span class="os-lock-badge">${act.lockLabel||"Locked"}</span>` : "";
-    let affordBadge = cantAfford ? `<span class="os-lock-badge" style="background:rgba(239,68,68,0.12);color:var(--red);border-color:rgba(239,68,68,0.2);">💸 Need $${fmt(act.cost)}</span>` : "";
+    let badge = isLocked
+      ? `<span class="os-lock-badge">${act.lockLabel||"Locked"}</span>`
+      : cantAfford
+      ? `<span class="os-lock-badge" style="background:rgba(239,68,68,0.12);color:var(--red);border-color:rgba(239,68,68,0.2);">💸 Need $${fmt(act.cost)}</span>`
+      : "";
+    let cls = "os-card" + (isLocked||cantAfford?" locked":"");
+    let click = (isLocked||cantAfford) ? "" : `onclick="selectOffseasonActivity('${act.key}')"`;
+    return `<div class="${cls}" ${click}>${badge}<span class="os-emoji">${act.emoji}</span><div class="os-name">${act.name}</div><div class="os-desc">${act.desc}</div><div class="os-fx">${tagHtml}</div></div>`;
+  }
 
-    let cardClass = "os-card" + (locked||cantAfford?" locked":"");
-    let onclick = (locked||cantAfford) ? "" : `onclick="selectOffseasonActivity('${act.key}')"`;
+  let html = "";
 
-    return `<div class="${cardClass}" ${onclick}>
-      ${lockBadge}${affordBadge}
-      <span class="os-emoji">${act.emoji}</span>
-      <div class="os-name">${act.name}</div>
-      <div class="os-desc">${act.desc}</div>
-      <div class="os-fx">${tagHtml}</div>
-    </div>`;
-  }).join("");
+  // Available activities section
+  html += `<div style="font-size:0.68rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding:0 2px;">✅ Available to you</div>`;
+  html += `<div class="offseason-grid" style="margin-bottom:18px;">` + available.map(a=>buildCard(a,false)).join("") + `</div>`;
+
+  // Locked activities — show greyed out with family label
+  if(locked.length){
+    html += `<div style="font-size:0.68rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding:0 2px;">🔒 Other families only</div>`;
+    html += `<div class="offseason-grid">` + locked.map(a=>buildCard(a,true)).join("") + `</div>`;
+  }
+
+  let grid = document.getElementById("offseasonGrid");
+  grid.innerHTML = html;
+
+  // Update prompt with family context
+  document.getElementById("offseasonPrompt").textContent =
+    `Choose one activity for the ${familyLabel} off-season. Your choice shapes your development.`;
 
   document.getElementById("offseasonModal").classList.remove("hidden");
 }
@@ -6201,6 +7757,22 @@ function closeDisposal(grewThisSeason){
   document.getElementById("equipDisposalModal").classList.add("hidden");
   if(grewThisSeason) invalidateGrowthItems(false);
   applyEquipmentBonuses();
+
+  // Hard rule: cannot play Little League at age 14+
+  // Skip off-season entirely and go straight to HS transition
+  if(careerStage === "Little League" && age >= 14){
+    saveAutoSlot();
+    showStageAdvanceModal({
+      emoji:"🏫", gradient:"linear-gradient(135deg,#1a0a3e,#2563eb)",
+      tag:"LITTLE LEAGUE COMPLETE", title:"Time for High School",
+      subtitle:"You've turned 14. Little League is behind you. The high school fields are waiting.",
+      summaryFn:buildLLSummary,
+      prompt:"Choose your high school to begin the next chapter.",
+      btnLabel:"Choose Your High School →", action:"hs"
+    });
+    return;
+  }
+
   // Check for early LL promotion before showing off-season
   if(careerStage === "Little League" && checkLLEarlyPromotion()){
     showLLPromotionModal();
@@ -6259,6 +7831,204 @@ function declineLLPromotion(){
 
 
 
+// ===================== SEASON SUMMARY =====================
+
+let _pendingDisposalGrew = false; // store grewThisSeason for after summary is closed
+
+function showSeasonSummary(seasonStats, attrBefore, attrAfter, awards, grewThisSeason){
+  _pendingDisposalGrew = grewThisSeason;
+
+  // ── Banner ──
+  let gradients = {
+    "Little League":"linear-gradient(135deg,#0a2240,#14532d)",
+    "High School":  "linear-gradient(135deg,#1a0a3e,#2563eb)",
+    "College":      "linear-gradient(135deg,#0d1f3c,#1e3a6e)",
+    "Single-A":     "linear-gradient(135deg,#0a1a0a,#166534)",
+    "Double-A":     "linear-gradient(135deg,#0a0a2e,#1a2d6e)",
+    "Triple-A":     "linear-gradient(135deg,#1a0a2e,#5b21b6)",
+    "MLB":          "linear-gradient(135deg,#0a0808,#7f1d1d)",
+  };
+  let banner = document.getElementById("ssBanner");
+  banner.style.background = gradients[careerStage] || gradients["Little League"];
+
+  let stageEmojis = {"Little League":"⚾","High School":"🏫","College":"🎓","Single-A":"📈","Double-A":"📈","Triple-A":"📈","MLB":"🏟️"};
+  document.getElementById("ssStageTag").textContent = (stageEmojis[careerStage]||"⚾") + " " + careerStage.toUpperCase() + " · SEASON " + seasonsPlayed + " COMPLETE";
+
+  // ── Title & subtitle based on performance ──
+  let avg = seasonStats.AB > 0 ? seasonStats.H / seasonStats.AB : 0;
+  let avgStr = "." + fmtAVG(avg);
+  let grade = avg >= 0.350 ? "Exceptional" : avg >= 0.300 ? "Strong" : avg >= 0.250 ? "Solid" : avg >= 0.200 ? "Decent" : "Tough";
+  document.getElementById("ssTitle").textContent = grade + " Season";
+  document.getElementById("ssSubtitle").textContent =
+    player.name + " · Age " + (age - 1) + " → " + age + " · " + careerStage;
+
+  let html = "";
+
+  // ── Batting Stats ──
+  let ops = (seasonStats.OBP||0) + (seasonStats.SLG||0);
+  html += `<div class="ss-section">
+    <div class="ss-section-title">📊 Batting Stats</div>
+    <div class="ss-stat-grid">
+      <div class="ss-stat-box">
+        <div class="sv" style="color:var(--accent);">${avgStr}</div>
+        <div class="sl">AVG</div>
+      </div>
+      <div class="ss-stat-box">
+        <div class="sv">${seasonStats.H||0}</div>
+        <div class="sl">Hits</div>
+      </div>
+      <div class="ss-stat-box">
+        <div class="sv" style="color:var(--red);">${seasonStats.HR||0}</div>
+        <div class="sl">Home Runs</div>
+      </div>
+      <div class="ss-stat-box">
+        <div class="sv">${seasonStats.RBI||0}</div>
+        <div class="sl">RBI</div>
+      </div>
+      <div class="ss-stat-box">
+        <div class="sv">${seasonStats.AB||0}</div>
+        <div class="sl">At Bats</div>
+      </div>
+      <div class="ss-stat-box">
+        <div class="sv">${seasonStats.SO||0}</div>
+        <div class="sl">Strikeouts</div>
+      </div>
+      <div class="ss-stat-box">
+        <div class="sv" style="color:var(--accent2);">.${fmtAVG(seasonStats.OBP||0)}</div>
+        <div class="sl">OBP</div>
+      </div>
+      <div class="ss-stat-box">
+        <div class="sv" style="color:var(--green);">${ops.toFixed(3)}</div>
+        <div class="sl">OPS</div>
+      </div>
+    </div>
+  </div>`;
+
+  // ── Attribute Improvements ──
+  let attrLabels = {contact:"Contact",power:"Power",speed:"Speed",fielding:"Fielding",arm:"Arm",control:"Control"};
+  let attrColors = {contact:"#3b9eff",power:"#ef4444",speed:"#22c55e",fielding:"#f59e0b",arm:"#a78bfa",control:"#fb923c"};
+  let anyGain = false;
+  let attrRows = Object.keys(attrLabels).map(k => {
+    let before = Math.round(attrBefore[k]||0);
+    let after  = Math.round(attrAfter[k]||0);
+    let gain   = after - before;
+    if(gain !== 0) anyGain = true;
+    let gainStr = gain > 0 ? `<span class="ss-attr-gain">+${gain}</span>` :
+                  gain < 0 ? `<span class="ss-attr-gain" style="color:var(--red);">${gain}</span>` :
+                  `<span class="ss-attr-gain" style="color:var(--muted);">—</span>`;
+    let pct = Math.round((after/99)*100);
+    return `<div class="ss-attr-row">
+      <div class="ss-attr-name">${attrLabels[k]}</div>
+      <div class="ss-attr-bar-wrap">
+        <div class="ss-attr-bar-fill" style="width:${pct}%;background:${attrColors[k]};"></div>
+      </div>
+      <div class="ss-attr-val">${after}</div>
+      ${gainStr}
+    </div>`;
+  }).join("");
+
+  html += `<div class="ss-section">
+    <div class="ss-section-title">📈 Attribute Development</div>
+    ${attrRows}
+    ${!anyGain ? '<p style="font-size:0.8rem;color:var(--muted);">No attribute changes this season.</p>' : ""}
+  </div>`;
+
+  // ── Awards ──
+  let awardsList = [];
+  if(awards.MVP && awards.MVP === player.name)           awardsList.push({icon:"🏆",label:"League MVP"});
+  if(awards.BattingChamp && awards.BattingChamp === player.name) awardsList.push({icon:"🎯",label:"Batting Champion"});
+  if(awards.HRKing && awards.HRKing === player.name)     awardsList.push({icon:"💪",label:"Home Run King"});
+  if(player.teamCaptain)                                 awardsList.push({icon:"🎖️",label:"Team Captain"});
+  if(avg >= 0.400)  awardsList.push({icon:"🔥",label:".400 Club"});
+  if((seasonStats.HR||0) >= 10) awardsList.push({icon:"⚡",label:"10+ HR Season"});
+  if((seasonStats.RBI||0) >= 30) awardsList.push({icon:"⭐",label:"30+ RBI Season"});
+  if((seasonStats.SO||0) === 0 && (seasonStats.AB||0) >= 20) awardsList.push({icon:"🎯",label:"Zero Strikeout Season"});
+
+  if(awardsList.length){
+    html += `<div class="ss-section">
+      <div class="ss-section-title">🏆 Awards & Honours</div>
+      <div>${awardsList.map(a=>`<span class="ss-award-chip">${a.icon} ${a.label}</span>`).join("")}</div>
+    </div>`;
+  }
+
+  // ── Milestones ──
+  let milestones = [];
+
+  // Physical development
+  if(grewThisSeason){
+    milestones.push({icon:"📏", text:"Growth Spurt", sub:"You grew significantly this season."});
+  }
+
+  // Season story events
+  let seasonEvents = (player.storyEventLog||[]).filter(e => e.week !== undefined);
+  // Show last season's events (those logged this season)
+  let recentEvents = player.storyEventLog ? player.storyEventLog.slice(-5).filter(e => e.title) : [];
+  recentEvents.forEach(e => {
+    milestones.push({icon:"📖", text:e.title, sub:e.choice + " — " + (e.outcome||"").slice(0,60)+(e.outcome&&e.outcome.length>60?"…":"")});
+  });
+
+  // Career totals
+  let careerTotals = (player.career||[]).reduce((a,s)=>({
+    HR: a.HR+(s.stats.HR||0), H: a.H+(s.stats.H||0), AB: a.AB+(s.stats.AB||0)
+  }), {HR:0,H:0,AB:0});
+  let cAvg = careerTotals.AB>0?(careerTotals.H/careerTotals.AB):0;
+
+  // Salary / money
+  if(player.salary > 0){
+    milestones.push({icon:"💰", text:"Salary Paid", sub:"$" + fmt(player.salary) + " added to your account."});
+  }
+
+  // Injury note
+  if(injury.active){
+    milestones.push({icon:"🤕", text:"Carrying an Injury", sub:injury.name + " — manage recovery in the off-season."});
+  }
+
+  // Level up milestone
+  let lvl = Math.floor((player.xp||0)/500)+1;
+  milestones.push({icon:"🏟️", text:"Career Progress", sub:`Season ${seasonsPlayed} · ${careerStage} · Career .${fmtAVG(cAvg)} AVG, ${careerTotals.HR} HR lifetime`});
+
+  if(milestones.length){
+    html += `<div class="ss-section">
+      <div class="ss-section-title">✨ Season Highlights</div>
+      ${milestones.map(m=>`<div class="ss-milestone">
+        <div class="sm-icon">${m.icon}</div>
+        <div>
+          <div class="sm-text">${m.text}</div>
+          <div class="sm-sub">${m.sub}</div>
+        </div>
+      </div>`).join("")}
+    </div>`;
+  }
+
+  // ── Team record ──
+  if(player.team){
+    let w = player.team.wins||0, l = player.team.losses||0;
+    let record = w + "-" + l;
+    let winPct = (w+l)>0 ? (w/(w+l)*100).toFixed(0)+"%" : "—";
+    html += `<div class="ss-section">
+      <div class="ss-section-title">👥 Team Season</div>
+      <div style="display:flex;gap:12px;">
+        <div class="ss-stat-box" style="flex:1;">
+          <div class="sv" style="color:var(--green);">${record}</div>
+          <div class="sl">${player.team.name||"Your Team"}</div>
+        </div>
+        <div class="ss-stat-box" style="flex:1;">
+          <div class="sv">${winPct}</div>
+          <div class="sl">Win %</div>
+        </div>
+      </div>
+    </div>`;
+  }
+
+  document.getElementById("ssBody").innerHTML = html;
+  document.getElementById("seasonSummaryModal").classList.remove("hidden");
+}
+
+function closeSeasonSummary(){
+  document.getElementById("seasonSummaryModal").classList.add("hidden");
+  showEquipDisposalModal(_pendingDisposalGrew);
+}
+
 function endSeason(){
   let cap = getCurrentSeasonCap();
   let gamesRemaining = cap - gamesPlayed;
@@ -6270,11 +8040,15 @@ function endSeason(){
     addFeed("Auto-Simmed", gamesRemaining + " game" + (gamesRemaining!==1?"s":"") + " simulated to close the season.", "warning");
   }
 
+  // Snapshot stats and attributes BEFORE reset/development
+  let seasonStats = {...player.stats};
+  let attrBefore  = {...attributes};
+
   let awards = generateAwards();
   player.career.push({
     stage: careerStage,
     season: seasonsPlayed+1,
-    stats: {...player.stats},
+    stats: seasonStats,
     awards,
     age
   });
@@ -6283,6 +8057,9 @@ function endSeason(){
   let heightBefore = physique.heightIn;
   developPlayer();   // increments age, grows physique, boosts attrs
   let grewThisSeason = physique.heightIn > heightBefore + 0.5;
+
+  // Snapshot attributes AFTER development to compute gains
+  let attrAfter = {...attributes};
 
   updateMarkets();
   applyExpenses();
@@ -6293,8 +8070,14 @@ function endSeason(){
   offTimeAvailable = false;
   pendingStoryEvent = false;
   player.storyEventsSeenThisSeason = [];
-
-  let box = document.getElementById("weekSummaryBox");
+  player.xmasGiftThisSeason = false;
+  player.suspended = false;
+  player.birthdaySeenThisSeason = false;
+  player.holidayGiftThisSeason  = false;
+  player.activityCounts = {};
+  player.weeksSinceRequired = 0;
+  player.baseballBlocked = false;
+  player.hadCoachThisSeason = false;  // reset private coach flag
   if(box) box.style.display="none";
   let offtimeP = document.getElementById("offtimePanel");
   if(offtimeP) offtimeP.style.display="none";
@@ -6302,8 +8085,8 @@ function endSeason(){
   saveAutoSlot();
   addFeed("Season " + seasonsPlayed + " End", "MVP: " + (awards.MVP||"—") + " · Age " + age + " · Off-season begins.", "success");
 
-  // Show equipment disposal (handles growth-invalidated items too), then off-season
-  showEquipDisposalModal(grewThisSeason);
+  // Show season summary → then disposal → then off-season (or HS transition)
+  showSeasonSummary(seasonStats, attrBefore, attrAfter, awards, grewThisSeason);
 }
 
 function retire(){
@@ -6436,17 +8219,21 @@ function generateAwards(){
 }
 
 // ===================== SAVE / LOAD =====================
+
+// Safe localStorage wrapper — silently fails in sandboxed iframes
+function lsGet(key){ try{ return localStorage.getItem(key); }catch(e){ return null; } }
+function lsSet(key, val){ try{ localStorage.setItem(key, val); }catch(e){} }
+
 function saveToSlot(n){
-  // Strip circular ref: save teamName string, not the live team object
   let savePlayer = Object.assign({}, player, {team: undefined, teamName: player.team ? player.team.name : (player.teamName||"")});
   let data = {player:savePlayer,attributes,teams,careerStage,age,gamesPlayed,seasonsPlayed,lastOutcome,injury,steroidUse,difficulty,eventFeed,physique,collegeSeasonsPlayed,currentWeek};
-  localStorage.setItem("bls_save_" + n, JSON.stringify(data));
+  lsSet("bls_save_" + n, JSON.stringify(data));
   showToast("Saved to Slot " + n + ".","success");
   renderSaveSlots();
 }
 
 function loadGameSlot(n){
-  let raw = localStorage.getItem("bls_save_" + n);
+  let raw = lsGet("bls_save_" + n);
   if(!raw){ showToast("No save found.","warning"); return; }
   let d = JSON.parse(raw);
   player=d.player; attributes=d.attributes; teams=d.teams;
@@ -6459,17 +8246,14 @@ function loadGameSlot(n){
   if(d.physique) physique=d.physique;
   if(d.collegeSeasonsPlayed!==undefined) collegeSeasonsPlayed=d.collegeSeasonsPlayed;
   if(d.currentWeek!==undefined) currentWeek=d.currentWeek;
-  // Re-link player.team from teams array by name
   if(!player.team && (player.teamName||player.mlbTeam)){
     let tname = player.teamName || player.mlbTeam;
     player.team = teams.find(t=>t.name===tname) || teams[0] || null;
   }
-  // Ensure offField exists on older saves
   if(!player.offField) player.offField = {popularity:50,religiousness:20,intelligence:50,reputation:50,confidence:50,aggression:30,attractiveness:50,recklessness:20};
   if(!player.storyEventLog) player.storyEventLog = [];
   if(!player.storyEventsSeenThisSeason) player.storyEventsSeenThisSeason = [];
   if(!player.equipment) player.equipment = getDefaultEquipment();
-  // Re-apply equipment bonuses from saved gear
   applyEquipmentBonuses();
   showScreen("screenGame");
   updateUI();
@@ -6479,7 +8263,7 @@ function loadGameSlot(n){
 function saveAutoSlot(){
   let savePlayer = Object.assign({}, player, {team: undefined, teamName: player.team ? player.team.name : (player.teamName||"")});
   let data = {player:savePlayer,attributes,teams,careerStage,age,gamesPlayed,seasonsPlayed,lastOutcome,injury,steroidUse,difficulty,eventFeed,physique,collegeSeasonsPlayed,currentWeek};
-  localStorage.setItem("bls_auto", JSON.stringify(data));
+  lsSet("bls_auto", JSON.stringify(data));
 }
 
 // ===================== UI HELPERS =====================
@@ -6552,12 +8336,9 @@ function renderSaveSlots(){
   let grid = document.getElementById("saveGrid");
   if(!grid) return;
   grid.innerHTML = [1,2,3].map(n=>{
-    let raw = localStorage.getItem(`bls_save_${n}`);
+    let raw = lsGet(`bls_save_${n}`);
     let info = "Empty";
-    if(raw){
-      let d = JSON.parse(raw);
-      info = `${d.player?.name||"??"} — ${d.careerStage||"??"} S${d.seasonsPlayed||0}`;
-    }
+    if(raw){ try{ let d = JSON.parse(raw); info = `${d.player?.name||"??"} — ${d.careerStage||"??"} S${d.seasonsPlayed||0}`; }catch(e){} }
     return `<div class="save-slot">
       <div class="slot-label">Slot ${n}</div>
       <div class="slot-data" style="font-size:0.78rem;color:var(--muted);margin-bottom:8px;">${info}</div>
@@ -6990,6 +8771,10 @@ function updateUI(){
   if(careerStage === "Little League"){
     let div = getEffectiveLLDivision();
     stageLabel = div + " · Little League";
+  } else if(careerStage === "College"){
+    let yearNames = {18:"Freshman",19:"Freshman",20:"Sophomore",21:"Junior",22:"Senior"};
+    let yr = yearNames[age] || ("Year " + (collegeSeasonsPlayed||1));
+    stageLabel = yr + " · College";
   }
   document.getElementById("pillStage").textContent = stageLabel;
   document.getElementById("pillAge").textContent = `Age ${age}`;
