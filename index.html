@@ -1375,7 +1375,7 @@ color: var(–muted); margin-bottom: 12px; display: flex; align-items: center; g
       <!-- Secondary controls -->
       <div class="actions-grid" style="margin-top:4px;">
         <button class="action-btn" onclick="playGame()">▶ Single Game</button>
-        <button class="action-btn" onclick="endSeason()">📅 Next Season</button>
+        <button class="action-btn" onclick="endSeason()">🏁 End Season</button>
         <button class="action-btn blue" onclick="signContract()">✍ Sign Contract</button>
         <button class="action-btn" onclick="retire()" style="color:var(--muted);">🏁 Retire</button>
       </div>
@@ -3736,7 +3736,7 @@ function advanceWeek(){
 
   let cap = getCurrentSeasonCap();
   if(gamesPlayed >= cap){
-    setSpotlight("Season Done","Season complete.",`You've finished all ${cap} games. Hit Next Season or Advance Career.`,"warning");
+    setSpotlight("Season Done","Season complete.",`You've finished all ${cap} games. Hit End Season to wrap up.`,"warning");
     showToast("Season complete — end the season first.","warning"); return;
   }
 
@@ -3798,7 +3798,7 @@ function advanceWeek(){
   } else if(gamesPlayed >= cap){
     setSpotlight("Season Complete 🏆", `All ${cap} games played.`,
       `Final: .${fmtAVG(player.stats.AVG)} AVG · ${player.stats.HR} HR · ${player.stats.RBI} RBI. Hit End Season.`, "success");
-    showToast("Season done! Hit Next Season.","success");
+    showToast("Season done! Hit End Season.","success");
     let offtimeP = document.getElementById("offtimePanel");
     if(offtimeP) offtimeP.style.display = "none";
   } else {
@@ -3826,7 +3826,7 @@ async function simulateFullSeason(){
   if(isSimulating) return;
   let cap = getCurrentSeasonCap();
   if(gamesPlayed >= cap){
-    showToast("Season already complete — hit Next Season.","warning"); return;
+    showToast("Season already complete — hit End Season.","warning"); return;
   }
 
   isSimulating = true;
@@ -3974,7 +3974,7 @@ async function simulateFullSeason(){
   }
 
   addFeed("Season Simulated", `.${Math.round(avg*1000).toString().padStart(3,"0")} AVG · ${hr} HR · ${rbi} RBI · Grade ${grade}`, "success");
-  setSpotlight("Season Complete ⚡", `Grade: ${grade} — .${Math.round(avg*1000).toString().padStart(3,"0")} AVG · ${hr} HR · ${rbi} RBI`, `Hit Next Season to collect your salary, update finances, and move to the off-season.`, "success");
+  setSpotlight("Season Complete ⚡", `Grade: ${grade} — .${Math.round(avg*1000).toString().padStart(3,"0")} AVG · ${hr} HR · ${rbi} RBI`, `Hit End Season to collect your salary, update finances, and move to the off-season.`, "success");
   showToast(`Season done! ${hr} HR · .${Math.round(avg*1000).toString().padStart(3,"0")} AVG · Grade ${grade}`, "success");
   updateUI();
 }
@@ -5228,7 +5228,7 @@ function postponeStageAdvance(){
   let modal = document.getElementById("stageAdvanceModal");
   if(modal) modal.classList.add("hidden");
   pendingStageAdvance = null;
-  setSpotlight("Take Your Time","You can advance when you're ready.","Continue playing or hit Next Season when done.","success");
+  setSpotlight("Take Your Time","You can advance when you're ready.","Continue playing or hit End Season when done.","success");
   updateUI();
 }
 
@@ -6260,8 +6260,14 @@ function declineLLPromotion(){
 
 function endSeason(){
   let cap = getCurrentSeasonCap();
-  // Sim any remaining games silently
-  while(gamesPlayed < cap){ silentGame(); }
+  let gamesRemaining = cap - gamesPlayed;
+
+  // Auto-sim any remaining games with a notice
+  if(gamesRemaining > 0){
+    showToast("Simulating " + gamesRemaining + " remaining game" + (gamesRemaining!==1?"s":"") + "…", "warning");
+    while(gamesPlayed < cap){ silentGame(); }
+    addFeed("Auto-Simmed", gamesRemaining + " game" + (gamesRemaining!==1?"s":"") + " simulated to close the season.", "warning");
+  }
 
   let awards = generateAwards();
   player.career.push({
