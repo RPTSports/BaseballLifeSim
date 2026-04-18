@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -22,20 +23,20 @@
   --shadow: 0 8px 32px rgba(0,0,0,0.5);
 }
 
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--bg);
-  color: var(--ink);
+- { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+  font-family: ‘DM Sans’, sans-serif;
+  background: var(–bg);
+  color: var(–ink);
   min-height: 100vh;
   overflow-x: hidden;
-}
+  }
 
 body::before {
-  content: '';
-  position: fixed; inset: 0; z-index: 0; pointer-events: none;
-  background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(59,158,255,0.07), transparent),
-              radial-gradient(ellipse 60% 40% at 90% 80%, rgba(230,160,32,0.05), transparent);
+content: ‘’;
+position: fixed; inset: 0; z-index: 0; pointer-events: none;
+background: radial-gradient(ellipse 80% 50% at 50% -10%, rgba(59,158,255,0.07), transparent),
+radial-gradient(ellipse 60% 40% at 90% 80%, rgba(230,160,32,0.05), transparent);
 }
 
 /* LAYOUT */
@@ -43,36 +44,36 @@ body::before {
 
 /* HEADER */
 .header {
-  background: linear-gradient(135deg, #0a1628 0%, #0f2040 50%, #0a1628 100%);
-  border-bottom: 1px solid var(--border);
-  padding: 18px 28px;
-  display: flex; align-items: center; justify-content: space-between; gap: 16px;
-  position: sticky; top: 0; z-index: 50;
-  backdrop-filter: blur(20px);
+background: linear-gradient(135deg, #0a1628 0%, #0f2040 50%, #0a1628 100%);
+border-bottom: 1px solid var(–border);
+padding: 18px 28px;
+display: flex; align-items: center; justify-content: space-between; gap: 16px;
+position: sticky; top: 0; z-index: 50;
+backdrop-filter: blur(20px);
 }
 .header-brand {
-  display: flex; align-items: center; gap: 12px;
+display: flex; align-items: center; gap: 12px;
 }
 .logo-ball {
-  width: 36px; height: 36px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #fff8f0, #e8c97a, #c8800a);
-  box-shadow: 0 0 16px rgba(230,160,32,0.35);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 18px; flex-shrink: 0;
+width: 36px; height: 36px; border-radius: 50%;
+background: radial-gradient(circle at 35% 35%, #fff8f0, #e8c97a, #c8800a);
+box-shadow: 0 0 16px rgba(230,160,32,0.35);
+display: flex; align-items: center; justify-content: center;
+font-size: 18px; flex-shrink: 0;
 }
 .header-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.3rem; font-weight: 900; letter-spacing: -0.02em;
-  background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+font-family: ‘Playfair Display’, serif;
+font-size: 1.3rem; font-weight: 900; letter-spacing: -0.02em;
+background: linear-gradient(135deg, #fff 30%, var(–accent) 100%);
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 .header-pills { display: flex; gap: 8px; flex-wrap: wrap; }
 .pill {
-  padding: 4px 12px; border-radius: 999px; font-size: 0.75rem; font-weight: 600;
-  background: rgba(255,255,255,0.06); border: 1px solid var(--border);
-  color: var(--muted);
+padding: 4px 12px; border-radius: 999px; font-size: 0.75rem; font-weight: 600;
+background: rgba(255,255,255,0.06); border: 1px solid var(–border);
+color: var(–muted);
 }
-.pill.active { background: rgba(230,160,32,0.15); border-color: rgba(230,160,32,0.3); color: var(--accent); }
+.pill.active { background: rgba(230,160,32,0.15); border-color: rgba(230,160,32,0.3); color: var(–accent); }
 
 /* SCREENS */
 .screen { display: none; }
@@ -80,115 +81,115 @@ body::before {
 
 /* ======= START SCREEN ======= */
 .start-hero {
-  max-width: 900px; margin: 0 auto;
-  padding: 60px 24px 40px;
-  text-align: center;
+max-width: 900px; margin: 0 auto;
+padding: 60px 24px 40px;
+text-align: center;
 }
 .start-hero h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(2.8rem, 7vw, 5.5rem);
-  font-weight: 900; line-height: 0.92;
-  letter-spacing: -0.04em;
-  background: linear-gradient(160deg, #fff 20%, #e2eaf4 50%, var(--accent) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-  margin-bottom: 16px;
+font-family: ‘Playfair Display’, serif;
+font-size: clamp(2.8rem, 7vw, 5.5rem);
+font-weight: 900; line-height: 0.92;
+letter-spacing: -0.04em;
+background: linear-gradient(160deg, #fff 20%, #e2eaf4 50%, var(–accent) 100%);
+-webkit-background-clip: text; -webkit-text-fill-color: transparent;
+margin-bottom: 16px;
 }
 .start-hero p {
-  color: var(--muted); font-size: 1.1rem; line-height: 1.6; max-width: 520px; margin: 0 auto 40px;
+color: var(–muted); font-size: 1.1rem; line-height: 1.6; max-width: 520px; margin: 0 auto 40px;
 }
 
 .creation-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 760px; margin: 0 auto 28px;
+display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 760px; margin: 0 auto 28px;
 }
 .creation-section {
-  background: var(--card); border: 1px solid var(--border);
-  border-radius: 20px; padding: 24px;
-  text-align: left;
+background: var(–card); border: 1px solid var(–border);
+border-radius: 20px; padding: 24px;
+text-align: left;
 }
 .creation-section h3 {
-  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 16px;
+font-size: 0.75rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+color: var(–muted); margin-bottom: 16px;
 }
 .field-group { display: flex; flex-direction: column; gap: 12px; }
-label { font-size: 0.82rem; color: var(--muted); font-weight: 500; margin-bottom: 4px; display: block; }
+label { font-size: 0.82rem; color: var(–muted); font-weight: 500; margin-bottom: 4px; display: block; }
 input, select {
-  width: 100%; padding: 10px 14px;
-  background: rgba(255,255,255,0.04); border: 1px solid var(--border);
-  border-radius: 10px; color: var(--ink); font-family: 'DM Sans', sans-serif; font-size: 0.95rem;
-  outline: none; transition: border-color 0.2s;
+width: 100%; padding: 10px 14px;
+background: rgba(255,255,255,0.04); border: 1px solid var(–border);
+border-radius: 10px; color: var(–ink); font-family: ‘DM Sans’, sans-serif; font-size: 0.95rem;
+outline: none; transition: border-color 0.2s;
 }
-input:focus, select:focus { border-color: var(--accent2); }
+input:focus, select:focus { border-color: var(–accent2); }
 select option { background: #1a2332; }
 
 .archetype-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .arch-btn {
-  padding: 8px 6px; border-radius: 10px; border: 1px solid var(--border);
-  background: rgba(255,255,255,0.03); color: var(--muted); font-size: 0.8rem;
-  cursor: pointer; transition: all 0.2s; text-align: center;
+padding: 8px 6px; border-radius: 10px; border: 1px solid var(–border);
+background: rgba(255,255,255,0.03); color: var(–muted); font-size: 0.8rem;
+cursor: pointer; transition: all 0.2s; text-align: center;
 }
-.arch-btn:hover { border-color: var(--accent); color: var(--ink); }
-.arch-btn.selected { border-color: var(--accent); background: rgba(230,160,32,0.12); color: var(--accent); }
+.arch-btn:hover { border-color: var(–accent); color: var(–ink); }
+.arch-btn.selected { border-color: var(–accent); background: rgba(230,160,32,0.12); color: var(–accent); }
 
 .start-btn {
-  display: inline-flex; align-items: center; gap: 10px;
-  padding: 16px 48px; border-radius: 999px;
-  background: linear-gradient(135deg, var(--accent), #c87010);
-  border: none; cursor: pointer; color: #0d1117;
-  font-family: 'DM Sans', sans-serif; font-size: 1.05rem; font-weight: 700;
-  box-shadow: 0 0 40px rgba(230,160,32,0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
+display: inline-flex; align-items: center; gap: 10px;
+padding: 16px 48px; border-radius: 999px;
+background: linear-gradient(135deg, var(–accent), #c87010);
+border: none; cursor: pointer; color: #0d1117;
+font-family: ‘DM Sans’, sans-serif; font-size: 1.05rem; font-weight: 700;
+box-shadow: 0 0 40px rgba(230,160,32,0.3);
+transition: transform 0.2s, box-shadow 0.2s;
 }
 .start-btn:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(230,160,32,0.45); }
 
 /* ======= GAME SCREEN ======= */
 .game-layout {
-  display: grid;
-  grid-template-columns: 280px 1fr 300px;
-  min-height: calc(100vh - 65px);
+display: grid;
+grid-template-columns: 280px 1fr 300px;
+min-height: calc(100vh - 65px);
 }
 
 /* Sidebar left */
 .sidebar-left {
-  background: var(--surface);
-  border-right: 1px solid var(--border);
-  padding: 20px 16px;
-  display: flex; flex-direction: column; gap: 14px;
-  overflow-y: auto;
+background: var(–surface);
+border-right: 1px solid var(–border);
+padding: 20px 16px;
+display: flex; flex-direction: column; gap: 14px;
+overflow-y: auto;
 }
 .player-badge {
-  background: linear-gradient(135deg, var(--surface2), var(--card));
-  border: 1px solid var(--border); border-radius: 16px; padding: 18px;
-  text-align: center;
+background: linear-gradient(135deg, var(–surface2), var(–card));
+border: 1px solid var(–border); border-radius: 16px; padding: 18px;
+text-align: center;
 }
 .player-badge .number {
-  font-family: 'Playfair Display', serif;
-  font-size: 3.5rem; font-weight: 900; line-height: 1;
-  color: var(--accent); opacity: 0.15;
-  position: absolute; right: 14px; top: 8px;
+font-family: ‘Playfair Display’, serif;
+font-size: 3.5rem; font-weight: 900; line-height: 1;
+color: var(–accent); opacity: 0.15;
+position: absolute; right: 14px; top: 8px;
 }
 .player-badge-name { font-size: 1.1rem; font-weight: 700; }
-.player-badge-sub { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+.player-badge-sub { font-size: 0.8rem; color: var(–muted); margin-top: 4px; }
 .badge-tags { display: flex; flex-wrap: wrap; gap: 4px; justify-content: center; margin-top: 10px; }
-.tag { padding: 3px 9px; border-radius: 999px; font-size: 0.7rem; font-weight: 600; background: rgba(59,158,255,0.1); border: 1px solid rgba(59,158,255,0.2); color: var(--accent2); }
-.tag.gold { background: rgba(230,160,32,0.1); border-color: rgba(230,160,32,0.25); color: var(--accent); }
-.tag.red { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.25); color: var(--red); }
+.tag { padding: 3px 9px; border-radius: 999px; font-size: 0.7rem; font-weight: 600; background: rgba(59,158,255,0.1); border: 1px solid rgba(59,158,255,0.2); color: var(–accent2); }
+.tag.gold { background: rgba(230,160,32,0.1); border-color: rgba(230,160,32,0.25); color: var(–accent); }
+.tag.red { background: rgba(239,68,68,0.1); border-color: rgba(239,68,68,0.25); color: var(–red); }
 
-.stat-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--border); font-size: 0.85rem; }
+.stat-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid var(–border); font-size: 0.85rem; }
 .stat-row:last-child { border-bottom: none; }
-.stat-row .label { color: var(--muted); }
+.stat-row .label { color: var(–muted); }
 .stat-row .val { font-weight: 700; }
 
 .attr-bar-item { margin-bottom: 10px; }
 .attr-bar-header { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px; }
-.attr-bar-header .name { color: var(--muted); }
+.attr-bar-header .name { color: var(–muted); }
 .attr-bar-track { height: 6px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; }
-.attr-bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(--accent2), var(--accent)); transition: width 0.5s ease; }
+.attr-bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, var(–accent2), var(–accent)); transition: width 0.5s ease; }
 
 .sidebar-section-title {
-  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--muted); padding: 4px 0;
+font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+color: var(–muted); padding: 4px 0;
 }
-.sidebar-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
+.sidebar-card { background: var(–card); border: 1px solid var(–border); border-radius: 14px; padding: 14px; }
 
 .xp-bar-track { height: 8px; background: rgba(255,255,255,0.06); border-radius: 999px; margin-top: 8px; }
 .xp-bar-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #8b5cf6, #ec4899); transition: width 0.5s ease; }
@@ -197,37 +198,37 @@ select option { background: #1a2332; }
 .main-area { padding: 20px; display: flex; flex-direction: column; gap: 16px; overflow-y: auto; }
 
 .spotlight {
-  border-radius: 20px; padding: 28px 28px 24px;
-  position: relative; overflow: hidden;
-  background: linear-gradient(135deg, #0f2040, #1a3060);
-  border: 1px solid rgba(59,158,255,0.15);
-  min-height: 130px;
+border-radius: 20px; padding: 28px 28px 24px;
+position: relative; overflow: hidden;
+background: linear-gradient(135deg, #0f2040, #1a3060);
+border: 1px solid rgba(59,158,255,0.15);
+min-height: 130px;
 }
 .spotlight::before {
-  content: '⚾';
-  position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
-  font-size: 5rem; opacity: 0.06; pointer-events: none;
+content: ‘⚾’;
+position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+font-size: 5rem; opacity: 0.06; pointer-events: none;
 }
 .spotlight.success { background: linear-gradient(135deg, #082015, #0d3520); border-color: rgba(34,197,94,0.2); }
 .spotlight.warning { background: linear-gradient(135deg, #201008, #3d1a08); border-color: rgba(239,68,68,0.2); }
 .spotlight-label {
-  font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
-  color: var(--accent2); margin-bottom: 8px;
+font-size: 0.72rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+color: var(–accent2); margin-bottom: 8px;
 }
-.spotlight.success .spotlight-label { color: var(--green); }
-.spotlight.warning .spotlight-label { color: var(--red); }
-.spotlight-title { font-family: 'Playfair Display', serif; font-size: clamp(1.3rem,3vw,2rem); font-weight: 700; margin-bottom: 8px; }
-.spotlight-text { color: var(--muted); font-size: 0.92rem; line-height: 1.5; max-width: 50ch; }
+.spotlight.success .spotlight-label { color: var(–green); }
+.spotlight.warning .spotlight-label { color: var(–red); }
+.spotlight-title { font-family: ‘Playfair Display’, serif; font-size: clamp(1.3rem,3vw,2rem); font-weight: 700; margin-bottom: 8px; }
+.spotlight-text { color: var(–muted); font-size: 0.92rem; line-height: 1.5; max-width: 50ch; }
 
 /* Tab nav */
-.tab-nav { display: flex; gap: 6px; background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 6px; }
+.tab-nav { display: flex; gap: 6px; background: var(–surface); border: 1px solid var(–border); border-radius: 14px; padding: 6px; }
 .tab-btn {
-  flex: 1; padding: 9px 12px; border-radius: 10px; border: none; cursor: pointer;
-  background: transparent; color: var(--muted);
-  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600;
-  transition: all 0.2s;
+flex: 1; padding: 9px 12px; border-radius: 10px; border: none; cursor: pointer;
+background: transparent; color: var(–muted);
+font-family: ‘DM Sans’, sans-serif; font-size: 0.85rem; font-weight: 600;
+transition: all 0.2s;
 }
-.tab-btn.active { background: var(--surface2); color: var(--ink); }
+.tab-btn.active { background: var(–surface2); color: var(–ink); }
 
 .tab-content { display: none; }
 .tab-content.active { display: block; }
@@ -235,70 +236,70 @@ select option { background: #1a2332; }
 /* Action buttons */
 .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .action-btn {
-  padding: 12px 10px; border-radius: 12px; border: 1px solid var(--border);
-  background: var(--card); color: var(--ink);
-  font-family: 'DM Sans', sans-serif; font-size: 0.85rem; font-weight: 600;
-  cursor: pointer; transition: all 0.2s; text-align: center;
+padding: 12px 10px; border-radius: 12px; border: 1px solid var(–border);
+background: var(–card); color: var(–ink);
+font-family: ‘DM Sans’, sans-serif; font-size: 0.85rem; font-weight: 600;
+cursor: pointer; transition: all 0.2s; text-align: center;
 }
-.action-btn:hover { border-color: var(--accent); background: rgba(230,160,32,0.08); }
+.action-btn:hover { border-color: var(–accent); background: rgba(230,160,32,0.08); }
 .action-btn:disabled { opacity: 0.35; pointer-events: none; }
-.action-btn.primary { background: linear-gradient(135deg, var(--accent), #c87010); border-color: transparent; color: #0d1117; }
+.action-btn.primary { background: linear-gradient(135deg, var(–accent), #c87010); border-color: transparent; color: #0d1117; }
 .action-btn.primary:hover { transform: translateY(-1px); }
-.action-btn.blue { background: rgba(59,158,255,0.1); border-color: rgba(59,158,255,0.25); color: var(--accent2); }
+.action-btn.blue { background: rgba(59,158,255,0.1); border-color: rgba(59,158,255,0.25); color: var(–accent2); }
 .action-btn.blue:hover { background: rgba(59,158,255,0.2); }
 
 /* Data table */
 .data-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
-.data-table th { padding: 8px 12px; text-align: left; color: var(--muted); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(--border); }
+.data-table th { padding: 8px 12px; text-align: left; color: var(–muted); font-weight: 600; font-size: 0.75rem; letter-spacing: 0.06em; text-transform: uppercase; border-bottom: 1px solid var(–border); }
 .data-table td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); }
 .data-table tr:last-child td { border-bottom: none; }
 .data-table tr:hover td { background: rgba(255,255,255,0.02); }
 
 /* Mini stat cards */
 .mini-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-.mini-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; text-align: center; }
-.mini-card .mv { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; }
-.mini-card .mk { font-size: 0.72rem; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
+.mini-card { background: var(–card); border: 1px solid var(–border); border-radius: 14px; padding: 14px; text-align: center; }
+.mini-card .mv { font-family: ‘Playfair Display’, serif; font-size: 1.5rem; font-weight: 700; }
+.mini-card .mk { font-size: 0.72rem; color: var(–muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
 
 /* Sidebar right (feed) */
 .sidebar-right {
-  background: var(--surface);
-  border-left: 1px solid var(--border);
-  padding: 20px 16px;
-  display: flex; flex-direction: column; gap: 14px;
-  overflow-y: auto;
+background: var(–surface);
+border-left: 1px solid var(–border);
+padding: 20px 16px;
+display: flex; flex-direction: column; gap: 14px;
+overflow-y: auto;
 }
 .feed-list { display: flex; flex-direction: column; gap: 8px; }
 .feed-item {
-  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-  padding: 11px 13px; animation: slideInFeed 0.3s ease;
+background: var(–card); border: 1px solid var(–border); border-radius: 12px;
+padding: 11px 13px; animation: slideInFeed 0.3s ease;
 }
 .feed-item.success { border-color: rgba(34,197,94,0.2); }
 .feed-item.warning { border-color: rgba(239,68,68,0.2); }
 .feed-item strong { display: block; font-size: 0.82rem; margin-bottom: 3px; }
-.feed-item span { font-size: 0.77rem; color: var(--muted); line-height: 1.4; }
+.feed-item span { font-size: 0.77rem; color: var(–muted); line-height: 1.4; }
 
 @keyframes slideInFeed { from { opacity: 0; transform: translateX(8px); } to { opacity: 1; transform: translateX(0); } }
 
 /* Finance */
 .finance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
-.finance-card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 14px; }
-.finance-card h4 { font-size: 0.75rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
-.finance-value { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 700; }
-.finance-value.green { color: var(--green); }
-.finance-value.gold { color: var(--gold); }
+.finance-card { background: var(–card); border: 1px solid var(–border); border-radius: 14px; padding: 14px; }
+.finance-card h4 { font-size: 0.75rem; color: var(–muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; }
+.finance-value { font-family: ‘Playfair Display’, serif; font-size: 1.3rem; font-weight: 700; }
+.finance-value.green { color: var(–green); }
+.finance-value.gold { color: var(–gold); }
 
 /* Standings */
 .standing-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; }
 .standing-row.player-team { background: rgba(230,160,32,0.08); border: 1px solid rgba(230,160,32,0.15); }
-.standing-rank { width: 20px; color: var(--muted); font-size: 0.8rem; }
+.standing-rank { width: 20px; color: var(–muted); font-size: 0.8rem; }
 .standing-name { flex: 1; font-weight: 600; }
-.standing-record { color: var(--muted); font-size: 0.8rem; }
+.standing-record { color: var(–muted); font-size: 0.8rem; }
 
 /* Career history */
 .career-history-item {
-  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-  padding: 14px; margin-bottom: 8px; font-size: 0.85rem;
+background: var(–card); border: 1px solid var(–border); border-radius: 12px;
+padding: 14px; margin-bottom: 8px; font-size: 0.85rem;
 }
 
 /* Choices modal */
@@ -307,751 +308,763 @@ select option { background: #1a2332; }
 /* Toast */
 .toast-wrap { position: fixed; bottom: 24px; right: 24px; z-index: 999; display: flex; flex-direction: column; gap: 8px; }
 .toast {
-  padding: 12px 18px; border-radius: 14px;
-  background: rgba(26,35,50,0.95); border: 1px solid var(--border);
-  backdrop-filter: blur(16px); color: var(--ink); font-size: 0.88rem; font-weight: 600;
-  box-shadow: var(--shadow);
-  opacity: 0; transform: translateY(10px);
-  transition: opacity 0.25s, transform 0.25s;
-  pointer-events: none;
+padding: 12px 18px; border-radius: 14px;
+background: rgba(26,35,50,0.95); border: 1px solid var(–border);
+backdrop-filter: blur(16px); color: var(–ink); font-size: 0.88rem; font-weight: 600;
+box-shadow: var(–shadow);
+opacity: 0; transform: translateY(10px);
+transition: opacity 0.25s, transform 0.25s;
+pointer-events: none;
 }
 .toast.show { opacity: 1; transform: translateY(0); }
-.toast.success { border-color: rgba(34,197,94,0.3); color: var(--green); }
-.toast.warning { border-color: rgba(239,68,68,0.3); color: var(--red); }
+.toast.success { border-color: rgba(34,197,94,0.3); color: var(–green); }
+.toast.warning { border-color: rgba(239,68,68,0.3); color: var(–red); }
 
 /* Progress ring */
 .progress-ring { position: relative; width: 72px; height: 72px; flex-shrink: 0; }
 .progress-ring svg { transform: rotate(-90deg); }
-.progress-ring .pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 700; }
+.progress-ring .pct { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: ‘Playfair Display’, serif; font-size: 0.95rem; font-weight: 700; }
 
 /* Save slots */
 .save-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
-.save-slot { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; }
-.save-slot:hover { border-color: var(--accent2); }
-.save-slot .slot-label { color: var(--muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
+.save-slot { background: var(–card); border: 1px solid var(–border); border-radius: 12px; padding: 12px; text-align: center; font-size: 0.82rem; cursor: pointer; transition: all 0.2s; }
+.save-slot:hover { border-color: var(–accent2); }
+.save-slot .slot-label { color: var(–muted); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 4px; }
 .save-slot .slot-data { font-weight: 700; font-size: 0.9rem; }
 
 /* Height/weight display */
 .physique-bar { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
 .height-visual { display: flex; flex-direction: column; align-items: center; gap: 2px; }
 .height-block { width: 10px; border-radius: 2px; background: rgba(255,255,255,0.08); }
-.height-block.filled { background: linear-gradient(180deg, var(--accent2), var(--accent)); }
-.growth-indicator { font-size: 0.7rem; color: var(--green); font-weight: 700; }
+.height-block.filled { background: linear-gradient(180deg, var(–accent2), var(–accent)); }
+.growth-indicator { font-size: 0.7rem; color: var(–green); font-weight: 700; }
 
 /* High School Modal Overlay */
 .modal-overlay {
-  position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,0.82);
-  backdrop-filter: blur(8px);
-  display: flex; align-items: center; justify-content: center;
-  padding: 20px;
-  animation: fadeIn 0.25s ease;
+position: fixed; inset: 0; z-index: 200;
+background: rgba(0,0,0,0.82);
+backdrop-filter: blur(8px);
+display: flex; align-items: center; justify-content: center;
+padding: 20px;
+animation: fadeIn 0.25s ease;
 }
 .modal-overlay.hidden { display: none; }
 @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
 .hs-modal {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 28px;
-  padding: 32px;
-  max-width: 780px;
-  width: 100%;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 32px 80px rgba(0,0,0,0.7);
-  animation: slideUp 0.3s ease;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 28px;
+padding: 32px;
+max-width: 780px;
+width: 100%;
+max-height: 90vh;
+overflow-y: auto;
+box-shadow: 0 32px 80px rgba(0,0,0,0.7);
+animation: slideUp 0.3s ease;
 }
 @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
 .hs-modal-header { margin-bottom: 20px; }
-.hs-modal-header h2 { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 900; margin-bottom: 6px; }
-.hs-modal-header p { color: var(--muted); font-size: 0.92rem; line-height: 1.5; }
+.hs-modal-header h2 { font-family: ‘Playfair Display’, serif; font-size: 1.8rem; font-weight: 900; margin-bottom: 6px; }
+.hs-modal-header p { color: var(–muted); font-size: 0.92rem; line-height: 1.5; }
 
 .hs-loading { text-align: center; padding: 40px 0; }
 .hs-loading .spin { font-size: 2rem; display: inline-block; animation: spin 1s linear infinite; }
 @keyframes spin { to { transform: rotate(360deg); } }
-.hs-loading p { color: var(--muted); margin-top: 12px; }
+.hs-loading p { color: var(–muted); margin-top: 12px; }
 
 .hs-options { display: flex; flex-direction: column; gap: 14px; }
 
 .hs-card {
-  background: var(--card);
-  border: 2px solid var(--border);
-  border-radius: 18px;
-  padding: 20px;
-  cursor: pointer;
-  transition: all 0.2s;
-  position: relative;
-  overflow: hidden;
+background: var(–card);
+border: 2px solid var(–border);
+border-radius: 18px;
+padding: 20px;
+cursor: pointer;
+transition: all 0.2s;
+position: relative;
+overflow: hidden;
 }
-.hs-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
-.hs-card.selected { border-color: var(--accent); background: rgba(230,160,32,0.06); }
+.hs-card:hover { border-color: var(–accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+.hs-card.selected { border-color: var(–accent); background: rgba(230,160,32,0.06); }
 .hs-card.private { border-color: rgba(230,160,32,0.3); }
 .hs-card.scholarship { border-color: rgba(34,197,94,0.35); }
 .hs-card.private::before {
-  content: '⭐ PRIVATE'; position: absolute; top: 12px; right: 14px;
-  font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em;
-  color: var(--accent); background: rgba(230,160,32,0.12); padding: 3px 8px; border-radius: 999px;
+content: ‘⭐ PRIVATE’; position: absolute; top: 12px; right: 14px;
+font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em;
+color: var(–accent); background: rgba(230,160,32,0.12); padding: 3px 8px; border-radius: 999px;
 }
 .hs-card.scholarship::before {
-  content: '🎓 SCHOLARSHIP'; position: absolute; top: 12px; right: 14px;
-  font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em;
-  color: var(--green); background: rgba(34,197,94,0.1); padding: 3px 8px; border-radius: 999px;
+content: ‘🎓 SCHOLARSHIP’; position: absolute; top: 12px; right: 14px;
+font-size: 0.65rem; font-weight: 800; letter-spacing: 0.1em;
+color: var(–green); background: rgba(34,197,94,0.1); padding: 3px 8px; border-radius: 999px;
 }
 .hs-card h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 4px; padding-right: 100px; }
-.hs-card .hs-meta { font-size: 0.78rem; color: var(--muted); margin-bottom: 10px; }
-.hs-card .hs-desc { font-size: 0.85rem; line-height: 1.5; color: var(--ink); opacity: 0.85; }
+.hs-card .hs-meta { font-size: 0.78rem; color: var(–muted); margin-bottom: 10px; }
+.hs-card .hs-desc { font-size: 0.85rem; line-height: 1.5; color: var(–ink); opacity: 0.85; }
 .hs-card .hs-bonuses {
-  display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px;
+display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px;
 }
 .hs-bonus {
-  padding: 3px 10px; border-radius: 999px; font-size: 0.72rem; font-weight: 700;
-  background: rgba(59,158,255,0.1); border: 1px solid rgba(59,158,255,0.2); color: var(--accent2);
+padding: 3px 10px; border-radius: 999px; font-size: 0.72rem; font-weight: 700;
+background: rgba(59,158,255,0.1); border: 1px solid rgba(59,158,255,0.2); color: var(–accent2);
 }
-.hs-bonus.green { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.2); color: var(--green); }
-.hs-bonus.gold { background: rgba(230,160,32,0.1); border-color: rgba(230,160,32,0.2); color: var(--accent); }
+.hs-bonus.green { background: rgba(34,197,94,0.1); border-color: rgba(34,197,94,0.2); color: var(–green); }
+.hs-bonus.gold { background: rgba(230,160,32,0.1); border-color: rgba(230,160,32,0.2); color: var(–accent); }
 
 .hs-modal-footer { margin-top: 20px; display: flex; justify-content: flex-end; gap: 10px; }
 
-/* ---- College Recruitment Modal ---- */
+/* –– College Recruitment Modal –– */
 .college-modal { max-width: 900px; }
 
 .offer-badge {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 4px 12px; border-radius: 999px; font-size: 0.7rem; font-weight: 800;
-  letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px;
+display: inline-flex; align-items: center; gap: 6px;
+padding: 4px 12px; border-radius: 999px; font-size: 0.7rem; font-weight: 800;
+letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px;
 }
-.offer-badge.full-ride { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.35); color: var(--gold); }
-.offer-badge.partial   { background: rgba(59,158,255,0.12); border: 1px solid rgba(59,158,255,0.3); color: var(--accent2); }
-.offer-badge.walk-on   { background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--muted); }
-.offer-badge.nil       { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3); color: var(--green); }
+.offer-badge.full-ride { background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.35); color: var(–gold); }
+.offer-badge.partial   { background: rgba(59,158,255,0.12); border: 1px solid rgba(59,158,255,0.3); color: var(–accent2); }
+.offer-badge.walk-on   { background: rgba(255,255,255,0.05); border: 1px solid var(–border); color: var(–muted); }
+.offer-badge.nil       { background: rgba(34,197,94,0.12); border: 1px solid rgba(34,197,94,0.3); color: var(–green); }
 
 .college-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 @media(max-width:640px){ .college-grid { grid-template-columns: 1fr; } }
 
 .college-card {
-  background: var(--card); border: 2px solid var(--border); border-radius: 18px;
-  padding: 18px; cursor: pointer; transition: all 0.2s; position: relative;
+background: var(–card); border: 2px solid var(–border); border-radius: 18px;
+padding: 18px; cursor: pointer; transition: all 0.2s; position: relative;
 }
-.college-card:hover { border-color: var(--accent2); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,0.4); }
-.college-card.selected { border-color: var(--accent); background: rgba(230,160,32,0.06); }
+.college-card:hover { border-color: var(–accent2); transform: translateY(-2px); box-shadow: 0 10px 28px rgba(0,0,0,0.4); }
+.college-card.selected { border-color: var(–accent); background: rgba(230,160,32,0.06); }
 
 .college-card .school-colors {
-  width: 100%; height: 5px; border-radius: 999px; margin-bottom: 14px;
+width: 100%; height: 5px; border-radius: 999px; margin-bottom: 14px;
 }
 .college-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 3px; }
-.college-card .conf { font-size: 0.75rem; color: var(--muted); margin-bottom: 10px; }
+.college-card .conf { font-size: 0.75rem; color: var(–muted); margin-bottom: 10px; }
 .college-card .school-desc { font-size: 0.83rem; line-height: 1.5; margin-bottom: 10px; }
 .college-card .nil-row {
-  display: flex; align-items: center; gap: 8px; margin-top: 10px;
-  padding-top: 10px; border-top: 1px solid var(--border);
-  font-size: 0.8rem;
+display: flex; align-items: center; gap: 8px; margin-top: 10px;
+padding-top: 10px; border-top: 1px solid var(–border);
+font-size: 0.8rem;
 }
-.nil-amount { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--green); }
+.nil-amount { font-family: ‘Playfair Display’, serif; font-size: 1.1rem; font-weight: 700; color: var(–green); }
 
-/* ---- MLB Draft Modal ---- */
+/* –– MLB Draft Modal –– */
 .draft-modal { max-width: 860px; }
 
 .draft-header-band {
-  background: linear-gradient(135deg, #0a1628, #1a3060);
-  border-radius: 16px; padding: 20px 24px; margin-bottom: 20px;
-  display: flex; align-items: center; gap: 20px;
-  border: 1px solid rgba(59,158,255,0.2);
+background: linear-gradient(135deg, #0a1628, #1a3060);
+border-radius: 16px; padding: 20px 24px; margin-bottom: 20px;
+display: flex; align-items: center; gap: 20px;
+border: 1px solid rgba(59,158,255,0.2);
 }
 .draft-round-badge {
-  min-width: 80px; height: 80px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent), #c87010);
-  display: flex; flex-direction: column; align-items: center; justify-content: center;
-  flex-shrink: 0; box-shadow: 0 0 30px rgba(230,160,32,0.35);
+min-width: 80px; height: 80px; border-radius: 50%;
+background: linear-gradient(135deg, var(–accent), #c87010);
+display: flex; flex-direction: column; align-items: center; justify-content: center;
+flex-shrink: 0; box-shadow: 0 0 30px rgba(230,160,32,0.35);
 }
-.draft-round-badge .round-num { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; color: #0d1117; line-height: 1; }
+.draft-round-badge .round-num { font-family: ‘Playfair Display’, serif; font-size: 1.6rem; font-weight: 900; color: #0d1117; line-height: 1; }
 .draft-round-badge .round-lbl { font-size: 0.6rem; font-weight: 800; color: rgba(13,17,23,0.7); text-transform: uppercase; letter-spacing: 0.05em; }
 
-.draft-header-band h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; margin-bottom: 4px; }
-.draft-header-band p { color: var(--muted); font-size: 0.88rem; line-height: 1.5; }
+.draft-header-band h2 { font-family: ‘Playfair Display’, serif; font-size: 1.5rem; font-weight: 900; margin-bottom: 4px; }
+.draft-header-band p { color: var(–muted); font-size: 0.88rem; line-height: 1.5; }
 
 .draft-team-card {
-  background: var(--card); border: 2px solid var(--border); border-radius: 18px;
-  padding: 20px; margin-bottom: 14px;
+background: var(–card); border: 2px solid var(–border); border-radius: 18px;
+padding: 20px; margin-bottom: 14px;
 }
 .draft-team-card .team-row {
-  display: flex; align-items: center; gap: 16px; margin-bottom: 14px;
+display: flex; align-items: center; gap: 16px; margin-bottom: 14px;
 }
 .team-logo-circle {
-  width: 52px; height: 52px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.5rem; flex-shrink: 0;
-  border: 2px solid var(--border);
+width: 52px; height: 52px; border-radius: 50%;
+display: flex; align-items: center; justify-content: center;
+font-size: 1.5rem; flex-shrink: 0;
+border: 2px solid var(–border);
 }
 .draft-team-card h3 { font-size: 1.15rem; font-weight: 700; margin-bottom: 2px; }
-.draft-team-card .team-meta { font-size: 0.78rem; color: var(--muted); }
+.draft-team-card .team-meta { font-size: 0.78rem; color: var(–muted); }
 
 .offer-breakdown {
-  display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 14px;
+display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 14px;
 }
-.offer-stat { background: rgba(255,255,255,0.03); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center; }
-.offer-stat .ov { font-family: 'Playfair Display', serif; font-size: 1.25rem; font-weight: 700; }
-.offer-stat .ok { font-size: 0.7rem; color: var(--muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.06em; }
+.offer-stat { background: rgba(255,255,255,0.03); border: 1px solid var(–border); border-radius: 12px; padding: 12px; text-align: center; }
+.offer-stat .ov { font-family: ‘Playfair Display’, serif; font-size: 1.25rem; font-weight: 700; }
+.offer-stat .ok { font-size: 0.7rem; color: var(–muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.06em; }
 
 .draft-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
 
 .negotiate-panel {
-  background: rgba(230,160,32,0.06); border: 1px solid rgba(230,160,32,0.2);
-  border-radius: 14px; padding: 16px; margin-top: 14px; display: none;
+background: rgba(230,160,32,0.06); border: 1px solid rgba(230,160,32,0.2);
+border-radius: 14px; padding: 16px; margin-top: 14px; display: none;
 }
-.negotiate-panel h4 { font-size: 0.85rem; color: var(--accent); margin-bottom: 10px; }
+.negotiate-panel h4 { font-size: 0.85rem; color: var(–accent); margin-bottom: 10px; }
 
 .draft-vs-college {
-  background: var(--surface2); border: 1px solid var(--border); border-radius: 16px;
-  padding: 18px; margin-top: 14px;
+background: var(–surface2); border: 1px solid var(–border); border-radius: 16px;
+padding: 18px; margin-top: 14px;
 }
-.draft-vs-college h4 { font-size: 0.85rem; color: var(--muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
+.draft-vs-college h4 { font-size: 0.85rem; color: var(–muted); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.08em; }
 .vs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 .vs-card {
-  background: var(--card); border: 1px solid var(--border); border-radius: 12px;
-  padding: 14px; cursor: pointer; transition: all 0.2s;
+background: var(–card); border: 1px solid var(–border); border-radius: 12px;
+padding: 14px; cursor: pointer; transition: all 0.2s;
 }
-.vs-card:hover { border-color: var(--accent); }
+.vs-card:hover { border-color: var(–accent); }
 .vs-card h5 { font-size: 0.92rem; font-weight: 700; margin-bottom: 6px; }
-.vs-card ul { padding-left: 16px; font-size: 0.8rem; color: var(--muted); line-height: 1.7; }
+.vs-card ul { padding-left: 16px; font-size: 0.8rem; color: var(–muted); line-height: 1.7; }
 
 /* Off-time activity picker */
 .offtime-panel {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 16px;
-  margin-bottom: 12px;
-  animation: slideIn 0.25s ease;
+background: var(–surface2);
+border: 1px solid var(–border);
+border-radius: 16px;
+padding: 16px;
+margin-bottom: 12px;
+animation: slideIn 0.25s ease;
 }
 .offtime-panel h4 {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin-bottom: 12px;
+font-size: 0.75rem;
+font-weight: 700;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+color: var(–muted);
+margin-bottom: 12px;
 }
 .offtime-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 8px;
 }
 @media (max-width: 600px){ .offtime-grid { grid-template-columns: repeat(2,1fr); } }
 
 .offtime-btn {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  padding: 12px 8px;
-  border-radius: 14px;
-  border: 1px solid var(--border);
-  background: var(--card);
-  cursor: pointer;
-  transition: all 0.18s;
-  font-family: 'DM Sans', sans-serif;
-  text-align: center;
+display: flex;
+flex-direction: column;
+align-items: center;
+gap: 5px;
+padding: 12px 8px;
+border-radius: 14px;
+border: 1px solid var(–border);
+background: var(–card);
+cursor: pointer;
+transition: all 0.18s;
+font-family: ‘DM Sans’, sans-serif;
+text-align: center;
 }
 .offtime-btn:hover {
-  border-color: var(--accent);
-  background: rgba(230,160,32,0.07);
-  transform: translateY(-2px);
+border-color: var(–accent);
+background: rgba(230,160,32,0.07);
+transform: translateY(-2px);
 }
 .offtime-btn.religion-highlight {
-  border-color: rgba(245,158,11,0.4);
-  background: rgba(245,158,11,0.06);
+border-color: rgba(245,158,11,0.4);
+background: rgba(245,158,11,0.06);
 }
 .offtime-btn .ot-emoji { font-size: 1.5rem; line-height: 1; }
-.offtime-btn .ot-label { font-size: 0.78rem; font-weight: 700; color: var(--ink); }
-.offtime-btn .ot-effects { font-size: 0.65rem; color: var(--muted); line-height: 1.4; }
+.offtime-btn .ot-label { font-size: 0.78rem; font-weight: 700; color: var(–ink); }
+.offtime-btn .ot-effects { font-size: 0.65rem; color: var(–muted); line-height: 1.4; }
 
 .offtime-result {
-  margin-top: 10px;
-  padding: 10px 13px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid var(--border);
-  font-size: 0.82rem;
-  line-height: 1.6;
-  animation: slideIn 0.2s ease;
+margin-top: 10px;
+padding: 10px 13px;
+border-radius: 12px;
+background: rgba(255,255,255,0.03);
+border: 1px solid var(–border);
+font-size: 0.82rem;
+line-height: 1.6;
+animation: slideIn 0.2s ease;
 }
 #locationResolved {
-  animation: slideIn 0.25s ease;
+animation: slideIn 0.25s ease;
 }
 #locationError {
-  animation: slideIn 0.2s ease;
+animation: slideIn 0.2s ease;
 }
 @keyframes slideIn {
-  from { opacity: 0; transform: translateY(-4px); }
-  to   { opacity: 1; transform: translateY(0); }
+from { opacity: 0; transform: translateY(-4px); }
+to   { opacity: 1; transform: translateY(0); }
 }
 
 /* City search results dropdown */
 #cityResults {
-  max-height: 240px;
-  overflow-y: auto;
-  animation: slideIn 0.15s ease;
+max-height: 240px;
+overflow-y: auto;
+animation: slideIn 0.15s ease;
 }
 #cityResults > div:last-child { border-bottom: none !important; }
 
 /* Retirement screen */
 /* Stage Banner */
 #stageBanner svg {
-  display: block;
-  width: 100%;
-  height: auto;
-  border-radius: 20px;
+display: block;
+width: 100%;
+height: auto;
+border-radius: 20px;
 }
 #stageBanner {
-  filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
+filter: drop-shadow(0 8px 24px rgba(0,0,0,0.5));
 }
 
 /* ── Rehab Plan Picker ── */
 .rehab-picker { width: 100%; }
 .rehab-header {
-  display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  margin-bottom: 8px;
+display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+margin-bottom: 8px;
 }
 .rehab-injury-name {
-  font-weight: 700; font-size: 1rem; color: var(--ink);
+font-weight: 700; font-size: 1rem; color: var(–ink);
 }
 .rehab-severity {
-  padding: 3px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 800;
-  text-transform: uppercase; letter-spacing: 0.08em;
+padding: 3px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 800;
+text-transform: uppercase; letter-spacing: 0.08em;
 }
-.rehab-severity.minor    { background: rgba(34,197,94,0.1);  border: 1px solid rgba(34,197,94,0.25);  color: var(--green); }
-.rehab-severity.moderate { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); color: var(--gold); }
-.rehab-severity.serious  { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.25);  color: var(--red); }
+.rehab-severity.minor    { background: rgba(34,197,94,0.1);  border: 1px solid rgba(34,197,94,0.25);  color: var(–green); }
+.rehab-severity.moderate { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.25); color: var(–gold); }
+.rehab-severity.serious  { background: rgba(239,68,68,0.1);  border: 1px solid rgba(239,68,68,0.25);  color: var(–red); }
 .rehab-games-out {
-  font-size: 0.82rem; color: var(--muted);
+font-size: 0.82rem; color: var(–muted);
 }
 .rehab-prompt {
-  font-size: 0.82rem; color: var(--muted); margin-bottom: 12px; line-height: 1.4;
-  padding: 8px 12px; background: rgba(239,68,68,0.06);
-  border: 1px solid rgba(239,68,68,0.15); border-radius: 10px;
+font-size: 0.82rem; color: var(–muted); margin-bottom: 12px; line-height: 1.4;
+padding: 8px 12px; background: rgba(239,68,68,0.06);
+border: 1px solid rgba(239,68,68,0.15); border-radius: 10px;
 }
 .rehab-plans-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
 }
 @media(max-width:500px){ .rehab-plans-grid { grid-template-columns: 1fr; } }
 .rehab-plan-card {
-  background: var(--card); border: 2px solid var(--border); border-radius: 14px;
-  padding: 14px; cursor: pointer; transition: all 0.18s;
+background: var(–card); border: 2px solid var(–border); border-radius: 14px;
+padding: 14px; cursor: pointer; transition: all 0.18s;
 }
 .rehab-plan-card:hover {
-  border-color: var(--accent2);
-  background: rgba(59,158,255,0.06);
-  transform: translateY(-2px);
+border-color: var(–accent2);
+background: rgba(59,158,255,0.06);
+transform: translateY(-2px);
 }
 .rehab-plan-label {
-  font-weight: 700; font-size: 0.92rem; margin-bottom: 5px; color: var(--ink);
+font-weight: 700; font-size: 0.92rem; margin-bottom: 5px; color: var(–ink);
 }
 .rehab-plan-desc {
-  font-size: 0.8rem; color: var(--muted); line-height: 1.4;
+font-size: 0.8rem; color: var(–muted); line-height: 1.4;
 }
 
 /* ── Equipment Shop ── */
 .equip-modal {
-  max-width: 900px; width: 97vw;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 28px; overflow: hidden;
-  box-shadow: 0 32px 80px rgba(0,0,0,0.8);
-  animation: slideUp 0.3s ease;
-  max-height: 94vh; display: flex; flex-direction: column;
+max-width: 900px; width: 97vw;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 28px; overflow: hidden;
+box-shadow: 0 32px 80px rgba(0,0,0,0.8);
+animation: slideUp 0.3s ease;
+max-height: 92vh; display: flex; flex-direction: column;
+}
+@media(max-width:600px){
+.equip-modal { border-radius: 20px 20px 0 0; max-height: 95vh; position: fixed; bottom: 0; left: 0; right: 0; width: 100%; }
+.equip-modal-header { padding: 14px 16px 12px; }
+.equip-modal-header h2 { font-size: 1.1rem; }
+.equip-tab { padding: 8px 10px; font-size: 0.72rem; }
+.equip-body { padding: 12px 14px 14px; }
+.equip-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+.equip-card { padding: 10px; }
+.equip-card .ec-model { font-size: 0.78rem; }
+.equip-card .ec-desc { display: none; }
+.equip-summary-bar { display: none; }
 }
 .equip-modal-header {
-  padding: 20px 24px 16px;
-  background: linear-gradient(135deg,#0a1628,#1a3060);
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
+padding: 20px 24px 16px;
+background: linear-gradient(135deg,#0a1628,#1a3060);
+border-bottom: 1px solid var(–border);
+flex-shrink: 0;
 }
 .equip-modal-header h2 {
-  font-family: 'Playfair Display',serif; font-size:1.5rem; font-weight:900; color:white;
+font-family: ‘Playfair Display’,serif; font-size:1.5rem; font-weight:900; color:white;
 }
 .equip-modal-header p { font-size:0.82rem; color:rgba(255,255,255,0.6); margin-top:4px; }
 .equip-tabs {
-  display: flex; gap:0; overflow-x: auto; background: var(--surface2);
-  border-bottom: 1px solid var(--border); flex-shrink: 0;
+display: flex; gap:0; overflow-x: auto; background: var(–surface2);
+border-bottom: 1px solid var(–border); flex-shrink: 0;
 }
 .equip-tab {
-  padding: 10px 14px; font-size:0.78rem; font-weight:700; cursor:pointer;
-  border-bottom: 2px solid transparent; color: var(--muted); white-space:nowrap;
-  background:none; border-top:none; border-left:none; border-right:none;
-  font-family:'DM Sans',sans-serif; transition: all 0.15s;
+padding: 10px 14px; font-size:0.78rem; font-weight:700; cursor:pointer;
+border-bottom: 2px solid transparent; color: var(–muted); white-space:nowrap;
+background:none; border-top:none; border-left:none; border-right:none;
+font-family:‘DM Sans’,sans-serif; transition: all 0.15s;
 }
-.equip-tab.active { color:var(--accent2); border-bottom-color:var(--accent2); }
-.equip-tab:hover:not(.active) { color:var(--ink); }
+.equip-tab.active { color:var(–accent2); border-bottom-color:var(–accent2); }
+.equip-tab:hover:not(.active) { color:var(–ink); }
 .equip-body { flex:1; overflow-y:auto; padding:16px 20px 20px; }
 .equip-slot-header {
-  display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;
+display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;
 }
-.equip-slot-title { font-size:1rem; font-weight:800; color:var(--ink); }
+.equip-slot-title { font-size:1rem; font-weight:800; color:var(–ink); }
 .equip-slot-current {
-  font-size:0.75rem; color:var(--muted); background:rgba(255,255,255,0.05);
-  border:1px solid var(--border); padding:4px 10px; border-radius:999px;
+font-size:0.75rem; color:var(–muted); background:rgba(255,255,255,0.05);
+border:1px solid var(–border); padding:4px 10px; border-radius:999px;
 }
 .equip-grid {
-  display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:10px; margin-bottom:16px;
+display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:10px; margin-bottom:16px;
 }
 .equip-card {
-  background:var(--card); border:2px solid var(--border);
-  border-radius:14px; padding:12px; cursor:pointer; transition:all 0.15s; position:relative;
+background:var(–card); border:2px solid var(–border);
+border-radius:14px; padding:12px; cursor:pointer; transition:all 0.15s; position:relative;
 }
-.equip-card:hover { border-color:var(--accent2); background:rgba(59,158,255,0.05); transform:translateY(-1px); }
-.equip-card.equipped { border-color:var(--green); background:rgba(34,197,94,0.05); }
+.equip-card:hover { border-color:var(–accent2); background:rgba(59,158,255,0.05); transform:translateY(-1px); }
+.equip-card.equipped { border-color:var(–green); background:rgba(34,197,94,0.05); }
 .equip-card.cant-afford { opacity:0.42; cursor:not-allowed; pointer-events:none; }
 .equip-card.free-item { border-color:rgba(230,160,32,0.3); }
-.equip-card .ec-brand { font-size:0.68rem; font-weight:800; color:var(--accent2); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:3px; }
-.equip-card .ec-model { font-size:0.88rem; font-weight:700; color:var(--ink); margin-bottom:4px; line-height:1.2; }
-.equip-card .ec-price { font-size:0.82rem; font-weight:700; color:var(--green); margin-bottom:6px; }
-.equip-card .ec-price.free-price { color:var(--accent); }
-.equip-card .ec-desc { font-size:0.72rem; color:var(--muted); line-height:1.4; margin-bottom:7px; }
+.equip-card .ec-brand { font-size:0.68rem; font-weight:800; color:var(–accent2); letter-spacing:0.08em; text-transform:uppercase; margin-bottom:3px; }
+.equip-card .ec-model { font-size:0.88rem; font-weight:700; color:var(–ink); margin-bottom:4px; line-height:1.2; }
+.equip-card .ec-price { font-size:0.82rem; font-weight:700; color:var(–green); margin-bottom:6px; }
+.equip-card .ec-price.free-price { color:var(–accent); }
+.equip-card .ec-desc { font-size:0.72rem; color:var(–muted); line-height:1.4; margin-bottom:7px; }
 .equip-card .ec-fx { display:flex; flex-wrap:wrap; gap:3px; }
 .equip-card .ec-tag { padding:2px 7px; border-radius:999px; font-size:0.65rem; font-weight:700; }
-.equip-card .ec-tag.pos { background:rgba(34,197,94,0.12); color:var(--green); border:1px solid rgba(34,197,94,0.2); }
-.equip-card .ec-tag.prot { background:rgba(59,158,255,0.1); color:var(--accent2); border:1px solid rgba(59,158,255,0.2); }
-.equip-card .ec-tag.neu { background:rgba(255,255,255,0.06); color:var(--muted); border:1px solid var(--border); }
+.equip-card .ec-tag.pos { background:rgba(34,197,94,0.12); color:var(–green); border:1px solid rgba(34,197,94,0.2); }
+.equip-card .ec-tag.prot { background:rgba(59,158,255,0.1); color:var(–accent2); border:1px solid rgba(59,158,255,0.2); }
+.equip-card .ec-tag.neu { background:rgba(255,255,255,0.06); color:var(–muted); border:1px solid var(–border); }
 .equip-card .ec-badge {
-  position:absolute; top:8px; right:8px; font-size:0.65rem; font-weight:800;
-  padding:2px 8px; border-radius:999px;
+position:absolute; top:8px; right:8px; font-size:0.65rem; font-weight:800;
+padding:2px 8px; border-radius:999px;
 }
-.equip-card .ec-badge.owned { background:rgba(34,197,94,0.15); color:var(--green); border:1px solid rgba(34,197,94,0.25); }
-.equip-card .ec-badge.free-badge { background:rgba(230,160,32,0.15); color:var(--accent); border:1px solid rgba(230,160,32,0.25); }
+.equip-card .ec-badge.owned { background:rgba(34,197,94,0.15); color:var(–green); border:1px solid rgba(34,197,94,0.25); }
+.equip-card .ec-badge.free-badge { background:rgba(230,160,32,0.15); color:var(–accent); border:1px solid rgba(230,160,32,0.25); }
 .equip-summary-bar {
-  display:flex; gap:10px; flex-wrap:wrap; padding:12px 16px;
-  background:rgba(255,255,255,0.03); border-top:1px solid var(--border);
-  align-items:center; flex-shrink:0;
+display:flex; gap:10px; flex-wrap:wrap; padding:12px 16px;
+background:rgba(255,255,255,0.03); border-top:1px solid var(–border);
+align-items:center; flex-shrink:0;
 }
 .equip-summary-slot {
-  display:flex; align-items:center; gap:5px; font-size:0.72rem;
+display:flex; align-items:center; gap:5px; font-size:0.72rem;
 }
 .equip-summary-slot .ss-emoji { font-size:0.9rem; }
-.equip-summary-slot .ss-name { color:var(--muted); }
-.equip-summary-slot .ss-val  { font-weight:700; color:var(--ink); }
+.equip-summary-slot .ss-name { color:var(–muted); }
+.equip-summary-slot .ss-val  { font-weight:700; color:var(–ink); }
 
 /* ── Stage Advance Modal ── */
 .stage-advance-modal {
-  max-width: 600px;
-  width: 94vw;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 28px;
-  overflow: hidden;
-  box-shadow: 0 32px 80px rgba(0,0,0,0.8);
-  animation: slideUp 0.35s ease;
+max-width: 600px;
+width: 94vw;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 28px;
+overflow: hidden;
+box-shadow: 0 32px 80px rgba(0,0,0,0.8);
+animation: slideUp 0.35s ease;
 }
 .stage-advance-banner {
-  padding: 36px 28px 28px;
-  text-align: center;
-  position: relative;
+padding: 36px 28px 28px;
+text-align: center;
+position: relative;
 }
 
 /* ── Off-Season Modal ── */
 .offseason-modal {
-  max-width: 720px;
-  width: 95vw;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 28px;
-  overflow: hidden;
-  box-shadow: 0 32px 80px rgba(0,0,0,0.75);
-  animation: slideUp 0.3s ease;
-  max-height: 92vh;
-  overflow-y: auto;
+max-width: 720px;
+width: 95vw;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 28px;
+overflow: hidden;
+box-shadow: 0 32px 80px rgba(0,0,0,0.75);
+animation: slideUp 0.3s ease;
+max-height: 92vh;
+overflow-y: auto;
 }
 .offseason-header {
-  padding: 24px 28px 20px;
-  position: relative;
-  overflow: hidden;
-  min-height: 100px;
-  display: flex;
-  align-items: center;
+padding: 24px 28px 20px;
+position: relative;
+overflow: hidden;
+min-height: 100px;
+display: flex;
+align-items: center;
 }
 .offseason-title-block { position: relative; z-index: 1; }
 .offseason-tag {
-  display: inline-block;
-  padding: 3px 12px;
-  border-radius: 999px;
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  background: rgba(255,255,255,0.12);
-  color: rgba(255,255,255,0.8);
-  margin-bottom: 8px;
+display: inline-block;
+padding: 3px 12px;
+border-radius: 999px;
+font-size: 0.65rem;
+font-weight: 800;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+background: rgba(255,255,255,0.12);
+color: rgba(255,255,255,0.8);
+margin-bottom: 8px;
 }
 .offseason-header h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.7rem;
-  font-weight: 900;
-  color: white;
-  line-height: 1.1;
+font-family: ‘Playfair Display’, serif;
+font-size: 1.7rem;
+font-weight: 900;
+color: white;
+line-height: 1.1;
 }
 .offseason-body { padding: 20px 24px 24px; }
 .offseason-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 10px;
+display: grid;
+grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+gap: 10px;
 }
 .os-card {
-  background: var(--card);
-  border: 2px solid var(--border);
-  border-radius: 16px;
-  padding: 14px 14px 12px;
-  cursor: pointer;
-  transition: all 0.18s;
-  text-align: left;
-  position: relative;
-  overflow: hidden;
+background: var(–card);
+border: 2px solid var(–border);
+border-radius: 16px;
+padding: 14px 14px 12px;
+cursor: pointer;
+transition: all 0.18s;
+text-align: left;
+position: relative;
+overflow: hidden;
 }
 .os-card:hover {
-  border-color: var(--accent2);
-  background: rgba(59,158,255,0.06);
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+border-color: var(–accent2);
+background: rgba(59,158,255,0.06);
+transform: translateY(-2px);
+box-shadow: 0 6px 20px rgba(0,0,0,0.3);
 }
 .os-card.locked {
-  opacity: 0.38;
-  cursor: not-allowed;
-  pointer-events: none;
+opacity: 0.38;
+cursor: not-allowed;
+pointer-events: none;
 }
 .os-card .os-emoji { font-size: 1.8rem; margin-bottom: 6px; display: block; line-height: 1; }
-.os-card .os-name  { font-weight: 800; font-size: 0.9rem; color: var(--ink); margin-bottom: 4px; }
-.os-card .os-desc  { font-size: 0.75rem; color: var(--muted); line-height: 1.4; margin-bottom: 8px; }
+.os-card .os-name  { font-weight: 800; font-size: 0.9rem; color: var(–ink); margin-bottom: 4px; }
+.os-card .os-desc  { font-size: 0.75rem; color: var(–muted); line-height: 1.4; margin-bottom: 8px; }
 .os-card .os-fx    { display: flex; flex-wrap: wrap; gap: 3px; }
 .os-card .os-fx-tag {
-  padding: 2px 7px;
-  border-radius: 999px;
-  font-size: 0.65rem;
-  font-weight: 700;
+padding: 2px 7px;
+border-radius: 999px;
+font-size: 0.65rem;
+font-weight: 700;
 }
-.os-card .pos { background: rgba(34,197,94,0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
-.os-card .neg { background: rgba(239,68,68,0.1);  color: var(--red);   border: 1px solid rgba(239,68,68,0.18); }
-.os-card .neu { background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid var(--border); }
+.os-card .pos { background: rgba(34,197,94,0.12); color: var(–green); border: 1px solid rgba(34,197,94,0.2); }
+.os-card .neg { background: rgba(239,68,68,0.1);  color: var(–red);   border: 1px solid rgba(239,68,68,0.18); }
+.os-card .neu { background: rgba(255,255,255,0.06); color: var(–muted); border: 1px solid var(–border); }
 .os-card .os-lock-badge {
-  position: absolute;
-  top: 8px; right: 8px;
-  font-size: 0.6rem;
-  font-weight: 800;
-  padding: 2px 7px;
-  border-radius: 999px;
-  background: rgba(230,160,32,0.15);
-  color: var(--accent);
-  border: 1px solid rgba(230,160,32,0.25);
+position: absolute;
+top: 8px; right: 8px;
+font-size: 0.6rem;
+font-weight: 800;
+padding: 2px 7px;
+border-radius: 999px;
+background: rgba(230,160,32,0.15);
+color: var(–accent);
+border: 1px solid rgba(230,160,32,0.25);
 }
 
 /* ── Story Event Modal ── */
 .story-modal {
-  max-width: 680px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 28px;
-  padding: 0;
-  overflow: hidden;
-  box-shadow: 0 32px 80px rgba(0,0,0,0.75);
-  animation: slideUp 0.3s ease;
+max-width: 680px;
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 28px;
+padding: 0;
+overflow: hidden;
+box-shadow: 0 32px 80px rgba(0,0,0,0.75);
+animation: slideUp 0.3s ease;
 }
 .story-banner {
-  width: 100%;
-  min-height: 120px;
-  display: flex;
-  align-items: flex-end;
-  padding: 20px 24px 16px;
-  position: relative;
-  overflow: hidden;
+width: 100%;
+min-height: 120px;
+display: flex;
+align-items: flex-end;
+padding: 20px 24px 16px;
+position: relative;
+overflow: hidden;
 }
 .story-banner-emoji {
-  position: absolute;
-  right: 20px; top: 50%;
-  transform: translateY(-50%);
-  font-size: 4.5rem;
-  opacity: 0.25;
-  pointer-events: none;
+position: absolute;
+right: 20px; top: 50%;
+transform: translateY(-50%);
+font-size: 4.5rem;
+opacity: 0.25;
+pointer-events: none;
 }
 .story-banner-tag {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 999px;
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  background: rgba(255,255,255,0.12);
-  color: rgba(255,255,255,0.85);
-  margin-bottom: 8px;
+display: inline-block;
+padding: 4px 12px;
+border-radius: 999px;
+font-size: 0.68rem;
+font-weight: 800;
+letter-spacing: 0.1em;
+text-transform: uppercase;
+background: rgba(255,255,255,0.12);
+color: rgba(255,255,255,0.85);
+margin-bottom: 8px;
 }
 .story-banner h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: white;
-  line-height: 1.15;
-  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+font-family: ‘Playfair Display’, serif;
+font-size: 1.5rem;
+font-weight: 900;
+color: white;
+line-height: 1.15;
+text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
 .story-body {
-  padding: 20px 24px;
+padding: 20px 24px;
 }
 .story-narrative {
-  font-size: 0.95rem;
-  line-height: 1.65;
-  color: var(--ink);
-  margin-bottom: 20px;
-  padding: 14px 16px;
-  background: rgba(255,255,255,0.03);
-  border-left: 3px solid var(--accent2);
-  border-radius: 0 10px 10px 0;
+font-size: 0.95rem;
+line-height: 1.65;
+color: var(–ink);
+margin-bottom: 20px;
+padding: 14px 16px;
+background: rgba(255,255,255,0.03);
+border-left: 3px solid var(–accent2);
+border-radius: 0 10px 10px 0;
 }
 .story-choices {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+display: flex;
+flex-direction: column;
+gap: 10px;
 }
 .story-choice-btn {
-  display: flex;
-  align-items: flex-start;
-  gap: 12px;
-  padding: 14px 16px;
-  border-radius: 14px;
-  border: 2px solid var(--border);
-  background: var(--card);
-  cursor: pointer;
-  transition: all 0.18s;
-  text-align: left;
-  font-family: 'DM Sans', sans-serif;
-  width: 100%;
+display: flex;
+align-items: flex-start;
+gap: 12px;
+padding: 14px 16px;
+border-radius: 14px;
+border: 2px solid var(–border);
+background: var(–card);
+cursor: pointer;
+transition: all 0.18s;
+text-align: left;
+font-family: ‘DM Sans’, sans-serif;
+width: 100%;
 }
 .story-choice-btn:hover {
-  border-color: var(--accent2);
-  background: rgba(59,158,255,0.07);
-  transform: translateX(3px);
+border-color: var(–accent2);
+background: rgba(59,158,255,0.07);
+transform: translateX(3px);
 }
 .story-choice-btn .choice-letter {
-  width: 26px; height: 26px;
-  border-radius: 50%;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 0.75rem; font-weight: 800;
-  color: var(--muted);
-  flex-shrink: 0;
-  margin-top: 1px;
+width: 26px; height: 26px;
+border-radius: 50%;
+background: var(–surface2);
+border: 1px solid var(–border);
+display: flex; align-items: center; justify-content: center;
+font-size: 0.75rem; font-weight: 800;
+color: var(–muted);
+flex-shrink: 0;
+margin-top: 1px;
 }
 .story-choice-btn:hover .choice-letter {
-  background: var(--accent2);
-  color: white;
-  border-color: var(--accent2);
+background: var(–accent2);
+color: white;
+border-color: var(–accent2);
 }
 .story-choice-btn .choice-text {
-  flex: 1;
+flex: 1;
 }
 .story-choice-btn .choice-label {
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: var(--ink);
-  margin-bottom: 3px;
+font-weight: 700;
+font-size: 0.9rem;
+color: var(–ink);
+margin-bottom: 3px;
 }
 .story-choice-btn .choice-desc {
-  font-size: 0.8rem;
-  color: var(--muted);
-  line-height: 1.4;
+font-size: 0.8rem;
+color: var(–muted);
+line-height: 1.4;
 }
 .story-choice-btn .choice-effects {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 4px;
-  margin-top: 7px;
+display: flex;
+flex-wrap: wrap;
+gap: 4px;
+margin-top: 7px;
 }
 .story-eff-tag {
-  padding: 2px 8px;
-  border-radius: 999px;
-  font-size: 0.68rem;
-  font-weight: 700;
+padding: 2px 8px;
+border-radius: 999px;
+font-size: 0.68rem;
+font-weight: 700;
 }
-.story-eff-tag.pos { background: rgba(34,197,94,0.12); color: var(--green); border: 1px solid rgba(34,197,94,0.2); }
-.story-eff-tag.neg { background: rgba(239,68,68,0.1);  color: var(--red);   border: 1px solid rgba(239,68,68,0.2); }
-.story-eff-tag.neu { background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid var(--border); }
+.story-eff-tag.pos { background: rgba(34,197,94,0.12); color: var(–green); border: 1px solid rgba(34,197,94,0.2); }
+.story-eff-tag.neg { background: rgba(239,68,68,0.1);  color: var(–red);   border: 1px solid rgba(239,68,68,0.2); }
+.story-eff-tag.neu { background: rgba(255,255,255,0.06); color: var(–muted); border: 1px solid var(–border); }
 
 .story-result-card {
-  padding: 16px;
-  border-radius: 14px;
-  margin-top: 16px;
-  border: 1px solid var(--border);
-  background: rgba(255,255,255,0.03);
-  animation: slideIn 0.25s ease;
+padding: 16px;
+border-radius: 14px;
+margin-top: 16px;
+border: 1px solid var(–border);
+background: rgba(255,255,255,0.03);
+animation: slideIn 0.25s ease;
 }
 .story-result-card h4 { font-weight: 700; margin-bottom: 6px; font-size: 0.95rem; }
-.story-result-card p  { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+.story-result-card p  { font-size: 0.85rem; color: var(–muted); line-height: 1.5; }
 
 /* Off-field attribute bars in Bio */
 .offfield-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
 .offfield-row:last-child { margin-bottom: 0; }
-.offfield-name { font-size: 0.78rem; color: var(--muted); width: 110px; flex-shrink: 0; }
+.offfield-name { font-size: 0.78rem; color: var(–muted); width: 110px; flex-shrink: 0; }
 .offfield-track { flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; }
 .offfield-fill { height: 6px; border-radius: 999px; transition: width 0.5s ease; }
 .offfield-val { font-size: 0.75rem; font-weight: 700; width: 22px; text-align: right; flex-shrink: 0; }
 
 /* ── Bio Tab ── */
 .bio-hero {
-  background: linear-gradient(135deg, #0a1628 0%, #1a3060 100%);
-  border: 1px solid rgba(59,158,255,0.15);
-  border-radius: 20px; padding: 24px;
-  display: flex; gap: 20px; align-items: center;
-  margin-bottom: 14px; position: relative; overflow: hidden;
+background: linear-gradient(135deg, #0a1628 0%, #1a3060 100%);
+border: 1px solid rgba(59,158,255,0.15);
+border-radius: 20px; padding: 24px;
+display: flex; gap: 20px; align-items: center;
+margin-bottom: 14px; position: relative; overflow: hidden;
 }
 .bio-hero::before {
-  content: attr(data-number);
-  position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
-  font-family: 'Playfair Display', serif; font-size: 7rem; font-weight: 900;
-  color: rgba(59,158,255,0.07); line-height: 1; pointer-events: none;
+content: attr(data-number);
+position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
+font-family: ‘Playfair Display’, serif; font-size: 7rem; font-weight: 900;
+color: rgba(59,158,255,0.07); line-height: 1; pointer-events: none;
 }
 .bio-avatar {
-  width: 72px; height: 72px; border-radius: 50%;
-  background: linear-gradient(135deg, var(--accent2), var(--accent));
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900;
-  color: #0d1117; flex-shrink: 0;
+width: 72px; height: 72px; border-radius: 50%;
+background: linear-gradient(135deg, var(–accent2), var(–accent));
+display: flex; align-items: center; justify-content: center;
+font-family: ‘Playfair Display’, serif; font-size: 2rem; font-weight: 900;
+color: #0d1117; flex-shrink: 0;
 }
-.bio-hero-info h2 { font-family: 'Playfair Display', serif; font-size: 1.6rem; font-weight: 900; margin-bottom: 4px; line-height: 1; }
-.bio-hero-info .bio-sub { font-size: 0.85rem; color: var(--muted); line-height: 1.5; }
+.bio-hero-info h2 { font-family: ‘Playfair Display’, serif; font-size: 1.6rem; font-weight: 900; margin-bottom: 4px; line-height: 1; }
+.bio-hero-info .bio-sub { font-size: 0.85rem; color: var(–muted); line-height: 1.5; }
 .bio-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
-.bio-tag { padding: 3px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); color: var(--muted); }
-.bio-tag.accent { background: rgba(230,160,32,0.12); border-color: rgba(230,160,32,0.25); color: var(--accent); }
-.bio-tag.blue   { background: rgba(59,158,255,0.1);  border-color: rgba(59,158,255,0.22);  color: var(--accent2); }
-.bio-tag.green  { background: rgba(34,197,94,0.1);   border-color: rgba(34,197,94,0.22);   color: var(--green); }
-.bio-tag.red    { background: rgba(239,68,68,0.1);   border-color: rgba(239,68,68,0.22);   color: var(--red); }
+.bio-tag { padding: 3px 10px; border-radius: 999px; font-size: 0.7rem; font-weight: 700; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); color: var(–muted); }
+.bio-tag.accent { background: rgba(230,160,32,0.12); border-color: rgba(230,160,32,0.25); color: var(–accent); }
+.bio-tag.blue   { background: rgba(59,158,255,0.1);  border-color: rgba(59,158,255,0.22);  color: var(–accent2); }
+.bio-tag.green  { background: rgba(34,197,94,0.1);   border-color: rgba(34,197,94,0.22);   color: var(–green); }
+.bio-tag.red    { background: rgba(239,68,68,0.1);   border-color: rgba(239,68,68,0.22);   color: var(–red); }
 .bio-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
 @media(max-width:640px){ .bio-grid { grid-template-columns: 1fr; } }
-.bio-section { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 16px; }
+.bio-section { background: var(–card); border: 1px solid var(–border); border-radius: 16px; padding: 16px; }
 .bio-section-title {
-  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
+font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+color: var(–muted); margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
 }
-.bio-section-title::before { content: ''; display: block; width: 3px; height: 12px; border-radius: 2px; background: var(--accent2); }
+.bio-section-title::before { content: ‘’; display: block; width: 3px; height: 12px; border-radius: 2px; background: var(–accent2); }
 .bio-attr-row { display: flex; align-items: center; gap: 8px; margin-bottom: 9px; }
 .bio-attr-row:last-child { margin-bottom: 0; }
-.bio-attr-name { font-size: 0.8rem; color: var(--muted); width: 68px; flex-shrink: 0; }
+.bio-attr-name { font-size: 0.8rem; color: var(–muted); width: 68px; flex-shrink: 0; }
 .bio-attr-bar-track { flex: 1; height: 7px; background: rgba(255,255,255,0.06); border-radius: 999px; overflow: hidden; }
 .bio-attr-bar-fill { height: 7px; border-radius: 999px; transition: width 0.6s ease; }
 .bio-attr-val { font-size: 0.8rem; font-weight: 700; width: 24px; text-align: right; flex-shrink: 0; }
 .bio-kv { display: flex; justify-content: space-between; align-items: center; padding: 7px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.84rem; }
 .bio-kv:last-child { border-bottom: none; }
-.bio-kv .k { color: var(--muted); }
+.bio-kv .k { color: var(–muted); }
 .bio-kv .v { font-weight: 600; text-align: right; max-width: 58%; }
 .bio-award { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.04); font-size: 0.82rem; }
 .bio-award:last-child { border-bottom: none; }
 .bio-award .award-icon { font-size: 1.1rem; flex-shrink: 0; }
 .bio-award .award-name { font-weight: 700; }
-.bio-award .award-meta { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+.bio-award .award-meta { font-size: 0.72rem; color: var(–muted); margin-top: 1px; }
 .bio-timeline { position: relative; padding-left: 18px; }
-.bio-timeline::before { content: ''; position: absolute; left: 5px; top: 6px; bottom: 6px; width: 2px; background: rgba(255,255,255,0.08); border-radius: 2px; }
+.bio-timeline::before { content: ‘’; position: absolute; left: 5px; top: 6px; bottom: 6px; width: 2px; background: rgba(255,255,255,0.08); border-radius: 2px; }
 .bio-timeline-item { position: relative; margin-bottom: 12px; font-size: 0.82rem; }
 .bio-timeline-item:last-child { margin-bottom: 0; }
-.bio-timeline-item::before { content: ''; position: absolute; left: -14px; top: 5px; width: 8px; height: 8px; border-radius: 50%; background: var(--accent2); border: 2px solid var(--surface); }
-.bio-timeline-item .tl-label { font-weight: 700; color: var(--ink); }
-.bio-timeline-item .tl-sub   { color: var(--muted); font-size: 0.75rem; margin-top: 1px; }
+.bio-timeline-item::before { content: ‘’; position: absolute; left: -14px; top: 5px; width: 8px; height: 8px; border-radius: 50%; background: var(–accent2); border: 2px solid var(–surface); }
+.bio-timeline-item .tl-label { font-weight: 700; color: var(–ink); }
+.bio-timeline-item .tl-sub   { color: var(–muted); font-size: 0.75rem; margin-top: 1px; }
 
 .retire-screen { max-width: 720px; margin: 60px auto; padding: 0 24px; text-align: center; }
 .trophy { font-size: 5rem; margin-bottom: 16px; display: block; }
@@ -1059,25 +1072,27 @@ select option { background: #1a2332; }
 
 /* Responsive */
 @media (max-width: 1100px) {
-  .game-layout { grid-template-columns: 240px 1fr; }
-  .sidebar-right { display: none; }
+.game-layout { grid-template-columns: 240px 1fr; }
+.sidebar-right { display: none; }
 }
 @media (max-width: 760px) {
-  .game-layout { grid-template-columns: 1fr; }
-  .sidebar-left { display: none; }
-  .creation-grid { grid-template-columns: 1fr; }
-  .mini-stats { grid-template-columns: 1fr 1fr; }
+.game-layout { grid-template-columns: 1fr; }
+.sidebar-left { display: none; }
+.creation-grid { grid-template-columns: 1fr; }
+.mini-stats { grid-template-columns: 1fr 1fr; }
 }
 
 /* Panel */
-.panel-card { background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 20px; }
-.panel-card h3 { font-family: 'Playfair Display', serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 14px; }
+.panel-card { background: var(–card); border: 1px solid var(–border); border-radius: 18px; padding: 20px; }
+.panel-card h3 { font-family: ‘Playfair Display’, serif; font-size: 1.15rem; font-weight: 700; margin-bottom: 14px; }
 </style>
+
 </head>
 <body>
 <div class="app">
 
 <!-- HEADER -->
+
 <header class="header">
   <div class="header-brand">
     <div class="logo-ball">⚾</div>
@@ -1092,361 +1107,370 @@ select option { background: #1a2332; }
 </header>
 
 <!-- TOAST -->
+
 <div class="toast-wrap" id="toastWrap"></div>
 
 <!-- START SCREEN -->
+
 <div class="screen active" id="screenStart">
   <div class="start-hero">
     <h1>Baseball<br>Life Simulator</h1>
     <p>Build a player from Little League to the Pros. Manage your game, your grades, your money, and your legacy.</p>
 
-    <div class="creation-grid">
-      <div class="creation-section">
-        <h3>Your Player</h3>
-        <div class="field-group">
-          <div>
-            <label>Name</label>
-            <input id="inputName" placeholder="Jordan Cruz">
-          </div>
-          <div>
-            <label>Hometown <span style="color:var(--muted);font-weight:400;font-size:0.75rem;">(city name or ZIP / postal code)</span></label>
-
-            <!-- City name search row -->
-            <div style="position:relative;margin-bottom:6px;">
-              <input id="inputCity" placeholder="e.g. Houston, TX or Toronto, ON"
-                style="padding-right:44px;"
-                oninput="onCityInput(this.value)"
-                autocomplete="off">
-              <span id="citySpinner" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:1rem;display:none;animation:spin 0.7s linear infinite;">⚾</span>
-            </div>
-
-            <!-- ZIP / postal fallback row -->
-            <div style="position:relative;">
-              <input id="inputZip" placeholder="…or enter ZIP / postal code directly"
-                maxlength="10" autocomplete="postal-code"
-                style="padding-right:38px;font-size:0.85rem;background:rgba(255,255,255,0.03);"
-                oninput="onZipInput(this.value)">
-              <span id="zipSpinner" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:1rem;display:none;animation:spin 0.7s linear infinite;">⚾</span>
-            </div>
-
-            <!-- City search results dropdown -->
-            <div id="cityResults" style="display:none;margin-top:4px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.4);"></div>
-
-            <!-- Resolved location display -->
-            <div id="cityNameDisplay" style="display:none;margin-top:6px;padding:10px 14px;background:rgba(59,158,255,0.07);border:1px solid rgba(59,158,255,0.18);border-radius:10px;animation:slideIn 0.2s ease;">
-              <div style="display:flex;align-items:center;gap:8px;">
-                <span style="font-size:1.1rem;line-height:1;">📍</span>
-                <div>
-                  <div id="cityNameBig" style="font-size:1.1rem;font-weight:800;color:var(--ink);letter-spacing:-0.01em;"></div>
-                  <div id="cityNameSub" style="font-size:0.75rem;color:var(--muted);margin-top:2px;"></div>
-                </div>
-                <span style="margin-left:auto;color:var(--green);font-size:1.1rem;">✓</span>
-              </div>
-            </div>
-
-            <!-- Hidden elements needed by religion JS -->
-            <div id="locationResolved" style="display:none;">
-              <div id="religionRow" style="display:none;">
-                <div id="religionLoading" style="display:none;"></div>
-                <div id="religionResult" style="display:none;">
-                  <div id="religionBars"></div>
-                  <div id="religionNote"></div>
-                </div>
-              </div>
-            </div>
-
-            <div id="locationError" style="display:none;margin-top:8px;padding:10px 12px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;font-size:0.82rem;color:var(--red);line-height:1.5;"></div>
-          </div>
-          <div>
-            <label>Position</label>
-            <select id="inputPos">
-              <option value="P">Pitcher (P)</option>
-              <option value="C">Catcher (C)</option>
-              <option value="1B">First Base (1B)</option>
-              <option value="2B">Second Base (2B)</option>
-              <option value="3B">Third Base (3B)</option>
-              <option value="SS">Shortstop (SS)</option>
-              <option value="LF">Left Field (LF)</option>
-              <option value="CF">Center Field (CF)</option>
-              <option value="RF">Right Field (RF)</option>
-            </select>
-          </div>
-          <div>
-            <label>Jersey Number</label>
-            <input id="inputNum" placeholder="21" type="number" min="1" max="99">
-          </div>
-          <div>
-            <label>Difficulty</label>
-            <select id="inputDiff">
-              <option value="Easy">Easy</option>
-              <option value="Normal" selected>Normal</option>
-              <option value="Hard">Hard</option>
-            </select>
-          </div>
-        </div>
+```
+<div class="creation-grid">
+  <div class="creation-section">
+    <h3>Your Player</h3>
+    <div class="field-group">
+      <div>
+        <label>Name</label>
+        <input id="inputName" placeholder="Jordan Cruz">
       </div>
+      <div>
+        <label>Hometown <span style="color:var(--muted);font-weight:400;font-size:0.75rem;">(city name or ZIP / postal code)</span></label>
 
-      <div class="creation-section">
-        <h3>Archetype</h3>
-        <div class="archetype-grid" id="archetypeGrid">
-          <button class="arch-btn selected" data-arch="athletic" onclick="selectArch(this)">⚡ Athletic<br><small>+Speed +Field</small></button>
-          <button class="arch-btn" data-arch="power" onclick="selectArch(this)">💪 Power Hitter<br><small>+Power -Speed</small></button>
-          <button class="arch-btn" data-arch="contact" onclick="selectArch(this)">🎯 Contact<br><small>+Contact +Field</small></button>
-          <button class="arch-btn" data-arch="pitcher" onclick="selectArch(this)">🔥 Ace Pitcher<br><small>+Control +Arm</small></button>
-          <button class="arch-btn" data-arch="star" onclick="selectArch(this)">⭐ Born Star<br><small>+All Stats</small></button>
-          <button class="arch-btn" data-arch="scrappy" onclick="selectArch(this)">😤 Scrappy<br><small>+Contact +Hustle</small></button>
+        <!-- City name search row -->
+        <div style="position:relative;margin-bottom:6px;">
+          <input id="inputCity" placeholder="e.g. Houston, TX or Toronto, ON"
+            style="padding-right:44px;"
+            oninput="onCityInput(this.value)"
+            autocomplete="off">
+          <span id="citySpinner" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:1rem;display:none;animation:spin 0.7s linear infinite;">⚾</span>
         </div>
-        <div style="margin-top:14px;">
-          <label>Family Background</label>
-          <select id="inputParents">
-            <option value="wealthy">💰 Wealthy Family — +$50k, +Contact, +Confidence</option>
-            <option value="middle" selected>🏡 Middle Class — +$10k, Balanced</option>
-            <option value="poor">💪 Working Class / Poor — +Power, +Speed, +Grit</option>
-            <option value="sports">⚾ Sports Family — +Contact, +Fielding, +Discipline</option>
-            <option value="strict">📏 Strict Parents — +Contact, +Intelligence, +GPA</option>
-            <option value="absent">🌪️ Absent Parents — +Power, Reckless, Independent</option>
-            <option value="immigrant">🌍 Immigrant Family — +Resilience, +Work Ethic</option>
-            <option value="religious">✝️ Religious Family — +Community, +Reputation</option>
-            <option value="add">⚡ ADD/ADHD — Wild swings: highs and lows</option>
-          </select>
+
+        <!-- ZIP / postal fallback row -->
+        <div style="position:relative;">
+          <input id="inputZip" placeholder="…or enter ZIP / postal code directly"
+            maxlength="10" autocomplete="postal-code"
+            style="padding-right:38px;font-size:0.85rem;background:rgba(255,255,255,0.03);"
+            oninput="onZipInput(this.value)">
+          <span id="zipSpinner" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:1rem;display:none;animation:spin 0.7s linear infinite;">⚾</span>
         </div>
+
+        <!-- City search results dropdown -->
+        <div id="cityResults" style="display:none;margin-top:4px;background:var(--surface2);border:1px solid var(--border);border-radius:12px;overflow:hidden;box-shadow:0 8px 24px rgba(0,0,0,0.4);"></div>
+
+        <!-- Resolved location display -->
+        <div id="cityNameDisplay" style="display:none;margin-top:6px;padding:10px 14px;background:rgba(59,158,255,0.07);border:1px solid rgba(59,158,255,0.18);border-radius:10px;animation:slideIn 0.2s ease;">
+          <div style="display:flex;align-items:center;gap:8px;">
+            <span style="font-size:1.1rem;line-height:1;">📍</span>
+            <div>
+              <div id="cityNameBig" style="font-size:1.1rem;font-weight:800;color:var(--ink);letter-spacing:-0.01em;"></div>
+              <div id="cityNameSub" style="font-size:0.75rem;color:var(--muted);margin-top:2px;"></div>
+            </div>
+            <span style="margin-left:auto;color:var(--green);font-size:1.1rem;">✓</span>
+          </div>
+        </div>
+
+        <!-- Hidden elements needed by religion JS -->
+        <div id="locationResolved" style="display:none;">
+          <div id="religionRow" style="display:none;">
+            <div id="religionLoading" style="display:none;"></div>
+            <div id="religionResult" style="display:none;">
+              <div id="religionBars"></div>
+              <div id="religionNote"></div>
+            </div>
+          </div>
+        </div>
+
+        <div id="locationError" style="display:none;margin-top:8px;padding:10px 12px;background:rgba(239,68,68,0.08);border:1px solid rgba(239,68,68,0.2);border-radius:10px;font-size:0.82rem;color:var(--red);line-height:1.5;"></div>
+      </div>
+      <div>
+        <label>Position</label>
+        <select id="inputPos">
+          <option value="P">Pitcher (P)</option>
+          <option value="C">Catcher (C)</option>
+          <option value="1B">First Base (1B)</option>
+          <option value="2B">Second Base (2B)</option>
+          <option value="3B">Third Base (3B)</option>
+          <option value="SS">Shortstop (SS)</option>
+          <option value="LF">Left Field (LF)</option>
+          <option value="CF">Center Field (CF)</option>
+          <option value="RF">Right Field (RF)</option>
+        </select>
+      </div>
+      <div>
+        <label>Jersey Number</label>
+        <input id="inputNum" placeholder="21" type="number" min="1" max="99">
+      </div>
+      <div>
+        <label>Difficulty</label>
+        <select id="inputDiff">
+          <option value="Easy">Easy</option>
+          <option value="Normal" selected>Normal</option>
+          <option value="Hard">Hard</option>
+        </select>
       </div>
     </div>
+  </div>
 
-    <div style="display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;">
-      <button class="start-btn" onclick="startGame()">⚾ Start Career</button>
-      <button class="action-btn blue" onclick="loadGameSlot(1)" style="padding:14px 24px;border-radius:999px;">Load Save</button>
+  <div class="creation-section">
+    <h3>Archetype</h3>
+    <div class="archetype-grid" id="archetypeGrid">
+      <button class="arch-btn selected" data-arch="athletic" onclick="selectArch(this)">⚡ Athletic<br><small>+Speed +Field</small></button>
+      <button class="arch-btn" data-arch="power" onclick="selectArch(this)">💪 Power Hitter<br><small>+Power -Speed</small></button>
+      <button class="arch-btn" data-arch="contact" onclick="selectArch(this)">🎯 Contact<br><small>+Contact +Field</small></button>
+      <button class="arch-btn" data-arch="pitcher" onclick="selectArch(this)">🔥 Ace Pitcher<br><small>+Control +Arm</small></button>
+      <button class="arch-btn" data-arch="star" onclick="selectArch(this)">⭐ Born Star<br><small>+All Stats</small></button>
+      <button class="arch-btn" data-arch="scrappy" onclick="selectArch(this)">😤 Scrappy<br><small>+Contact +Hustle</small></button>
+    </div>
+    <div style="margin-top:14px;">
+      <label>Family Background</label>
+      <select id="inputParents">
+        <option value="wealthy">💰 Wealthy Family — +$50k, +Contact, +Confidence</option>
+        <option value="middle" selected>🏡 Middle Class — +$10k, Balanced</option>
+        <option value="poor">💪 Working Class / Poor — +Power, +Speed, +Grit</option>
+        <option value="sports">⚾ Sports Family — +Contact, +Fielding, +Discipline</option>
+        <option value="strict">📏 Strict Parents — +Contact, +Intelligence, +GPA</option>
+        <option value="absent">🌪️ Absent Parents — +Power, Reckless, Independent</option>
+        <option value="immigrant">🌍 Immigrant Family — +Resilience, +Work Ethic</option>
+        <option value="religious">✝️ Religious Family — +Community, +Reputation</option>
+        <option value="add">⚡ ADD/ADHD — Wild swings: highs and lows</option>
+      </select>
     </div>
   </div>
 </div>
 
+<div style="display:flex;gap:12px;justify-content:center;align-items:center;flex-wrap:wrap;">
+  <button class="start-btn" onclick="startGame()">⚾ Start Career</button>
+  <button class="action-btn blue" onclick="loadGameSlot(1)" style="padding:14px 24px;border-radius:999px;">Load Save</button>
+</div>
+```
+
+  </div>
+</div>
+
 <!-- GAME SCREEN -->
+
 <div class="screen" id="screenGame">
   <div class="game-layout">
 
-    <!-- Sidebar Left -->
-    <aside class="sidebar-left">
-      <div class="player-badge" style="position:relative;">
-        <div class="number" id="badgeNumber">21</div>
-        <div class="player-badge-name" id="badgeName">Player</div>
-        <div class="player-badge-sub" id="badgeSub">Shortstop • Little League</div>
-        <div class="badge-tags" id="badgeTags"></div>
+```
+<!-- Sidebar Left -->
+<aside class="sidebar-left">
+  <div class="player-badge" style="position:relative;">
+    <div class="number" id="badgeNumber">21</div>
+    <div class="player-badge-name" id="badgeName">Player</div>
+    <div class="player-badge-sub" id="badgeSub">Shortstop • Little League</div>
+    <div class="badge-tags" id="badgeTags"></div>
+  </div>
+
+  <div>
+    <div class="sidebar-section-title">Physique</div>
+    <div class="sidebar-card">
+      <div class="stat-row"><span class="label">Height</span><span class="val" id="sHeight">4'2"</span></div>
+      <div class="stat-row"><span class="label">Weight</span><span class="val" id="sWeight">75 lbs</span></div>
+      <div class="stat-row"><span class="label">Build</span><span class="val" id="sBuild">Child</span></div>
+      <div style="margin-top:8px;" id="growthNote"></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="sidebar-section-title">Current Season Stats</div>
+    <div class="sidebar-card">
+      <div class="stat-row"><span class="label">AVG</span><span class="val" id="sAVG">.000</span></div>
+      <div class="stat-row"><span class="label">OPS</span><span class="val" id="sOPS">.000</span></div>
+      <div class="stat-row"><span class="label">HR</span><span class="val" id="sHR">0</span></div>
+      <div class="stat-row"><span class="label">RBI</span><span class="val" id="sRBI">0</span></div>
+      <div class="stat-row"><span class="label">SO</span><span class="val" id="sSO">0</span></div>
+      <div class="stat-row"><span class="label">AB</span><span class="val" id="sAB">0</span></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="sidebar-section-title">Attributes</div>
+    <div class="sidebar-card" id="attrBars"></div>
+  </div>
+
+  <div>
+    <div class="sidebar-section-title">Level Progress</div>
+    <div class="sidebar-card">
+      <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:6px;">
+        <span>Level <span id="sLevel">1</span></span>
+        <span style="color:var(--muted)"><span id="sXP">0</span> / <span id="sXPMax">100</span> XP</span>
+      </div>
+      <div class="xp-bar-track"><div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div></div>
+    </div>
+  </div>
+
+  <div>
+    <div class="sidebar-section-title">School & Life</div>
+    <div class="sidebar-card">
+      <div class="stat-row"><span class="label">GPA</span><span class="val" id="sGPA">2.5</span></div>
+      <div class="stat-row"><span class="label">Eligible</span><span class="val" id="sEligible">✅ Yes</span></div>
+      <div class="stat-row"><span class="label">Popularity</span><span class="val" id="sPop">50</span></div>
+      <div class="stat-row"><span class="label">Religion</span><span class="val" id="sReligion" style="font-size:0.78rem;">—</span></div>
+    </div>
+  </div>
+</aside>
+
+<!-- Main -->
+<main class="main-area">
+
+  <!-- Stage Background Banner — SVG scene, updates per stage -->
+  <div id="stageBanner" style="width:100%;border-radius:20px;overflow:hidden;margin-bottom:0;line-height:0;"></div>
+
+  <!-- Spotlight -->
+  <div class="spotlight" id="spotlight">
+    <div class="spotlight-label" id="spotLabel">Opening Day</div>
+    <h2 class="spotlight-title" id="spotTitle">Your baseball story starts here.</h2>
+    <p class="spotlight-text" id="spotText">Step onto the field and build your legacy one season at a time.</p>
+  </div>
+
+  <!-- Mini stats -->
+  <div class="mini-stats">
+    <div class="mini-card"><div class="mv" id="mStage">LL</div><div class="mk">Stage</div></div>
+    <div class="mini-card"><div class="mv" id="mAge">8</div><div class="mk">Age</div></div>
+    <div class="mini-card"><div class="mv" id="mGames">0</div><div class="mk">Games</div></div>
+    <div class="mini-card"><div class="mv" id="mSeasons">0</div><div class="mk">Seasons</div></div>
+  </div>
+
+  <!-- Tab nav -->
+  <div class="tab-nav">
+    <button class="tab-btn active" onclick="showTab('tabPlay')">⚾ Play</button>
+    <button class="tab-btn" onclick="showTab('tabBio')">👤 Bio</button>
+    <button class="tab-btn" onclick="showTab('tabFinance')">💰 Finance</button>
+    <button class="tab-btn" onclick="showTab('tabLeague')">🏟 League</button>
+    <button class="tab-btn" onclick="showTab('tabCareer')">📋 Career</button>
+    <button class="tab-btn" onclick="showTab('tabSave')">💾 Save</button>
+  </div>
+
+  <!-- TAB: Play -->
+  <div class="tab-content active" id="tabPlay">
+
+    <!-- Season progress bar -->
+    <div class="panel-card" style="padding:16px 20px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <span style="font-size:0.78rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;">Season Progress</span>
+        <span style="font-size:0.82rem;font-weight:700;" id="seasonProgressLabel">Week 1 · Game 0 / 30</span>
+      </div>
+      <div style="background:rgba(255,255,255,0.06);height:10px;border-radius:999px;overflow:hidden;">
+        <div id="seasonProgressBar" style="height:10px;border-radius:999px;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0%;transition:width 0.3s ease;"></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-top:5px;">
+        <span>Opening Day</span>
+        <span id="seasonMidLabel">Mid-Season</span>
+        <span>Season End</span>
+      </div>
+    </div>
+
+    <!-- Main action buttons -->
+    <div class="panel-card" style="margin-top:0;">
+      <h3 style="margin-bottom:14px;">Actions</h3>
+
+      <!-- Primary game controls - prominent -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <button class="action-btn primary" onclick="advanceWeek()" id="btnAdvWeek" style="padding:16px;font-size:0.95rem;">
+          📅 Advance Week
+        </button>
+        <button class="action-btn" onclick="simulateFullSeason()" id="btnSimSeason" style="padding:16px;font-size:0.95rem;background:linear-gradient(135deg,#1a3a6e,#0f2040);border-color:rgba(59,158,255,0.3);color:var(--accent2);">
+          ⚡ Simulate Full Season
+        </button>
       </div>
 
-      <div>
-        <div class="sidebar-section-title">Physique</div>
-        <div class="sidebar-card">
-          <div class="stat-row"><span class="label">Height</span><span class="val" id="sHeight">4'2"</span></div>
-          <div class="stat-row"><span class="label">Weight</span><span class="val" id="sWeight">75 lbs</span></div>
-          <div class="stat-row"><span class="label">Build</span><span class="val" id="sBuild">Child</span></div>
-          <div style="margin-top:8px;" id="growthNote"></div>
-        </div>
+      <!-- Week detail / off-time picker area -->
+      <div id="weekSummaryBox" style="display:none;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:12px;font-size:0.82rem;line-height:1.7;color:var(--muted);"></div>
+      <div id="offtimePanel" style="display:none;"></div>
+
+      <!-- Secondary controls -->
+      <div class="actions-grid" style="margin-top:4px;">
+        <button class="action-btn" onclick="playGame()">▶ Single Game</button>
+        <button class="action-btn" onclick="endSeason()">📅 Next Season</button>
+        <button class="action-btn blue" onclick="signContract()">✍ Sign Contract</button>
+        <button class="action-btn" onclick="retire()" style="color:var(--muted);">🏁 Retire</button>
       </div>
+    </div>
 
-      <div>
-        <div class="sidebar-section-title">Current Season Stats</div>
-        <div class="sidebar-card">
-          <div class="stat-row"><span class="label">AVG</span><span class="val" id="sAVG">.000</span></div>
-          <div class="stat-row"><span class="label">OPS</span><span class="val" id="sOPS">.000</span></div>
-          <div class="stat-row"><span class="label">HR</span><span class="val" id="sHR">0</span></div>
-          <div class="stat-row"><span class="label">RBI</span><span class="val" id="sRBI">0</span></div>
-          <div class="stat-row"><span class="label">SO</span><span class="val" id="sSO">0</span></div>
-          <div class="stat-row"><span class="label">AB</span><span class="val" id="sAB">0</span></div>
-        </div>
+    <div class="hidden" id="choicesArea" style="margin-top:4px;">
+      <div id="choicesBtns"></div>
+    </div>
+  </div>
+
+  <!-- TAB: Bio -->
+  <div class="tab-content" id="tabBio">
+    <div id="bioTabContent"></div>
+  </div>
+
+  <!-- TAB: Finance -->
+  <div class="tab-content" id="tabFinance">
+    <div class="finance-grid">
+      <div class="finance-card"><h4>Cash</h4><div class="finance-value green" id="fCash">$0</div></div>
+      <div class="finance-card"><h4>Salary / yr</h4><div class="finance-value" id="fSalary">$0</div></div>
+      <div class="finance-card"><h4>Investments</h4><div class="finance-value gold" id="fInv">$0</div></div>
+      <div class="finance-card"><h4>Real Estate</h4><div class="finance-value gold" id="fRE">$0</div></div>
+      <div class="finance-card"><h4>Gold</h4><div class="finance-value" id="fGold">$0</div></div>
+      <div class="finance-card"><h4>Bitcoin</h4><div class="finance-value" id="fBTC">$0</div></div>
+    </div>
+    <div class="panel-card">
+      <h3>Invest Money</h3>
+      <div class="actions-grid">
+        <button class="action-btn blue" onclick="invest('investments')">📈 S&P 500 (50%)</button>
+        <button class="action-btn blue" onclick="invest('realEstate')">🏠 Real Estate (50%)</button>
+        <button class="action-btn blue" onclick="invest('gold')">🥇 Gold (50%)</button>
+        <button class="action-btn blue" onclick="invest('bitcoin')">₿ Bitcoin (50%)</button>
+        <button class="action-btn" onclick="sellAsset('investments')">Sell Investments</button>
+        <button class="action-btn" onclick="sellAsset('realEstate')">Sell Real Estate</button>
+        <button class="action-btn" onclick="sellAsset('gold')">Sell Gold</button>
+        <button class="action-btn" onclick="sellAsset('bitcoin')">Sell Bitcoin</button>
       </div>
-
-      <div>
-        <div class="sidebar-section-title">Attributes</div>
-        <div class="sidebar-card" id="attrBars"></div>
+      <div style="margin-top:14px;">
+        <label>Lifestyle</label>
+        <select id="lifestyleSelect" onchange="setLifestyle(this.value)" style="max-width:200px;">
+          <option value="Budget">Budget ($20k/yr)</option>
+          <option value="Normal" selected>Normal ($50k/yr)</option>
+          <option value="Luxury">Luxury ($200k/yr)</option>
+        </select>
       </div>
+    </div>
+  </div>
 
-      <div>
-        <div class="sidebar-section-title">Level Progress</div>
-        <div class="sidebar-card">
-          <div style="display:flex;justify-content:space-between;font-size:0.82rem;margin-bottom:6px;">
-            <span>Level <span id="sLevel">1</span></span>
-            <span style="color:var(--muted)"><span id="sXP">0</span> / <span id="sXPMax">100</span> XP</span>
-          </div>
-          <div class="xp-bar-track"><div class="xp-bar-fill" id="xpBarFill" style="width:0%"></div></div>
-        </div>
-      </div>
+  <!-- TAB: League -->
+  <div class="tab-content" id="tabLeague">
+    <div class="panel-card" style="margin-bottom:14px;">
+      <h3>Standings</h3>
+      <div id="standingsDiv"></div>
+    </div>
+    <div class="panel-card">
+      <h3>League Leaders</h3>
+      <table class="data-table" id="leadersTable">
+        <thead><tr><th>Category</th><th>Player</th><th>Value</th></tr></thead>
+        <tbody id="leadersTbody"></tbody>
+      </table>
+    </div>
+  </div>
 
-      <div>
-        <div class="sidebar-section-title">School & Life</div>
-        <div class="sidebar-card">
-          <div class="stat-row"><span class="label">GPA</span><span class="val" id="sGPA">2.5</span></div>
-          <div class="stat-row"><span class="label">Eligible</span><span class="val" id="sEligible">✅ Yes</span></div>
-          <div class="stat-row"><span class="label">Popularity</span><span class="val" id="sPop">50</span></div>
-          <div class="stat-row"><span class="label">Religion</span><span class="val" id="sReligion" style="font-size:0.78rem;">—</span></div>
-        </div>
-      </div>
-    </aside>
+  <!-- TAB: Career -->
+  <div class="tab-content" id="tabCareer">
+    <div class="panel-card">
+      <h3>Career History</h3>
+      <div id="careerHistoryDiv"></div>
+    </div>
+  </div>
 
-    <!-- Main -->
-    <main class="main-area">
+  <!-- TAB: Save -->
+  <div class="tab-content" id="tabSave">
+    <div class="panel-card">
+      <h3>Save Slots</h3>
+      <div class="save-grid" id="saveGrid"></div>
+      <p style="font-size:0.8rem;color:var(--muted);margin-top:12px;">Auto-saved on season end.</p>
+    </div>
+  </div>
+</main>
 
-      <!-- Stage Background Banner — SVG scene, updates per stage -->
-      <div id="stageBanner" style="width:100%;border-radius:20px;overflow:hidden;margin-bottom:0;line-height:0;"></div>
-
-      <!-- Spotlight -->
-      <div class="spotlight" id="spotlight">
-        <div class="spotlight-label" id="spotLabel">Opening Day</div>
-        <h2 class="spotlight-title" id="spotTitle">Your baseball story starts here.</h2>
-        <p class="spotlight-text" id="spotText">Step onto the field and build your legacy one season at a time.</p>
-      </div>
-
-      <!-- Mini stats -->
-      <div class="mini-stats">
-        <div class="mini-card"><div class="mv" id="mStage">LL</div><div class="mk">Stage</div></div>
-        <div class="mini-card"><div class="mv" id="mAge">8</div><div class="mk">Age</div></div>
-        <div class="mini-card"><div class="mv" id="mGames">0</div><div class="mk">Games</div></div>
-        <div class="mini-card"><div class="mv" id="mSeasons">0</div><div class="mk">Seasons</div></div>
-      </div>
-
-      <!-- Tab nav -->
-      <div class="tab-nav">
-        <button class="tab-btn active" onclick="showTab('tabPlay')">⚾ Play</button>
-        <button class="tab-btn" onclick="showTab('tabBio')">👤 Bio</button>
-        <button class="tab-btn" onclick="showTab('tabFinance')">💰 Finance</button>
-        <button class="tab-btn" onclick="showTab('tabLeague')">🏟 League</button>
-        <button class="tab-btn" onclick="showTab('tabCareer')">📋 Career</button>
-        <button class="tab-btn" onclick="showTab('tabSave')">💾 Save</button>
-      </div>
-
-      <!-- TAB: Play -->
-      <div class="tab-content active" id="tabPlay">
-
-        <!-- Season progress bar -->
-        <div class="panel-card" style="padding:16px 20px;">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
-            <span style="font-size:0.78rem;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em;">Season Progress</span>
-            <span style="font-size:0.82rem;font-weight:700;" id="seasonProgressLabel">Week 1 · Game 0 / 30</span>
-          </div>
-          <div style="background:rgba(255,255,255,0.06);height:10px;border-radius:999px;overflow:hidden;">
-            <div id="seasonProgressBar" style="height:10px;border-radius:999px;background:linear-gradient(90deg,var(--accent2),var(--accent));width:0%;transition:width 0.3s ease;"></div>
-          </div>
-          <div style="display:flex;justify-content:space-between;font-size:0.72rem;color:var(--muted);margin-top:5px;">
-            <span>Opening Day</span>
-            <span id="seasonMidLabel">Mid-Season</span>
-            <span>Season End</span>
-          </div>
-        </div>
-
-        <!-- Main action buttons -->
-        <div class="panel-card" style="margin-top:0;">
-          <h3 style="margin-bottom:14px;">Actions</h3>
-
-          <!-- Primary game controls - prominent -->
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-            <button class="action-btn primary" onclick="advanceWeek()" id="btnAdvWeek" style="padding:16px;font-size:0.95rem;">
-              📅 Advance Week
-            </button>
-            <button class="action-btn" onclick="simulateFullSeason()" id="btnSimSeason" style="padding:16px;font-size:0.95rem;background:linear-gradient(135deg,#1a3a6e,#0f2040);border-color:rgba(59,158,255,0.3);color:var(--accent2);">
-              ⚡ Simulate Full Season
-            </button>
-          </div>
-
-          <!-- Week detail / off-time picker area -->
-          <div id="weekSummaryBox" style="display:none;background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:12px;font-size:0.82rem;line-height:1.7;color:var(--muted);"></div>
-          <div id="offtimePanel" style="display:none;"></div>
-
-          <!-- Secondary controls -->
-          <div class="actions-grid" style="margin-top:4px;">
-            <button class="action-btn" onclick="playGame()">▶ Single Game</button>
-            <button class="action-btn" onclick="endSeason()">📅 Next Season</button>
-            <button class="action-btn blue" onclick="signContract()">✍ Sign Contract</button>
-            <button class="action-btn" onclick="retire()" style="color:var(--muted);">🏁 Retire</button>
-          </div>
-        </div>
-
-        <div class="hidden" id="choicesArea" style="margin-top:4px;">
-          <div id="choicesBtns"></div>
-        </div>
-      </div>
-
-      <!-- TAB: Bio -->
-      <div class="tab-content" id="tabBio">
-        <div id="bioTabContent"></div>
-      </div>
-
-      <!-- TAB: Finance -->
-      <div class="tab-content" id="tabFinance">
-        <div class="finance-grid">
-          <div class="finance-card"><h4>Cash</h4><div class="finance-value green" id="fCash">$0</div></div>
-          <div class="finance-card"><h4>Salary / yr</h4><div class="finance-value" id="fSalary">$0</div></div>
-          <div class="finance-card"><h4>Investments</h4><div class="finance-value gold" id="fInv">$0</div></div>
-          <div class="finance-card"><h4>Real Estate</h4><div class="finance-value gold" id="fRE">$0</div></div>
-          <div class="finance-card"><h4>Gold</h4><div class="finance-value" id="fGold">$0</div></div>
-          <div class="finance-card"><h4>Bitcoin</h4><div class="finance-value" id="fBTC">$0</div></div>
-        </div>
-        <div class="panel-card">
-          <h3>Invest Money</h3>
-          <div class="actions-grid">
-            <button class="action-btn blue" onclick="invest('investments')">📈 S&P 500 (50%)</button>
-            <button class="action-btn blue" onclick="invest('realEstate')">🏠 Real Estate (50%)</button>
-            <button class="action-btn blue" onclick="invest('gold')">🥇 Gold (50%)</button>
-            <button class="action-btn blue" onclick="invest('bitcoin')">₿ Bitcoin (50%)</button>
-            <button class="action-btn" onclick="sellAsset('investments')">Sell Investments</button>
-            <button class="action-btn" onclick="sellAsset('realEstate')">Sell Real Estate</button>
-            <button class="action-btn" onclick="sellAsset('gold')">Sell Gold</button>
-            <button class="action-btn" onclick="sellAsset('bitcoin')">Sell Bitcoin</button>
-          </div>
-          <div style="margin-top:14px;">
-            <label>Lifestyle</label>
-            <select id="lifestyleSelect" onchange="setLifestyle(this.value)" style="max-width:200px;">
-              <option value="Budget">Budget ($20k/yr)</option>
-              <option value="Normal" selected>Normal ($50k/yr)</option>
-              <option value="Luxury">Luxury ($200k/yr)</option>
-            </select>
-          </div>
-        </div>
-      </div>
-
-      <!-- TAB: League -->
-      <div class="tab-content" id="tabLeague">
-        <div class="panel-card" style="margin-bottom:14px;">
-          <h3>Standings</h3>
-          <div id="standingsDiv"></div>
-        </div>
-        <div class="panel-card">
-          <h3>League Leaders</h3>
-          <table class="data-table" id="leadersTable">
-            <thead><tr><th>Category</th><th>Player</th><th>Value</th></tr></thead>
-            <tbody id="leadersTbody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <!-- TAB: Career -->
-      <div class="tab-content" id="tabCareer">
-        <div class="panel-card">
-          <h3>Career History</h3>
-          <div id="careerHistoryDiv"></div>
-        </div>
-      </div>
-
-      <!-- TAB: Save -->
-      <div class="tab-content" id="tabSave">
-        <div class="panel-card">
-          <h3>Save Slots</h3>
-          <div class="save-grid" id="saveGrid"></div>
-          <p style="font-size:0.8rem;color:var(--muted);margin-top:12px;">Auto-saved on season end.</p>
-        </div>
-      </div>
-    </main>
-
-    <!-- Sidebar Right - Feed -->
-    <aside class="sidebar-right">
-      <div class="sidebar-section-title">Career Feed</div>
-      <div class="feed-list" id="feedList">
-        <p style="font-size:0.82rem;color:var(--muted);">Play a game to start building your story.</p>
-      </div>
-    </aside>
+<!-- Sidebar Right - Feed -->
+<aside class="sidebar-right">
+  <div class="sidebar-section-title">Career Feed</div>
+  <div class="feed-list" id="feedList">
+    <p style="font-size:0.82rem;color:var(--muted);">Play a game to start building your story.</p>
+  </div>
+</aside>
+```
 
   </div>
 </div>
 
 <!-- FULL SEASON SIM OVERLAY -->
+
 <div class="modal-overlay hidden" id="simOverlay" style="z-index:300;">
   <div style="text-align:center;max-width:440px;width:100%;padding:40px 32px;background:var(--surface);border:1px solid var(--border);border-radius:28px;box-shadow:0 32px 80px rgba(0,0,0,0.7);">
     <div style="font-size:3rem;margin-bottom:16px;animation:spin 0.8s linear infinite;display:inline-block;">⚾</div>
@@ -1460,6 +1484,7 @@ select option { background: #1a2332; }
 </div>
 
 <!-- HIGH SCHOOL SELECTION MODAL -->
+
 <div class="modal-overlay hidden" id="hsModal">
   <div class="hs-modal">
     <div class="hs-modal-header">
@@ -1479,6 +1504,7 @@ select option { background: #1a2332; }
 </div>
 
 <!-- COLLEGE RECRUITMENT MODAL -->
+
 <div class="modal-overlay hidden" id="collegeModal">
   <div class="hs-modal college-modal">
     <div class="hs-modal-header">
@@ -1498,6 +1524,7 @@ select option { background: #1a2332; }
 </div>
 
 <!-- MLB DRAFT MODAL -->
+
 <div class="modal-overlay hidden" id="draftModal">
   <div class="hs-modal draft-modal">
     <div id="draftModalBody">
@@ -1510,6 +1537,7 @@ select option { background: #1a2332; }
 </div>
 
 <!-- LL EARLY PROMOTION MODAL -->
+
 <div class="modal-overlay hidden" id="llPromotionModal">
   <div class="stage-advance-modal">
     <div class="stage-advance-banner" style="background:linear-gradient(135deg,#1a3a6e,#f59e0b);">
@@ -1546,6 +1574,7 @@ select option { background: #1a2332; }
 </div>
 
 <!-- EQUIPMENT DISPOSAL MODAL -->
+
 <div class="modal-overlay hidden" id="equipDisposalModal">
   <div class="equip-modal" style="max-width:680px;">
     <div class="equip-modal-header" style="background:linear-gradient(135deg,#1a0a00,#7c3a00);">
@@ -1562,55 +1591,59 @@ select option { background: #1a2332; }
       </div>
     </div>
 
-    <!-- Quick options -->
-    <div style="padding:16px 20px;border-bottom:1px solid var(--border);" id="disposalQuickOptions">
-      <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
-        <div class="os-card" onclick="disposalDonatAll()" style="border-color:rgba(34,197,94,0.25);">
-          <span class="os-emoji">🤝</span>
-          <div class="os-name">Donate All</div>
-          <div class="os-desc">Give everything to a less fortunate teammate. Nothing back — but it matters.</div>
-          <div class="os-fx">
-            <span class="os-fx-tag pos">+12 Reputation</span>
-            <span class="os-fx-tag pos">+10 Popularity</span>
-            <span class="os-fx-tag pos">+8 Confidence</span>
-          </div>
-        </div>
-        <div class="os-card" onclick="disposalSellAll()" style="border-color:rgba(230,160,32,0.25);">
-          <span class="os-emoji">💵</span>
-          <div class="os-name">Sell All</div>
-          <div class="os-desc">Move everything at 40 cents on the dollar. Cash in hand.</div>
-          <div class="os-fx">
-            <span class="os-fx-tag pos" id="disposalSellAllTag">+$0</span>
-          </div>
-        </div>
-        <div class="os-card" onclick="disposalKeepAll()" style="border-color:rgba(59,158,255,0.25);">
-          <span class="os-emoji">📦</span>
-          <div class="os-name">Keep All</div>
-          <div class="os-desc">Store everything for next season. No cost, no gain.</div>
-          <div class="os-fx"><span class="os-fx-tag neu">Carry into next season</span></div>
-        </div>
-        <div class="os-card" onclick="disposalShowPieces()" style="border-color:rgba(167,139,250,0.25);">
-          <span class="os-emoji">🔍</span>
-          <div class="os-name">Go Piece by Piece</div>
-          <div class="os-desc">Choose what to donate, sell, or keep for each item individually.</div>
-          <div class="os-fx"><span class="os-fx-tag neu">Most control</span></div>
-        </div>
+```
+<!-- Quick options -->
+<div style="padding:16px 20px;border-bottom:1px solid var(--border);" id="disposalQuickOptions">
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;">
+    <div class="os-card" onclick="disposalDonatAll()" style="border-color:rgba(34,197,94,0.25);">
+      <span class="os-emoji">🤝</span>
+      <div class="os-name">Donate All</div>
+      <div class="os-desc">Give everything to a less fortunate teammate. Nothing back — but it matters.</div>
+      <div class="os-fx">
+        <span class="os-fx-tag pos">+12 Reputation</span>
+        <span class="os-fx-tag pos">+10 Popularity</span>
+        <span class="os-fx-tag pos">+8 Confidence</span>
       </div>
     </div>
-
-    <!-- Per-piece detail view (hidden by default) -->
-    <div id="disposalPiecesView" style="display:none;padding:16px 20px;overflow-y:auto;max-height:340px;">
-      <div id="disposalPiecesList"></div>
+    <div class="os-card" onclick="disposalSellAll()" style="border-color:rgba(230,160,32,0.25);">
+      <span class="os-emoji">💵</span>
+      <div class="os-name">Sell All</div>
+      <div class="os-desc">Move everything at 40 cents on the dollar. Cash in hand.</div>
+      <div class="os-fx">
+        <span class="os-fx-tag pos" id="disposalSellAllTag">+$0</span>
+      </div>
     </div>
-
-    <!-- Footer note for growth -->
-    <div id="disposalGrowthNote" style="display:none;padding:10px 20px;background:rgba(239,68,68,0.06);border-top:1px solid rgba(239,68,68,0.15);">
-      <span style="font-size:0.8rem;color:var(--red);">📏 <strong>Growth spurt!</strong> Your cleats and batting gloves no longer fit — they will be removed regardless.</span>
+    <div class="os-card" onclick="disposalKeepAll()" style="border-color:rgba(59,158,255,0.25);">
+      <span class="os-emoji">📦</span>
+      <div class="os-name">Keep All</div>
+      <div class="os-desc">Store everything for next season. No cost, no gain.</div>
+      <div class="os-fx"><span class="os-fx-tag neu">Carry into next season</span></div>
+    </div>
+    <div class="os-card" onclick="disposalShowPieces()" style="border-color:rgba(167,139,250,0.25);">
+      <span class="os-emoji">🔍</span>
+      <div class="os-name">Go Piece by Piece</div>
+      <div class="os-desc">Choose what to donate, sell, or keep for each item individually.</div>
+      <div class="os-fx"><span class="os-fx-tag neu">Most control</span></div>
     </div>
   </div>
 </div>
 
+<!-- Per-piece detail view (hidden by default) -->
+<div id="disposalPiecesView" style="display:none;padding:16px 20px;overflow-y:auto;max-height:340px;">
+  <div id="disposalPiecesList"></div>
+</div>
+
+<!-- Footer note for growth -->
+<div id="disposalGrowthNote" style="display:none;padding:10px 20px;background:rgba(239,68,68,0.06);border-top:1px solid rgba(239,68,68,0.15);">
+  <span style="font-size:0.8rem;color:var(--red);">📏 <strong>Growth spurt!</strong> Your cleats and batting gloves no longer fit — they will be removed regardless.</span>
+</div>
+```
+
+  </div>
+</div>
+
 <!-- EQUIPMENT SHOP MODAL -->
+
 <div class="modal-overlay hidden" id="equipModal">
   <div class="equip-modal">
     <div class="equip-modal-header">
@@ -1644,6 +1677,7 @@ select option { background: #1a2332; }
 </div>
 
 <!-- STAGE ADVANCE MODAL -->
+
 <div class="modal-overlay hidden" id="stageAdvanceModal">
   <div class="stage-advance-modal">
     <div class="stage-advance-banner" id="stageAdvanceBanner">
@@ -1664,6 +1698,7 @@ select option { background: #1a2332; }
 </div>
 
 <!-- OFF-SEASON MODAL -->
+
 <div class="modal-overlay hidden" id="offseasonModal">
   <div class="offseason-modal">
     <div class="offseason-header" id="offseasonHeader">
@@ -1682,6 +1717,7 @@ select option { background: #1a2332; }
 </div>
 
 <!-- STORY EVENT MODAL -->
+
 <div class="modal-overlay hidden" id="storyModal">
   <div class="story-modal">
     <div class="story-banner" id="storyBanner">
@@ -1700,6 +1736,7 @@ select option { background: #1a2332; }
 </div>
 
 <!-- RETIREMENT SCREEN -->
+
 <div class="screen" id="screenRetire">
   <div class="retire-screen">
     <span class="trophy">🏆</span>
@@ -1871,6 +1908,10 @@ function createPlayer(){
     storyEventsSeenThisSeason: [], // prevent repeats per season
     gameMissedStory: 0, // games missed due to story events (not injury)
     llDivision: null,   // override for early LL promotion (null = age-based)
+    scholarship: false, // true if earned a scholarship (unlocks free equipment)
+    teamCaptain: false, // true if voted team captain
+    parentsMoney: 0,    // LL: parents' disposable income for equipment
+    playerMoney: 0,     // LL: player's own earned money (allowance/jobs)
   };
 }
 
@@ -1918,6 +1959,14 @@ function applyParents(p){
   for(let k in d.attrs) attributes[k] = Math.max(20,Math.min(99,(attributes[k]||50)+d.attrs[k]));
   if(d.offField) for(let k in d.offField) player.offField[k] = Math.max(0,Math.min(100,(player.offField[k]||50)+d.offField[k]));
   if(PERSONALITY_MAP[p]) player.personality.push(PERSONALITY_MAP[p]);
+
+  // LL Finance: set parents' equipment budget based on family
+  const parentsBudgets = {
+    wealthy:800, middle:200, poor:0, sports:300,
+    strict:150, absent:0, immigrant:50, religious:150, add:200
+  };
+  player.parentsMoney = parentsBudgets[p] || 0;
+  player.playerMoney  = 0; // player starts with no own money
 }
 
 function clampAttrs(){
@@ -2111,10 +2160,15 @@ function simulateOtherTeams(){
       p.stats.AB+=4; p.stats.H+=H; p.stats.HR+=HR; p.stats.RBI+=H+HR;
       updateAdvancedStats(p);
     });
-    // game outcome
     if(Math.random()<0.5) t.wins++; else t.losses++;
   });
-  if(Math.random()<0.5) player.team.wins++; else player.team.losses++;
+  // Popularity and team chemistry boost win odds slightly
+  // High popularity means teammates play harder, better cohesion
+  let pop = Math.min(100, player.popularity || 50);
+  let baseWinOdds = 0.50;
+  let popBonus = (pop - 50) / 50 * 0.12; // up to +12% at max popularity, -12% at min
+  let winOdds = Math.max(0.28, Math.min(0.72, baseWinOdds + popBonus));
+  if(Math.random() < winOdds) player.team.wins++; else player.team.losses++;
 }
 
 // ===================== OFF-TIME ACTIVITY SYSTEM =====================
@@ -2514,7 +2568,13 @@ function applyStoryEffects(fx){
   if(fx.offField) for(let k in fx.offField) player.offField[k]  = Math.max(0,Math.min(100,(player.offField[k]||50)+fx.offField[k]));
   if(fx.grades)   player.grades    = Math.max(0,Math.min(100,player.grades+fx.grades));
   if(fx.pop)      player.popularity= Math.max(0,Math.min(100,player.popularity+fx.pop));
-  if(fx.money)    player.money     = Math.max(0,player.money+fx.money);
+  if(fx.money){
+    player.money = Math.max(0, player.money + fx.money);
+    // In LL, earned money goes to player's own pocket
+    if(careerStage === "Little League" && fx.money > 0){
+      player.playerMoney = (player.playerMoney||0) + fx.money;
+    }
+  }
   // Keep offField.popularity in sync with player.popularity
   if(player.offField) player.offField.popularity = player.popularity;
   if(fx.gamesMiss){
@@ -3244,6 +3304,268 @@ const STORY_EVENTS = [
       }
     ]
   },
+
+  // ───────── AGE 8 SPECIFIC ─────────
+  {
+    id:"age8_first_practice",
+    families:["all"], condition:()=>age===8,
+    title:"First Day of Practice",
+    emoji:"⭐",
+    bannerGradient:"linear-gradient(135deg,#0a2a4a,#0f4c81)",
+    narrative:"You show up to your first Little League practice in your dad's old glove, nervous and excited. The coach asks who wants to take ground balls first. Most kids look away. Your heart is pounding.",
+    choices:[
+      { label:"Volunteer — step up first", desc:"Show no fear on day one.",
+        fx:{offField:{confidence:10,popularity:5,reputation:5}},
+        outcome:"The coach nods and tosses you a grounder. You boot it — but you picked it up and threw anyway. Coach says: 'That's what I want to see.'" },
+      { label:"Watch first — learn before acting", desc:"Study the field, then perform.",
+        fx:{offField:{intelligence:6,confidence:3}, attrs:{fielding:2}},
+        outcome:"You watch five kids boot it before your turn. When you go, you know exactly what to do. Clean pickup, strong throw." }
+    ]
+  },
+  {
+    id:"age8_positions",
+    families:["all"], condition:()=>age===8,
+    title:"Coach Asks What Position You Want",
+    emoji:"🧢",
+    bannerGradient:"linear-gradient(135deg,#14532d,#15803d)",
+    narrative:"Coach asks everyone to write down their position. Most kids say shortstop or pitcher — everyone wants those. You think about what you're actually good at.",
+    choices:[
+      { label:"Pick what looks coolest — pitcher or SS", desc:"Aim for the glamour spots.",
+        fx:{offField:{confidence:5,recklessness:5}},
+        outcome:"Coach laughs — 'Everyone wants those spots.' You earn your keep through hustle." },
+      { label:"Pick based on your actual strengths", desc:"Be honest with yourself.",
+        fx:{attrs:{fielding:3,contact:2}, offField:{intelligence:5,reputation:4}},
+        outcome:"Coach is impressed. 'Most kids your age have no idea.' You start the season in the right spot." }
+    ]
+  },
+
+  // ───────── AGE 9 SPECIFIC ─────────
+  {
+    id:"age9_better_player",
+    families:["all"], condition:()=>age===9,
+    title:"A Better Player Joins the Team",
+    emoji:"⚡",
+    bannerGradient:"linear-gradient(135deg,#1a1a3e,#312e81)",
+    narrative:"A new kid joins midseason who is clearly better than you — faster, stronger arm, hits the ball harder. The coach moves you to make room for him. Some teammates think it's unfair.",
+    choices:[
+      { label:"Challenge yourself — study how he plays", desc:"Turn the rivalry into learning.",
+        fx:{attrs:{contact:2,fielding:2,arm:2}, offField:{intelligence:5,confidence:3}},
+        outcome:"You stay after practice and watch how he positions his feet. By month's end you're competing for the same reps." },
+      { label:"Resent it — this is your team", desc:"Dig in and protect your spot.",
+        fx:{offField:{aggression:8,confidence:-3,recklessness:5}},
+        outcome:"The tension fuels your effort. You hit well for two weeks out of spite. He's still better — but you're close." }
+    ]
+  },
+
+  // ───────── AGE 10 SPECIFIC: TRAVEL BALL ─────────
+  {
+    id:"age10_travel_ball",
+    families:["all"], condition:()=>age===10,
+    title:"Travel Ball Tryout Opportunity",
+    emoji:"🚗",
+    bannerGradient:"linear-gradient(135deg,#1a2a0a,#15803d)",
+    narrative:"A regional travel ball coach watches you play and approaches your parents. There's a spot on the travel team — elite competition, tournaments across the state, better coaching. But it costs time and money, and means leaving your local teammates behind.",
+    choices:[
+      { label:"Try out for the travel team", desc:"Higher level. More exposure.",
+        fx:{attrs:{contact:3,power:2,fielding:2,arm:2,speed:2}, offField:{confidence:6,popularity:-4,reputation:5}},
+        condition:()=>player.money>500 || player.parents==="wealthy" || player.parents==="sports",
+        outcome:"The competition is on another level. You struggle early, grow fast. By summer you're a different player." },
+      { label:"Stay with your local team — loyalty matters", desc:"Your team needs you.",
+        fx:{offField:{popularity:10,reputation:8,confidence:5}},
+        outcome:"Your teammates rally around you. Coach makes you a team captain for the playoff push. Loyalty has weight." },
+      { label:"Try to do both — local and travel", desc:"Grueling but possible.",
+        fx:{attrs:{contact:2,arm:1}, offField:{recklessness:5,confidence:4}, grades:-5},
+        outcome:"Exhausted but experienced. Your grades slip from the travel schedule. But your arm has never been stronger." }
+    ]
+  },
+
+  // ───────── AGE 11 SPECIFIC ─────────
+  {
+    id:"age11_arm_trouble",
+    families:["all"], condition:()=>age===11,
+    title:"Your Arm is Hurting After Overuse",
+    emoji:"💪",
+    bannerGradient:"linear-gradient(135deg,#3d0000,#7f1d1d)",
+    narrative:"You've been throwing every day all summer — practices, games, pickup. Your elbow is sore. Nothing severe, but it aches. The older pitching coach says you might be overthrowing. Your regular coach wants you to pitch this weekend.",
+    choices:[
+      { label:"Rest your arm — say no to pitching this week", desc:"Smart, but disappoints the coach.",
+        fx:{attrs:{arm:2,control:2}, offField:{intelligence:6,confidence:3}},
+        outcome:"You sit out. Three weeks later your arm is fresh and your velocity is up. Pitching coach says you made the right call." },
+      { label:"Push through — teams need you", desc:"Warrior mentality.",
+        fx:{attrs:{arm:-2}, offField:{aggression:5,confidence:5,recklessness:8}},
+        outcome:"You throw a complete game. Arm is worse after. Minor soreness becomes a persistent issue that follows you into next season." },
+      { label:"Learn proper mechanics from the pitching coach", desc:"Fix the root cause.",
+        fx:{attrs:{arm:4,control:3}, offField:{intelligence:8,confidence:4}},
+        outcome:"He teaches you the hip-to-shoulder separation nobody showed you before. Your arm goes from a liability to a weapon." }
+    ]
+  },
+  {
+    id:"age11_former_pro",
+    families:["all"], condition:()=>age===11,
+    title:"Former Big Leaguer Comes to Practice",
+    emoji:"🌟",
+    bannerGradient:"linear-gradient(135deg,#0a1628,#78350f)",
+    narrative:"A former MLB outfielder who grew up in your town is visiting his old field. He stops to watch practice. After, he offers to spend 30 minutes with anyone who wants tips. Most kids freeze up. You step forward.",
+    choices:[
+      { label:"Ask him about hitting mechanics", desc:"Learn from the best.",
+        fx:{attrs:{contact:4,power:3}, offField:{confidence:10,reputation:6}},
+        outcome:"He adjusts your load and tells you to stop trying to kill the ball. 'Just meet it.' Your next three games are your best of the season." },
+      { label:"Ask him about outfield reads and routes", desc:"Become a better fielder.",
+        fx:{attrs:{fielding:4,speed:2,arm:2}, offField:{intelligence:6,reputation:5}},
+        outcome:"He shows you how to read the ball off the bat — the spin, the sound. Your range improves by 20 feet in two weeks." },
+      { label:"Ask him what the biggest mistake young players make is", desc:"Get the real advice.",
+        fx:{offField:{intelligence:10,confidence:6,reputation:8}},
+        outcome:"He says: 'Too many kids play scared. The field shrinks when you stop playing scared.' You carry that forever." }
+    ]
+  },
+
+  // ───────── AGE 12 SPECIFIC ─────────
+  {
+    id:"age12_captain",
+    families:["all"], condition:()=>age===12,
+    title:"Coach Announces Team Captain Vote",
+    emoji:"🏆",
+    bannerGradient:"linear-gradient(135deg,#1a2a0a,#b45309)",
+    narrative:"End of season — Coach says the team votes for next year's captain. You've been one of the better players but captain is about leadership too. A popular kid who hits worse than you is the other main candidate.",
+    choices:[
+      { label:"Campaign for it — talk to teammates", desc:"Put yourself out there.",
+        fx:{offField:{popularity:8,confidence:6,aggression:3}},
+        outcome:()=>{
+          let pop = player.offField?.popularity||50;
+          if(pop >= 65) return "You win the vote. Coach announces it at the year-end dinner. The weight of it settles on your shoulders.";
+          return "It's close — you lose by two votes. The popular kid gets it. But the votes you got were from the right people.";
+        }
+      },
+      { label:"Let the vote happen naturally", desc:"Actions speak louder.",
+        fx:{offField:{reputation:5,confidence:3}},
+        outcome:()=>{
+          let pop = player.offField?.popularity||50; let attr = attributes.contact||50;
+          if(pop >= 60 && attr >= 65) return "They vote for you anyway. Turns out leading by example is the best campaign.";
+          return "You don't get it. But Coach tells you privately: 'You're the leader out there whether you have the title or not.'";
+        }
+      }
+    ]
+  },
+
+  // ───────── AGE 13 SPECIFIC ─────────
+  {
+    id:"age13_showcase",
+    families:["all"], condition:()=>age===13,
+    title:"Regional Showcase — HS Scouts Watching",
+    emoji:"📋",
+    bannerGradient:"linear-gradient(135deg,#0f1f3c,#1e3a8a)",
+    narrative:"The biggest game of your Little League career. High school coaches are in the bleachers with clipboards. This is the moment that determines which schools come calling. You can feel every eye in the park.",
+    choices:[
+      { label:"Play your game — don't overthink it", desc:"Trust your training.",
+        fx:{attrs:{contact:3,power:2,fielding:2}, offField:{confidence:8,reputation:6}},
+        outcome:"You go 3-for-4 with two hard line drives. Two coaches approach your parents after the game." },
+      { label:"Swing for the fences — this is your shot", desc:"Big moment, big swing.",
+        fx:{attrs:{power:5,contact:-2}, offField:{confidence:5,recklessness:8}},
+        outcome:"You hit a towering home run and strike out twice. One coach stays. 'That power is real,' he tells your dad." },
+      { label:"Focus on fundamentals — show all-around skill", desc:"Be the complete player.",
+        fx:{attrs:{fielding:3,arm:3,contact:2,speed:2}, offField:{reputation:8,intelligence:5}},
+        outcome:"Coaches note your baseball IQ. Two private school coaches specifically mention your defense to your parents." }
+    ]
+  },
+
+  // ───────── RELIGIOUS FAMILY — CHURCH PUNISHMENT SYSTEM ─────────
+  {
+    id:"religious_missed_service",
+    families:["religious","strict"], condition:()=>player.religion && player.religion!=="None / Secular" && player.offField?.religiousness>=40,
+    title:"You Missed Sunday Service — Your Parents Found Out",
+    emoji:"⛪",
+    bannerGradient:"linear-gradient(135deg,#1a0a2e,#4c1d95)",
+    narrative:"You skipped church to watch a pro game on TV at a friend's house. Your parents found out through another family at the congregation. The silence at dinner is heavy. They haven't decided your punishment yet.",
+    choices:[
+      { label:"Confess and apologize fully", desc:"Own it. Take what comes.",
+        fx:{offField:{religiousness:5,reputation:5,confidence:3}},
+        outcome:"Your father is quiet for a long time. Then: 'I'm disappointed, not angry. You'll volunteer at the church food pantry this week.' You do. Something shifts." },
+      { label:"Defend your choice — you needed a break", desc:"Stand your ground respectfully.",
+        fx:{offField:{confidence:5,recklessness:5,religiousness:-5}},
+        outcome:"A tense conversation. You're grounded for two weeks — which means missing one practice. But you said your truth and they heard it." },
+      { label:"Say nothing and accept whatever punishment comes", desc:"Silence as penance.",
+        fx:{offField:{religiousness:3,intelligence:3}, gamesMiss:1},
+        outcome:"You miss a game as punishment. You sit at the church on Sunday and actually listen for the first time in months." }
+    ]
+  },
+  {
+    id:"church_big_leaguer",
+    families:["religious","all"], condition:()=>player.religion && player.religion!=="None / Secular",
+    title:"Former MLB Player Gives Testimony at Church",
+    emoji:"🙏",
+    bannerGradient:"linear-gradient(135deg,#1a0a2e,#166534)",
+    narrative:"A former MLB pitcher gives a faith testimony at your church. He played 8 years in the majors. Afterwards he's standing in the lobby. Most people are talking to him about faith. You're the only kid looking at his hands — the grip calluses, the forearm.",
+    choices:[
+      { label:"Wait your turn and ask about baseball", desc:"Respectful but direct.",
+        fx:{attrs:{arm:4,control:4,contact:2}, offField:{confidence:8,reputation:6,religiousness:5}},
+        outcome:"He gives you 20 minutes in the parking lot. Shows you the sinker grip that got him to the show. 'Keep your faith and your work ethic. The rest follows.' You never forget this day." },
+      { label:"Just listen to his testimony — don't push", desc:"Be present in the moment.",
+        fx:{offField:{religiousness:8,reputation:5,confidence:5,intelligence:5}},
+        outcome:"His story — the minor leagues, the doubt, the comeback — hits different when you know what it means to play. You carry his words into your next game." }
+    ]
+  },
+
+  // ───────── POPULARITY / CAPTAIN ─────────
+  {
+    id:"popularity_team_vote",
+    families:["all"], condition:()=>careerStage==="Little League" && age>=11,
+    title:"The Team Picks a Captain for the Tournament",
+    emoji:"🎖️",
+    bannerGradient:"linear-gradient(135deg,#0a1628,#b45309)",
+    narrative:"Coach lets the team pick a captain for the tournament run. It's between you and two other kids. Coach will honor the team's choice. The vote happens tomorrow.",
+    choices:[
+      { label:"Make your case — talk to each teammate tonight", desc:"One-on-one lobbying.",
+        fx:{offField:{popularity:6,confidence:5}},
+        outcome:()=>{
+          let pop = player.offField?.popularity||50;
+          if(pop>=65) return "You win. Captain's armband. Coach gives you the lineup card to hold. Tournament starts Friday.";
+          return "You get votes but not enough. The popular kid edges you out. You're named co-captain — real enough.";
+        }
+      },
+      { label:"Play great today and let it speak for itself", desc:"Earn it on the field.",
+        fx:{attrs:{contact:2,fielding:2}},
+        outcome:()=>{
+          let pop = player.offField?.popularity||50; let c = attributes.contact||50;
+          if(pop>=60 && c>=65) return "After your three-hit game, the vote isn't close. 'The best player should lead' becomes the team consensus.";
+          return "You play well but it's not enough by itself. Baseball ability isn't everything in a popularity vote.";
+        }
+      }
+    ]
+  },
+
+  // ───────── ARM / ACCURACY DEVELOPMENT ─────────
+  {
+    id:"arm_mechanics_coach",
+    families:["all"], condition:()=>age>=9,
+    title:"Pitching Coach Notices Your Mechanics Are Off",
+    emoji:"🎯",
+    bannerGradient:"linear-gradient(135deg,#0a1628,#1e3a6e)",
+    narrative:"The pitching coach pulls you aside after warmups. 'You're throwing with your arm. You need to throw with your whole body.' He shows you the hip rotation, the stride, the follow-through. It feels totally different from what you've been doing.",
+    choices:[
+      { label:"Retrain completely — trust the process", desc:"Takes weeks to feel natural.",
+        fx:{attrs:{arm:5,control:4}, offField:{intelligence:5,confidence:-2}},
+        outcome:"Your velocity drops for two weeks while you adjust. Then it clicks. You're throwing harder than ever with half the effort." },
+      { label:"Blend the new mechanics with your natural motion", desc:"Keep what works, add what's missing.",
+        fx:{attrs:{arm:3,control:2}, offField:{intelligence:4,confidence:4}},
+        outcome:"Compromise proves smart. You keep your accuracy while gaining 3mph. Coach says you're a natural adapter." }
+    ]
+  },
+  {
+    id:"arm_accuracy_drill",
+    families:["all"], condition:()=>age>=10,
+    title:"Extra Throwing Sessions Pay Off",
+    emoji:"📐",
+    bannerGradient:"linear-gradient(135deg,#0a2a1a,#166534)",
+    narrative:"You've been staying after practice throwing into the tire target your coach hung from the fence. Two hundred throws every Tuesday and Thursday after school. No one asked you to. Nobody's watching. Then Coach watches you nail 18-of-20 from 90 feet.",
+    choices:[
+      { label:"Tell Coach it's been the after-practice throwing", desc:"Give credit to the work.",
+        fx:{attrs:{arm:4,control:5}, offField:{reputation:8,confidence:6}},
+        outcome:"Coach announces it to the team: 'This is what separates good players from great ones.' Your arm becomes the team's calling card." },
+      { label:"Shrug and say you've just been working", desc:"Stay humble.",
+        fx:{attrs:{arm:3,control:4}, offField:{reputation:6,confidence:8,popularity:5}},
+        outcome:"Your quiet confidence earns more respect than bragging ever would. Teammates start staying after practice with you." }
+    ]
+  },
 ];
 
 // ── Story Event Engine ──
@@ -3285,18 +3607,25 @@ function triggerStoryEvent(ev){
   pendingStoryEventData = ev;
   player.storyEventsSeenThisSeason.push(ev.id);
 
-  // Populate modal
   let banner = document.getElementById("storyBanner");
   banner.style.background = ev.bannerGradient;
-  document.getElementById("storyTag").textContent = (player.parents.charAt(0).toUpperCase()+player.parents.slice(1)).replace("_"," ") + " Family Event";
+  // Build tag: show age + family or just family
+  let familyLabel = ev.families.includes("all") ? "All Families" :
+    (player.parents.charAt(0).toUpperCase()+player.parents.slice(1)).replace("_"," ") + " Family";
+  let ageLabel = ev.condition && typeof ev.condition === "function" ? " · Age " + age : "";
+  document.getElementById("storyTag").textContent = familyLabel + ageLabel + " Event";
   document.getElementById("storyTitle").textContent = ev.title;
   document.getElementById("storyEmoji").textContent = ev.emoji;
   document.getElementById("storyNarrative").textContent = ev.narrative;
   document.getElementById("storyResult").style.display = "none";
 
-  // Build choice buttons
+  // Filter choices by their own condition (if any), then build buttons
   let letters = ["A","B","C","D"];
-  let choicesHtml = ev.choices.map((c,i)=>{
+  let availableChoices = ev.choices.filter(c => !c.condition || c.condition());
+  // Fallback: always show at least first two if filtering removed too many
+  if(availableChoices.length < 2) availableChoices = ev.choices.slice(0, 2);
+
+  let choicesHtml = availableChoices.map((c, i) => {
     let tags = fxTags(c.fx);
     return `<button class="story-choice-btn" onclick="resolveStoryChoice(${i})">
       <span class="choice-letter">${letters[i]}</span>
@@ -3308,6 +3637,9 @@ function triggerStoryEvent(ev){
     </button>`;
   }).join("");
 
+  // Store filtered choices back so resolveStoryChoice uses the right index
+  ev._filteredChoices = availableChoices;
+
   document.getElementById("storyChoices").innerHTML = choicesHtml;
   document.getElementById("storyModal").classList.remove("hidden");
 }
@@ -3315,10 +3647,12 @@ function triggerStoryEvent(ev){
 function resolveStoryChoice(index){
   let ev = pendingStoryEventData;
   if(!ev) return;
-  let choice = ev.choices[index];
+  // Use filtered choices if available (choices may have been filtered by condition)
+  let choices = ev._filteredChoices || ev.choices;
+  let choice = choices[index];
   if(!choice) return;
 
-  // Special: sneak-out events have a 50% catch chance
+  // Apply effects
   let caughtSneak = false;
   if(choice.label.toLowerCase().includes("sneak") && choice.fxCaught && Math.random()<0.5){
     caughtSneak = true;
@@ -3327,13 +3661,14 @@ function resolveStoryChoice(index){
     applyStoryEffects(choice.fx);
   }
 
-  let outcome = caughtSneak
+  // Outcome can be a string or a function (dynamic based on player stats)
+  let rawOutcome = caughtSneak
     ? "You got caught. " + (choice.fxCaught ? "Serious consequences." : "")
     : choice.outcome;
+  let outcome = typeof rawOutcome === "function" ? rawOutcome() : (rawOutcome || "");
 
-  // Show result
   let resultDiv = document.getElementById("storyResult");
-  let isNeg = (choice.fx.gamesMiss||0)>0 || caughtSneak;
+  let isNeg = (choice.fx && (choice.fx.gamesMiss||0)>0) || caughtSneak;
   resultDiv.innerHTML = `<div class="story-result-card" style="border-color:${isNeg?"rgba(239,68,68,0.3)":"rgba(34,197,94,0.2)"};background:${isNeg?"rgba(239,68,68,0.04)":"rgba(34,197,94,0.04)"}">
     <h4>${isNeg?"⚠️ Outcome":"✅ Outcome"}</h4>
     <p>${outcome}</p>
@@ -3341,13 +3676,26 @@ function resolveStoryChoice(index){
   </div>`;
   resultDiv.style.display = "block";
 
-  // Replace choices with continue button
   document.getElementById("storyChoices").innerHTML = `<button class="action-btn primary" style="width:100%;padding:14px;font-size:1rem;" onclick="closeStoryModal()">Continue →</button>`;
 
-  // Log the event
   player.storyEventLog.push({id:ev.id, title:ev.title, choice:choice.label, outcome, week:currentWeek});
-  addFeed("Story: "+ev.title, choice.label+" — "+outcome.slice(0,60)+"...", isNeg?"warning":"success");
-}
+  addFeed("Story: "+ev.title, choice.label+" — "+(outcome||"").slice(0,60)+"...", isNeg?"warning":"success");
+
+  // Special post-choice effects for certain events
+  if((ev.id === "age12_captain" || ev.id === "popularity_team_vote") && outcome){
+    let won = outcome.toLowerCase().includes("win") || outcome.toLowerCase().includes("captain's armband") || outcome.toLowerCase().includes("vote isn't close");
+    if(won){
+      player.teamCaptain = true;
+      player.offField.confidence = Math.min(100, (player.offField.confidence||50) + 8);
+      player.offField.reputation = Math.min(100, (player.offField.reputation||50) + 6);
+      addFeed("Team Captain!", player.name + " is named team captain! +Confidence, +Reputation", "success");
+    }
+  }
+  // Church missed — punishment deducts a game
+  if(ev.id === "religious_missed_service" && choice.fx && choice.fx.gamesMiss > 0){
+    // Already handled by applyStoryEffects — just surface it
+    showToast("Missed " + choice.fx.gamesMiss + " game(s) as punishment.", "warning");
+  }
 
 function closeStoryModal(){
   document.getElementById("storyModal").classList.add("hidden");
@@ -4042,75 +4390,144 @@ Make the bonuses meaningful and differentiated. Private schools get +grades, sch
 
 function generateFallbackSchools(town, evaluation, isAffluent, isPoor){
   let city = (town||"Austin").split(",")[0].trim();
-  let schools = [
-    {
-      name: `${city} Central High School`,
-      type: "public",
-      location: `Central ${city}`,
-      enrollment: 1650,
-      baseballRecord: "14-12 last season",
-      description: `A solid community school with a dedicated baseball program. The coaching staff develops raw talent well.`,
-      bonuses: [{label:"+2 Contact",color:"blue"},{label:"Community Bond",color:"green"}],
-      attrBonus:{contact:2,power:0,speed:1,fielding:1,arm:0,control:0},
-      moneyEffect:0, gradeBonus:3, popularityBonus:5,
-      flavor:"The hometown school — you'll know everyone in the stands."
-    },
-    {
-      name: `${city} North High School`,
-      type: "public",
-      location: `North ${city}`,
-      enrollment: 1400,
-      baseballRecord: "19-6 last season",
-      description: `Known across the district for its competitive baseball culture. Players from here regularly get college looks.`,
-      bonuses: [{label:"+2 Power",color:"gold"},{label:"+2 Speed",color:"blue"},{label:"College Pipeline",color:"green"}],
-      attrBonus:{contact:0,power:2,speed:2,fielding:0,arm:1,control:0},
-      moneyEffect:0, gradeBonus:0, popularityBonus:8,
-      flavor:"High expectations, high rewards — you'll be pushed."
-    },
-  ];
+  let isImmigrant = player.parents === "immigrant";
+  let isAbsent    = player.parents === "absent";
+  let isStrict    = player.parents === "strict";
+  let isReligious = player.parents === "religious";
+  let isSports    = player.parents === "sports";
+  let isMiddle    = player.parents === "middle";
+  let hasGreatCareer = evaluation.score >= 60;
+  let hasGoodCareer  = evaluation.score >= 30;
+  let goodGrades = player.grades >= 75;
+  let greatGrades = player.grades >= 85;
 
-  if(isAffluent || evaluation.score >= 60){
-    schools.push({
-      name: `St. Michael's Preparatory`,
-      type: "private",
-      location: `${city} area`,
-      enrollment: 620,
-      baseballRecord: "22-4 last season",
-      description: `An elite prep school where the baseball program sends players to top college programs. Small classes, excellent facilities.`,
-      bonuses: [{label:"+3 Fielding",color:"gold"},{label:"+Grades",color:"green"},{label:"College Scout Access",color:"blue"}],
-      attrBonus:{contact:2,power:1,speed:0,fielding:3,arm:2,control:1},
-      moneyEffect: isAffluent ? -25000 : 0,
-      gradeBonus:15, popularityBonus:5,
-      flavor:"The expensive path — but the baseball pedigree is unmatched."
-    });
-  } else if(isPoor && evaluation.score >= 30){
-    schools.push({
-      name: `${city} Academy (Scholarship)`,
-      type: "scholarship",
-      location: `${city}`,
-      enrollment: 900,
-      baseballRecord: "16-10 last season",
-      description: `Awarded a full athletic scholarship based on your Little League performance. This school punches above its weight in baseball.`,
-      bonuses: [{label:"+3 Contact",color:"green"},{label:"Free Tuition",color:"gold"},{label:"+Confidence",color:"blue"}],
-      attrBonus:{contact:3,power:1,speed:1,fielding:2,arm:0,control:0},
-      moneyEffect: 5000, gradeBonus:5, popularityBonus:10,
-      flavor:"They saw something in you before anyone else did."
-    });
+  // Base tuition cost for private schools
+  let annualTuition = 25000;
+
+  // PUBLIC options for wealthy and middle class
+  let publicGoodSports = {
+    name: city + " West High School", type:"public",
+    location:"West " + city, enrollment:1800,
+    baseballRecord:"22-10 last season",
+    description:"A well-funded public school with one of the top baseball programs in the district. Coaches here have sent players to D1 programs. Average academics but excellent athletic facilities.",
+    bonuses:[{label:"+3 Contact",color:"blue"},{label:"+2 Speed",color:"green"},{label:"Strong Coaching",color:"gold"}],
+    attrBonus:{contact:3,power:1,speed:2,fielding:2,arm:1,control:0},
+    moneyEffect:0, gradeBonus:0, popularityBonus:8,
+    flavor:"The baseball pipeline school. If you want to play at the next level, this is the path.",
+    scholarship:false
+  };
+  let publicGoodAcademics = {
+    name: city + " Lakeside High School", type:"public",
+    location:"North " + city, enrollment:2100,
+    baseballRecord:"12-18 last season",
+    description:"Top-ranked academics, strong college prep program. The baseball team is decent but not a powerhouse. You'd be a big fish here.",
+    bonuses:[{label:"+15 GPA",color:"gold"},{label:"+Intelligence",color:"blue"},{label:"College Network",color:"green"}],
+    attrBonus:{contact:1,power:0,speed:0,fielding:1,arm:0,control:1},
+    moneyEffect:0, gradeBonus:15, popularityBonus:5,
+    flavor:"Brains over brawn. You'd dominate academically AND be the team's best player.",
+    scholarship:false
+  };
+
+  // PRIVATE options
+  let privateGreatAth = {
+    name: city + " St. Michael's Academy", type:"private",
+    location:"Central " + city, enrollment:850,
+    baseballRecord:"28-4, Regional Champions",
+    description:"Elite private school with a powerhouse baseball program and strong academics. National scouts visit every spring. Coaches here have produced a dozen pro players.",
+    bonuses:[{label:"+5 Contact",color:"blue"},{label:"+3 Power",color:"gold"},{label:"Pro Exposure",color:"green"}],
+    attrBonus:{contact:5,power:3,speed:2,fielding:3,arm:2,control:2},
+    moneyEffect: isAffluent ? -annualTuition : 0, gradeBonus:8, popularityBonus:10,
+    flavor:"The most direct path to a college scholarship or pro draft.",
+    scholarship:false, tuitionRequired: annualTuition, canScholarship: hasGreatCareer || greatGrades
+  };
+  let privateGreatAcademics = {
+    name: city + " Northbrook Prep", type:"private",
+    location:"North " + city, enrollment:720,
+    baseballRecord:"14-12 last season",
+    description:"Academically prestigious. Ivy League pipeline. Baseball is respectable but secondary. Your GPA here will open doors baseball alone cannot.",
+    bonuses:[{label:"+20 GPA",color:"gold"},{label:"+12 Intelligence",color:"blue"},{label:"Prestige Network",color:"green"}],
+    attrBonus:{contact:2,power:0,speed:0,fielding:1,arm:0,control:1},
+    moneyEffect: isAffluent ? -annualTuition : 0, gradeBonus:20, popularityBonus:5,
+    flavor:"The brains path. If baseball doesn't work out, you'll have options.",
+    scholarship:false, tuitionRequired:annualTuition, canScholarship:greatGrades
+  };
+
+  // PUBLIC options for poor / immigrant / absent
+  let publicPoorSports = {
+    name: city + " Roosevelt High School", type:"public",
+    location:"South " + city, enrollment:2400,
+    baseballRecord:"9-21 last season",
+    description:"Underfunded but passionate. Coach Rodriguez has been here 18 years and knows how to develop raw talent. Academics are tough — you're on your own to stay eligible.",
+    bonuses:[{label:"+2 Power",color:"gold"},{label:"+Speed",color:"green"},{label:"Grit +10",color:"blue"}],
+    attrBonus:{contact:1,power:2,speed:3,fielding:1,arm:2,control:0},
+    moneyEffect:0, gradeBonus:-5, popularityBonus:4,
+    flavor:"The hard way. But the players who make it from here are built different.",
+    scholarship:false
+  };
+  let publicPoorAcademics = {
+    name: city + " Lincoln High School", type:"public",
+    location:"East " + city, enrollment:1900,
+    baseballRecord:"5-25 last season",
+    description:"Struggling academics and a baseball program held together with tape and heart. The team loses a lot but so does everyone here — and most come out with a chip on their shoulder.",
+    bonuses:[{label:"+1 Contact",color:"blue"},{label:"Resilience",color:"green"}],
+    attrBonus:{contact:1,power:0,speed:1,fielding:0,arm:0,control:0},
+    moneyEffect:0, gradeBonus:-8, popularityBonus:2,
+    flavor:"The bottom. Get out of here on ability alone or stay forever.",
+    scholarship:false
+  };
+
+  // SCHOLARSHIP options (talent-based access to private schools for poor players)
+  let scholarshipAth = {...privateGreatAth,
+    type:"scholarship", moneyEffect:5000,
+    description:"Based on your baseball ability, St. Michael's is offering a full athletic scholarship. You've EARNED this.",
+    bonuses:[{label:"Full Scholarship",color:"gold"},{label:"+5 Contact",color:"blue"},{label:"+Prestige",color:"green"}],
+    flavor:"The scholarship kid. You'll have to work twice as hard to prove you belong.",
+    scholarship:true
+  };
+  let scholarshipAcad = {...privateGreatAcademics,
+    type:"scholarship", moneyEffect:3000,
+    description:"Your grades earned you an academic scholarship to Northbrook Prep. Rare for someone from your background.",
+    bonuses:[{label:"Academic Scholarship",color:"gold"},{label:"+20 GPA",color:"blue"},{label:"Prestige Network",color:"green"}],
+    flavor:"Brain got you in where money couldn't. Now prove it.",
+    scholarship:true
+  };
+
+  let schools = [];
+
+  if(isAffluent){
+    // Wealthy: public good sports, private great ath, private great academics
+    schools.push(publicGoodSports);
+    schools.push(privateGreatAth);
+    schools.push(privateGreatAcademics);
+  } else if(isPoor || isImmigrant || isAbsent){
+    // Poor/immigrant/absent: two poor public schools by default
+    schools.push(publicPoorSports);
+    schools.push(publicPoorAcademics);
+    // Unlock private via scholarship if grades or talent strong enough
+    if(hasGreatCareer || greatGrades){
+      schools.push(scholarshipAth);
+    } else if(goodGrades && hasGoodCareer){
+      schools.push(scholarshipAcad);
+    } else {
+      // No scholarship — stuck with what's available
+      schools.push({...publicGoodSports, name: city + " Central High School"});
+    }
   } else {
-    schools.push({
-      name: `${city} West High School`,
-      type: "public",
-      location: `West ${city}`,
-      enrollment: 1200,
-      baseballRecord: "11-15 last season",
-      description: `A rebuilding program looking for players like you to help turn things around. There's opportunity here.`,
-      bonuses: [{label:"+2 Arm",color:"blue"},{label:"Starter Role",color:"gold"}],
-      attrBonus:{contact:0,power:1,speed:0,fielding:0,arm:2,control:2},
-      moneyEffect:0, gradeBonus:5, popularityBonus:3,
-      flavor:"Not flashy — but you'd be a cornerstone from day one."
-    });
+    // Middle class, strict, sports, religious — public good sports + public good academics + private (pays tuition)
+    schools.push(publicGoodSports);
+    schools.push(publicGoodAcademics);
+    if(hasGreatCareer || greatGrades){
+      // Scholarship access
+      schools.push(scholarshipAth);
+    } else {
+      // Must pay tuition
+      let payPrivate = {...privateGreatAth, flavor:"Private school costs $25k/yr. Your family will need to stretch."};
+      schools.push(payPrivate);
+    }
   }
-  return schools;
+
+  // Cap at 3
+  return schools.slice(0,3);
 }
 
 function renderHSOptions(schools, evaluation){
@@ -4120,8 +4537,20 @@ function renderHSOptions(schools, evaluation){
     let cardClass = `hs-card ${s.type}`;
     let bonusesHtml = (s.bonuses||[]).map(b=>`<span class="hs-bonus ${b.color}">${b.label}</span>`).join("");
     let costNote = "";
+    if(s.type === "private" && s.tuitionRequired > 0){
+      if(s.canScholarship){
+        costNote = `<span class="hs-bonus green">🎓 Scholarship Offered</span>`;
+      } else if(player.money >= s.tuitionRequired){
+        costNote = `<span class="hs-bonus" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.25);color:var(--red);">Tuition: $${fmt(s.tuitionRequired)}/yr (you can afford)</span>`;
+      } else {
+        let shortage = s.tuitionRequired - player.money;
+        costNote = `<span class="hs-bonus" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.25);color:var(--red);">Tuition: $${fmt(s.tuitionRequired)}/yr · Need $${fmt(shortage)} more</span>`;
+      }
+    }
     if(s.type === "private" && s.moneyEffect < 0) costNote = `<span class="hs-bonus" style="background:rgba(239,68,68,0.1);border-color:rgba(239,68,68,0.25);color:var(--red);">Cost: $${fmt(Math.abs(s.moneyEffect))}</span>`;
-    if(s.type === "scholarship" && s.moneyEffect > 0) costNote = `<span class="hs-bonus green">+$${fmt(s.moneyEffect)} stipend</span>`;
+    if(s.type === "scholarship") costNote = `<span class="hs-bonus green">🎓 Full Scholarship${s.moneyEffect>0?" +$"+fmt(s.moneyEffect)+" stipend":""}</span>`;
+
+
 
     html += `<div class="${cardClass}" onclick="selectHS(${i})">
       <h3>${s.name}</h3>
@@ -4139,6 +4568,20 @@ function selectHS(index){
   let school = hsChoiceData[index];
   if(!school) return;
 
+  // Handle tuition for private schools
+  if(school.tuitionRequired > 0 && school.type === "private"){
+    if(school.canScholarship){
+      // Free on scholarship
+      player.scholarship = true;
+      addFeed("Scholarship!", `${school.name} offered a full scholarship!`, "success");
+    } else {
+      // Deduct first year tuition
+      player.money = Math.max(0, player.money - school.tuitionRequired);
+      addFeed("Tuition Paid", `$${fmt(school.tuitionRequired)} tuition for ${school.name}`, "warning");
+    }
+  }
+  if(school.scholarship) player.scholarship = true;
+
   // Apply bonuses
   for(let k in school.attrBonus){
     if(school.attrBonus[k] && attributes[k] !== undefined){
@@ -4147,7 +4590,7 @@ function selectHS(index){
   }
   player.grades = Math.min(100, player.grades + (school.gradeBonus||0));
   player.popularity = Math.min(100, player.popularity + (school.popularityBonus||0));
-  if(school.moneyEffect) player.money = Math.max(0, player.money + school.moneyEffect);
+  if(school.moneyEffect && school.type === "scholarship") player.money = Math.max(0, player.money + school.moneyEffect);
   player.eligibility = player.grades >= 60;
 
   player.highSchool = school.name;
@@ -4613,9 +5056,181 @@ function schoolEvent(){
 }
 
 // ===================== CAREER PROGRESSION =====================
-// advanceCareer is now handled automatically via checkForStageAdvance() after off-season
-// Kept as no-op for any legacy calls
 function advanceCareer(){ checkForStageAdvance(); }
+
+let pendingStageAdvance = null;
+
+function checkForStageAdvance(){
+  if(careerStage === "Little League"){
+    if(age >= 14){
+      showStageAdvanceModal({
+        emoji:"🏫", gradient:"linear-gradient(135deg,#1a0a3e,#2563eb)",
+        tag:"LITTLE LEAGUE COMPLETE", title:"Time for High School",
+        subtitle:"Your Little League career is over. The high school fields are waiting.",
+        summaryFn:buildLLSummary,
+        prompt:"Are you ready to start High School Baseball?",
+        btnLabel:"Choose Your High School →", action:"hs"
+      });
+      return true;
+    }
+    return false;
+  }
+  if(careerStage === "High School"){
+    if(age >= 18){
+      showStageAdvanceModal({
+        emoji:"🎓", gradient:"linear-gradient(135deg,#0f2040,#166534)",
+        tag:"HIGH SCHOOL COMPLETE", title:"Draft Day Approaches",
+        subtitle:"Your high school career is over. MLB scouts are watching. What's next?",
+        summaryFn:buildHSSummary,
+        prompt:"Ready to enter the MLB Draft?",
+        btnLabel:"Enter the Draft →", action:"draft_hs"
+      });
+      return true;
+    }
+    return false;
+  }
+  if(careerStage === "College"){
+    collegeSeasonsPlayed++;
+    if(player.nilDeal) player.money += player.nilDeal;
+    if(collegeSeasonsPlayed >= 4){
+      showStageAdvanceModal({
+        emoji:"⚾", gradient:"linear-gradient(135deg,#0d1f3c,#78350f)",
+        tag:"COLLEGE CAREER COMPLETE", title:"Four Years Done",
+        subtitle:"You've played 4 seasons at " + (player.college||"college") + ". The professional draft awaits.",
+        summaryFn:buildCollegeSummary,
+        prompt:"Ready to re-enter the MLB Draft?",
+        btnLabel:"Enter the Draft →", action:"draft_college"
+      });
+      return true;
+    }
+    gamesPlayed = 0;
+    setSpotlight("College Year " + collegeSeasonsPlayed, "Season " + collegeSeasonsPlayed + " of 4 complete.",
+      (4-collegeSeasonsPlayed) + " season(s) remaining at " + (player.college||"college") + ".","success");
+    showToast("College Year " + collegeSeasonsPlayed + "/4 done.","success");
+    return false;
+  }
+  const minorPromotions = {"Single-A":"Double-A","Double-A":"Triple-A","Triple-A":"MLB"};
+  if(minorPromotions[careerStage]){
+    let next = minorPromotions[careerStage];
+    showStageAdvanceModal({
+      emoji:next==="MLB"?"🏟️":"📈",
+      gradient:next==="MLB"?"linear-gradient(135deg,#020408,#7f1d1d)":"linear-gradient(135deg,#0a1628,#5b21b6)",
+      tag:careerStage.toUpperCase() + " SEASON COMPLETE",
+      title:next==="MLB"?"The Call-Up!":"Promoted to " + next,
+      subtitle:next==="MLB"?"You're heading to The Show. Everything you've worked for.":"Strong performance earns a promotion. " + next + " awaits.",
+      summaryFn:()=>buildMinorsSummary(careerStage),
+      prompt:"Ready to start " + (next==="MLB"?"your MLB career?":"playing in " + next + "?"),
+      btnLabel:next==="MLB"?"Enter the MLB →":"Start " + next + " →",
+      action:"minor_promote"
+    });
+    return true;
+  }
+  if(careerStage === "MLB"){
+    setSpotlight("The Show","You're at the top.",`Keep playing MLB seasons or retire.`,"success");
+    return false;
+  }
+  return false;
+}
+
+function buildLLSummary(){
+  let total = (player.career||[]).filter(s=>s.stage==="Little League");
+  let totAB=0,totH=0,totHR=0,totRBI=0;
+  total.forEach(s=>{ totAB+=s.stats?.AB||0; totH+=s.stats?.H||0; totHR+=s.stats?.HR||0; totRBI+=s.stats?.RBI||0; });
+  let avg = totAB>0 ? (totH/totAB).toFixed(3) : ".000";
+  return `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;text-align:center;">
+    <div><div style="font-size:1.4rem;font-weight:900;font-family:'Playfair Display',serif;color:var(--accent);">${avg}</div><div style="font-size:0.72rem;color:var(--muted);">Career AVG</div></div>
+    <div><div style="font-size:1.4rem;font-weight:900;">${totHR}</div><div style="font-size:0.72rem;color:var(--muted);">HR</div></div>
+    <div><div style="font-size:1.4rem;font-weight:900;">${totRBI}</div><div style="font-size:0.72rem;color:var(--muted);">RBI</div></div>
+    <div><div style="font-size:1.4rem;font-weight:900;">${total.length}</div><div style="font-size:0.72rem;color:var(--muted);">Seasons</div></div>
+  </div>`;
+}
+function buildHSSummary(){
+  let total = (player.career||[]).filter(s=>s.stage==="High School");
+  let totAB=0,totH=0,totHR=0,totRBI=0;
+  total.forEach(s=>{ totAB+=s.stats?.AB||0; totH+=s.stats?.H||0; totHR+=s.stats?.HR||0; totRBI+=s.stats?.RBI||0; });
+  let avg = totAB>0 ? (totH/totAB).toFixed(3) : ".000";
+  return `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;text-align:center;">
+    <div><div style="font-size:1.4rem;font-weight:900;font-family:'Playfair Display',serif;color:var(--accent2);">${avg}</div><div style="font-size:0.72rem;color:var(--muted);">HS AVG</div></div>
+    <div><div style="font-size:1.4rem;font-weight:900;">${totHR}</div><div style="font-size:0.72rem;color:var(--muted);">HR</div></div>
+    <div><div style="font-size:1.4rem;font-weight:900;">${totRBI}</div><div style="font-size:0.72rem;color:var(--muted);">RBI</div></div>
+    <div><div style="font-size:1.4rem;font-weight:900;">${total.length}</div><div style="font-size:0.72rem;color:var(--muted);">Seasons</div></div>
+  </div>`;
+}
+function buildCollegeSummary(){
+  let total = (player.career||[]).filter(s=>s.stage==="College");
+  let totAB=0,totH=0,totHR=0,totRBI=0;
+  total.forEach(s=>{ totAB+=s.stats?.AB||0; totH+=s.stats?.H||0; totHR+=s.stats?.HR||0; totRBI+=s.stats?.RBI||0; });
+  let avg = totAB>0 ? (totH/totAB).toFixed(3) : ".000";
+  return `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;text-align:center;">
+    <div><div style="font-size:1.4rem;font-weight:900;font-family:'Playfair Display',serif;color:var(--accent);">${avg}</div><div style="font-size:0.72rem;color:var(--muted);">College AVG</div></div>
+    <div><div style="font-size:1.4rem;font-weight:900;">${totHR}</div><div style="font-size:0.72rem;color:var(--muted);">HR</div></div>
+    <div><div style="font-size:1.4rem;font-weight:900;">${totRBI}</div><div style="font-size:0.72rem;color:var(--muted);">RBI</div></div>
+    <div><div style="font-size:1.4rem;font-weight:900;">${total.length}</div><div style="font-size:0.72rem;color:var(--muted);">Seasons</div></div>
+  </div>`;
+}
+function buildMinorsSummary(stage){
+  let total = (player.career||[]).filter(s=>s.stage===stage);
+  let totAB=0,totH=0,totHR=0,totRBI=0;
+  total.forEach(s=>{ totAB+=s.stats?.AB||0; totH+=s.stats?.H||0; totHR+=s.stats?.HR||0; totRBI+=s.stats?.RBI||0; });
+  let avg = totAB>0 ? (totH/totAB).toFixed(3) : ".000";
+  return `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;text-align:center;">
+    <div><div style="font-size:1.4rem;font-weight:900;font-family:'Playfair Display',serif;color:var(--accent);">${avg}</div><div style="font-size:0.72rem;color:var(--muted);">${stage} AVG</div></div>
+    <div><div style="font-size:1.4rem;font-weight:900;">${totHR}</div><div style="font-size:0.72rem;color:var(--muted);">HR</div></div>
+    <div><div style="font-size:1.4rem;font-weight:900;">${totRBI}</div><div style="font-size:0.72rem;color:var(--muted);">RBI</div></div>
+    <div><div style="font-size:1.4rem;font-weight:900;">${total.length}</div><div style="font-size:0.72rem;color:var(--muted);">Seasons</div></div>
+  </div>`;
+}
+
+function showStageAdvanceModal(cfg){
+  pendingStageAdvance = cfg;
+  let modal = document.getElementById("stageAdvanceModal");
+  if(!modal){ confirmStageAdvance(); return; }
+  document.getElementById("stageAdvanceBanner").style.background = cfg.gradient;
+  document.getElementById("stageAdvanceBannerEmoji").textContent = cfg.emoji;
+  document.getElementById("stageAdvanceTag").textContent = cfg.tag;
+  document.getElementById("stageAdvanceTitle").textContent = cfg.title;
+  document.getElementById("stageAdvanceSubtitle").textContent = cfg.subtitle;
+  document.getElementById("stageAdvanceSummary").innerHTML = cfg.summaryFn ? cfg.summaryFn() : "";
+  document.getElementById("stageAdvancePrompt").textContent = cfg.prompt;
+  document.getElementById("stageAdvanceBtn").textContent = cfg.btnLabel;
+  modal.classList.remove("hidden");
+}
+
+function confirmStageAdvance(){
+  let modal = document.getElementById("stageAdvanceModal");
+  if(modal) modal.classList.add("hidden");
+  let cfg = pendingStageAdvance;
+  pendingStageAdvance = null;
+  if(!cfg) return;
+
+  if(cfg.action === "hs"){
+    careerStage = "High School";
+    gamesPlayed = 0; age = Math.max(age,14);
+    growPlayer(); generateLeague();
+    pendingHSTransition = true;
+    showHSChoiceModal();
+  } else if(cfg.action === "draft_hs"){
+    growPlayer(); triggerMLBDraft(false);
+  } else if(cfg.action === "draft_college"){
+    growPlayer(); triggerMLBDraft(true);
+  } else if(cfg.action === "minor_promote"){
+    const promotions = {"Single-A":"Double-A","Double-A":"Triple-A","Triple-A":"MLB"};
+    let next = promotions[careerStage];
+    careerStage = next;
+    gamesPlayed = 0;
+    age = Math.max(age, STAGE_AGES[careerStage]||age+1);
+    growPlayer(); generateLeague();
+    completeCareerAdvance();
+  }
+}
+
+function postponeStageAdvance(){
+  let modal = document.getElementById("stageAdvanceModal");
+  if(modal) modal.classList.add("hidden");
+  pendingStageAdvance = null;
+  setSpotlight("Take Your Time","You can advance when you're ready.","Continue playing or hit Next Season when done.","success");
+  updateUI();
+}
 
 // ===================== OFF-SEASON SYSTEM =====================
 
@@ -5038,7 +5653,6 @@ function getPlayerEquip(){
 
 function openEquipmentShop(isNewSeason){
   let eq = getPlayerEquip();
-  // Pre-fill pending from current equipment
   equipPendingSelections = {};
   for(let slot of EQUIP_SLOTS){
     if(eq[slot]) equipPendingSelections[slot] = eq[slot];
@@ -5046,12 +5660,27 @@ function openEquipmentShop(isNewSeason){
   equipActiveSlot = "bat";
 
   let freeAll = getEquipFreeLevel() === "all";
+
+  // LL Finance: show parent budget + player's own money separately
+  let isLL = careerStage === "Little League";
+  let parentsBudget = isLL ? (player.parentsMoney||0) : 0;
+  let playerOwn     = isLL ? (player.playerMoney||0)  : 0;
+  let totalBudget   = isLL ? parentsBudget + playerOwn : player.money;
+
   let tagText = isNewSeason ? "PRE-SEASON EQUIPMENT" : "UPGRADE EQUIPMENT";
   document.getElementById("equipModalTag").textContent = tagText;
-  document.getElementById("equipModalSubtitle").textContent = freeAll
+
+  let subtitle = freeAll
     ? "You're in the MLB — all equipment is FREE. Pick the best."
-    : "Choose your gear. Better gear = small stat boosts. Protective gear reduces injuries.";
-  document.getElementById("equipBudgetDisplay").textContent = "$" + fmt(player.money);
+    : isLL
+      ? `Parents' budget: $${fmt(parentsBudget)} · Your money: $${fmt(playerOwn)} · Combined: $${fmt(totalBudget)}`
+      : "Choose your gear. Better gear = small stat boosts. Protective gear reduces injuries.";
+  document.getElementById("equipModalSubtitle").textContent = subtitle;
+
+  // For budget display in the header, show combined LL budget or regular money
+  document.getElementById("equipBudgetDisplay").textContent = isLL
+    ? "$" + fmt(totalBudget) + " total"
+    : "$" + fmt(player.money);
 
   renderEquipTabs();
   renderEquipSlot(equipActiveSlot);
@@ -5120,7 +5749,7 @@ function renderEquipSlot(slot){
 
   let itemCards = cat.items.map((item, idx) => {
     let isFree    = freeAll || (freeBase && item.tier === 1) || isEquipFree(slot, item);
-    let canAfford = isFree || player.money >= item.price;
+    let canAfford = isFree || getEffectiveBudget() >= item.price;
     let isEquipped= current && current.model === item.model && current.brand === item.brand;
     let classes   = `equip-card${isEquipped?" equipped":""}${!canAfford?" cant-afford":""}`;
 
@@ -5168,12 +5797,11 @@ function selectEquipItem(slot, idx){
     // Check affordability (account for other pending purchases)
     if(!isFree){
       let pendingCost = calcPendingCost();
-      // Cost of this item minus what was previously selected for this slot
       let prevSel = equipPendingSelections[slot];
       let prevOwned = prevSel && eq[slot] && prevSel.model===eq[slot].model && prevSel.brand===eq[slot].brand;
       let prevCost  = (prevSel && !prevOwned && prevSel.price>0) ? prevSel.price : 0;
       let newNet = pendingCost - prevCost + item.price;
-      if(newNet > player.money) return; // can't afford
+      if(newNet > getEffectiveBudget()) return; // can't afford
     }
     equipPendingSelections[slot] = item;
   }
@@ -5201,6 +5829,14 @@ function getNextEquipSlot(currentSlot){
   let idx = EQUIP_SLOTS.indexOf(currentSlot);
   if(idx < 0 || idx >= EQUIP_SLOTS.length - 1) return null;
   return EQUIP_SLOTS[idx + 1];
+}
+
+// Get effective spending power (LL uses parent+player combined, otherwise player.money)
+function getEffectiveBudget(){
+  if(careerStage === "Little League"){
+    return (player.parentsMoney||0) + (player.playerMoney||0);
+  }
+  return player.money;
 }
 
 // Calculate total cost of pending new purchases (items not already owned)
@@ -5242,26 +5878,34 @@ function renderEquipSummary(){
 
   // Update cart total display
   let cost = calcPendingCost();
-  let after = player.money - cost;
+  let budget = getEffectiveBudget();
+  let after = budget - cost;
   let cartEl   = document.getElementById("equipCartTotal");
   let afterEl  = document.getElementById("equipBalanceAfter");
   if(cartEl)  cartEl.textContent  = "$" + fmt(cost);
   if(cartEl)  cartEl.style.color  = cost > 0 ? "var(--red)" : "var(--muted)";
   if(afterEl) afterEl.textContent = "$" + fmt(Math.max(0, after));
   if(afterEl) afterEl.style.color = after < 0 ? "var(--red)" : "var(--green)";
-  // Also refresh budget display in header
   let budgetEl = document.getElementById("equipBudgetDisplay");
-  if(budgetEl) budgetEl.textContent = "$" + fmt(player.money);
+  if(budgetEl) budgetEl.textContent = "$" + fmt(budget) + (careerStage==="Little League"?" total":"");
 }
 
 function confirmEquipment(){
   let eq = getPlayerEquip();
   let totalCost = calcPendingCost();
 
-  // Deduct total cost once
-  player.money = Math.max(0, player.money - totalCost);
+  // Deduct from correct budget
+  if(careerStage === "Little League"){
+    // Parents cover first, player covers the rest
+    let parentsPay = Math.min(totalCost, player.parentsMoney||0);
+    let playerPay  = Math.max(0, totalCost - parentsPay);
+    player.parentsMoney = Math.max(0, (player.parentsMoney||0) - parentsPay);
+    player.playerMoney  = Math.max(0, (player.playerMoney||0)  - playerPay);
+    if(playerPay > 0) addFeed("You Chipped In", `You contributed $${fmt(playerPay)} of your own money.`, "success");
+  } else {
+    player.money = Math.max(0, player.money - totalCost);
+  }
 
-  // Apply all pending selections
   for(let slot of EQUIP_SLOTS){
     let sel = equipPendingSelections[slot];
     if(sel) eq[slot] = sel;
@@ -5563,8 +6207,6 @@ function closeDisposal(grewThisSeason){
     showOffseasonModal();
   }
 }
-
-// ── LL Early Promotion Modal ──
 function showLLPromotionModal(){
   let currentDiv = getEffectiveLLDivision();
   let nextDiv    = currentDiv === "8U" ? "11U" : "13U";
@@ -6355,6 +6997,7 @@ function updateUI(){
   let tags = document.getElementById("badgeTags");
   tags.innerHTML = "";
   player.personality.forEach(p=>{ let t=document.createElement("span"); t.className="tag gold"; t.textContent=p; tags.appendChild(t); });
+  if(player.teamCaptain){ let t=document.createElement("span"); t.className="tag gold"; t.textContent="⭐ Captain"; tags.appendChild(t); }
   if(injury.active){ let t=document.createElement("span"); t.className="tag red"; t.textContent=injury.name; tags.appendChild(t); }
   if(steroidUse.suspensions>0){ let t=document.createElement("span"); t.className="tag red"; t.textContent=`${steroidUse.suspensions} susp`; tags.appendChild(t); }
 
@@ -6564,6 +7207,30 @@ function newGame(){
   showScreen("screenStart");
 }
 
+function renderOffFieldBars(){
+  if(!player || !player.offField) return '<p style="color:var(--muted);font-size:0.82rem;">Off-field data not available.</p>';
+  var OF_DEFS = [
+    {key:"popularity",    label:"Popularity",    color:"#f9a8d4", icon:"😎"},
+    {key:"religiousness", label:"Religiousness", color:"#c4b5fd", icon:"🙏"},
+    {key:"intelligence",  label:"Intelligence",  color:"#93c5fd", icon:"📚"},
+    {key:"reputation",    label:"Reputation",    color:"#6ee7b7", icon:"⭐"},
+    {key:"confidence",    label:"Confidence",    color:"#fde68a", icon:"💪"},
+    {key:"aggression",    label:"Aggression",    color:"#fca5a5", icon:"🔥"},
+    {key:"attractiveness",label:"Attractiveness",color:"#fbcfe8", icon:"✨"},
+    {key:"recklessness",  label:"Recklessness",  color:"#fed7aa", icon:"🎲"},
+  ];
+  return OF_DEFS.map(function(d){
+    var v = Math.round(player.offField[d.key]||0);
+    var grade = v>=80?"Elite":v>=65?"High":v>=45?"Average":v>=25?"Low":"Very Low";
+    return '<div class="offfield-row">'
+      + '<span class="offfield-name">' + d.icon + ' ' + d.label + '</span>'
+      + '<div class="offfield-track"><div class="offfield-fill" style="width:'+v+'%;background:'+d.color+';opacity:0.8;"></div></div>'
+      + '<span class="offfield-val" style="color:'+d.color+';">'+v+'</span>'
+      + '<span style="font-size:0.68rem;color:var(--muted);width:48px;text-align:right;">'+grade+'</span>'
+      + '</div>';
+  }).join("");
+}
+
 function renderBioTab(){
   if(!player) return;
   let el = document.getElementById("bioTabContent");
@@ -6752,28 +7419,7 @@ function renderBioTab(){
     <!-- Off-Field Attributes — full width -->
     <div class="bio-section" style="margin-bottom:14px;">
       <div class="bio-section-title">🧠 Off-Field Attributes</div>
-      ${player.offField ? (() => {
-        const OF_DEFS = [
-          {key:"popularity",   label:"Popularity",    color:"#f9a8d4", icon:"😎"},
-          {key:"religiousness",label:"Religiousness",  color:"#c4b5fd", icon:"🙏"},
-          {key:"intelligence", label:"Intelligence",   color:"#93c5fd", icon:"📚"},
-          {key:"reputation",   label:"Reputation",     color:"#6ee7b7", icon:"⭐"},
-          {key:"confidence",   label:"Confidence",     color:"#fde68a", icon:"💪"},
-          {key:"aggression",   label:"Aggression",     color:"#fca5a5", icon:"🔥"},
-          {key:"attractiveness",label:"Attractiveness",color:"#fbcfe8", icon:"✨"},
-          {key:"recklessness", label:"Recklessness",   color:"#fed7aa", icon:"🎲"},
-        ];
-        return OF_DEFS.map(d=>{
-          let v = Math.round(player.offField[d.key]||0);
-          let grade = v>=80?"Elite":v>=65?"High":v>=45?"Average":v>=25?"Low":"Very Low";
-          return `<div class="offfield-row">
-            <span class="offfield-name">${d.icon} ${d.label}</span>
-            <div class="offfield-track"><div class="offfield-fill" style="width:${v}%;background:${d.color};opacity:0.8;"></div></div>
-            <span class="offfield-val" style="color:${d.color};">${v}</span>
-            <span style="font-size:0.68rem;color:var(--muted);width:48px;text-align:right;">${grade}</span>
-          </div>`;
-        }).join("");
-      })() : '<p style="color:var(--muted);font-size:0.82rem;">Off-field data not available.</p>'}
+      ${renderOffFieldBars()}
     </div>
 
     <!-- Career Path Timeline — full width -->
@@ -7218,5 +7864,6 @@ function caProvinceAbbr(name){
 // ===================== INIT =====================
 renderSaveSlots();
 </script>
+
 </body>
 </html>
