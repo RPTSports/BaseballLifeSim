@@ -6694,7 +6694,11 @@ function triggerBirthday(){
     player.money += amount;
   }
 
-  if(amount === 0) return; // absent family — no show if nothing sent
+  if(amount === 0){
+    // Absent family — no gift, no modal. Continue off-season flow directly.
+    showOffseasonModal();
+    return;
+  }
 
   showBirthdayModal(amount, bd.msg);
 }
@@ -6759,7 +6763,7 @@ function showHolidayGiftModal(hol){
     let item = cat.items.find(i => i.tier === 2);
     if(item) offerings.push({slot, item, cat});
   }
-  if(!offerings.length) return;
+  if(!offerings.length){ showOffseasonModal(); return; }
 
   let pick = offerings[Math.floor(Math.random()*offerings.length)];
   let eq = getPlayerEquip();
@@ -6771,7 +6775,7 @@ function showHolidayGiftModal(hol){
       let c = eq[o.slot]; return !c || c.tier < 2;
     });
     if(alt.length) pick = alt[Math.floor(Math.random()*alt.length)];
-    else return; // already well-equipped, no gift needed
+    else { showOffseasonModal(); return; } // already well-equipped, skip gift
   }
 
   eq[pick.slot] = pick.item;
