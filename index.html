@@ -1451,6 +1451,7 @@ select option { background: #1a2332; }
         </div>
 
         <!-- Main action buttons -->
+        <div id="weekControlsArea">
         <div class="panel-card" style="margin-top:0;">
           <h3 style="margin-bottom:14px;">Actions</h3>
 
@@ -1467,15 +1468,33 @@ select option { background: #1a2332; }
 
           <!-- Secondary controls -->
           <div class="actions-grid" style="margin-top:4px;">
-            <button class="action-btn" onclick="playGame()">▶ Single Game</button>
-            <button class="action-btn" onclick="confirmEndSeason()">🏁 End Season</button>
+            <button class="action-btn" id="btnPlayGame" onclick="playGame()">▶ Single Game</button>
+            <button class="action-btn" id="btnEndStartSeason" onclick="endOrStartSeason()">🏁 End Season</button>
             <button class="action-btn blue" onclick="signContract()">✍ Sign Contract</button>
             <button class="action-btn" onclick="retire()" style="color:var(--muted);">🏁 Retire</button>
           </div>
         </div>
+        </div><!-- /weekControlsArea -->
 
         <div class="hidden" id="choicesArea" style="margin-top:4px;">
           <div id="choicesBtns"></div>
+        </div>
+
+        <!-- OFF-SEASON PANEL — shown instead of week controls during off-season -->
+        <div id="offSeasonPanel" style="display:none;margin-top:8px;">
+          <div style="background:linear-gradient(135deg,rgba(34,197,94,0.08),rgba(59,158,255,0.06));border:1px solid rgba(34,197,94,0.2);border-radius:16px;padding:16px 18px;margin-bottom:10px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+              <div>
+                <div style="font-size:0.65rem;font-weight:800;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:3px;" id="offSeasonTag">☀️ OFF-SEASON</div>
+                <div style="font-size:1rem;font-weight:800;color:var(--ink);" id="offSeasonTitle">Age — Off-Season</div>
+                <div style="font-size:0.78rem;color:var(--muted);" id="offSeasonSubtitle">Choose an activity to shape your development.</div>
+              </div>
+              <button class="action-btn primary" style="padding:10px 18px;font-size:0.9rem;white-space:nowrap;" onclick="startNewSeason()">
+                ▶ Start Season
+              </button>
+            </div>
+            <div id="offSeasonActivitiesGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;"></div>
+          </div>
         </div>
       </div>
 
@@ -1973,6 +1992,7 @@ let collegeSeasonsPlayed = 0; // track 4-season college arc
 let currentWeek = 1;          // week within the current season
 let isSimulating = false;     // true while full-season sim is running
 let careerGamesTotal = 0;     // lifetime games played (for injury scaling)
+let isOffSeason = false;      // true while in off-season mode (between seasons)
 
 // ---- Little League sub-divisions ----
 // Player ages through LL year by year: 8 → 9 → 10 → 11 → 12 → 13
@@ -6835,10 +6855,7 @@ function closeEndSeasonConfirm(){
   document.getElementById("endSeasonConfirmModal").classList.add("hidden");
 }
 
-function doEndSeason(){
-  document.getElementById("endSeasonConfirmModal").classList.add("hidden");
-  endSeason();
-}
+
 
 function closeBirthdayModal(){
   document.getElementById("birthdayModal").classList.add("hidden");
@@ -6963,10 +6980,10 @@ function selectOffseasonActivity(key){
   if(act.cost && act.cost > 0) player.money = Math.max(0, player.money - act.cost);
 
   // Apply attribute effects
-  if(act.fx.attrs) for(let k in act.fx.attrs) attributes[k] = Math.max(20,Math.min(99,(attributes[k]||50)+act.fx.attrs[k]));
+  if(act.fx.attrs)    for(let k in act.fx.attrs)    attributes[k] = Math.max(20,Math.min(99,(attributes[k]||50)+act.fx.attrs[k]));
   if(act.fx.offField) for(let k in act.fx.offField) player.offField[k] = Math.max(0,Math.min(100,(player.offField[k]||50)+act.fx.offField[k]));
-  if(act.fx.grades){ player.grades = Math.max(0,Math.min(100,player.grades+(act.fx.grades||0))); player.eligibility = player.grades >= 60; }
-  if(act.fx.pop) player.popularity = Math.max(0,Math.min(100,player.popularity+(act.fx.pop||0)));
+  if(act.fx.grades){  player.grades = Math.max(0,Math.min(100,player.grades+(act.fx.grades||0))); player.eligibility = player.grades >= 60; }
+  if(act.fx.pop)      player.popularity = Math.max(0,Math.min(100,player.popularity+(act.fx.pop||0)));
   clampAttrs(); clampOF();
 
   // Heal injury if applicable
@@ -6981,30 +6998,21 @@ function selectOffseasonActivity(key){
     addFeed("Off-Season Injury","Hurt during " + act.name + ". Will carry into next season.","warning");
   }
 
-  // Log it
   addFeed("Off-Season: " + act.name, act.desc, "success");
   player.storyEventLog.push({id:"offseason_"+key, title:"Off-Season: "+act.name, choice:act.name, outcome:act.desc, week:0});
+  showToast("✅ " + act.name + " — off-season activity locked in!", "success");
 
-  document.getElementById("offseasonModal").classList.add("hidden");
-
-  // Check if this season completes a stage and a transition is needed
-  let advanced = checkForStageAdvance();
-  if(advanced) return; // stage advance modal takes over
-
-  // Check LL age promotion banner (within LL, no stage change yet)
-  let promoMsg = "";
-  if(careerStage === "Little League"){
-    let prevDiv = getLLDivision(age - 1);
-    let curDiv  = getEffectiveLLDivision();
-    if(curDiv !== prevDiv){
-      promoMsg = " · Now in " + curDiv + "!";
-    }
+  // Update the panel to show confirmation and prompt to start season
+  let panel = document.getElementById("offSeasonActivitiesGrid");
+  if(panel){
+    panel.innerHTML = `<div style="grid-column:1/-1;text-align:center;padding:16px;background:rgba(34,197,94,0.08);border:1px solid rgba(34,197,94,0.2);border-radius:12px;">
+      <div style="font-size:1.8rem;margin-bottom:6px;">${act.emoji}</div>
+      <div style="font-size:0.95rem;font-weight:800;color:var(--green);margin-bottom:4px;">${act.name} — Done!</div>
+      <div style="font-size:0.8rem;color:var(--muted);margin-bottom:12px;">${act.desc}</div>
+      <div style="font-size:0.82rem;color:var(--ink);">Press <strong style="color:var(--accent2);">▶ Start Season</strong> when you're ready.</div>
+    </div>`;
   }
-
-  setSpotlight("Off-Season Complete","Gear up for the new season!","Age " + age + " · " + careerStage + promoMsg + " · Choose your equipment.", "success");
-  showToast("Off-season done: " + act.name,"success");
-  // Open equipment shop before the new season starts
-  openEquipmentShop(true);
+  document.getElementById("offSeasonSubtitle").textContent = act.name + " complete. Hit Start Season to begin!";
   updateUI();
 }
 
@@ -7733,28 +7741,8 @@ function closeDisposal(grewThisSeason){
   document.getElementById("equipDisposalModal").classList.add("hidden");
   if(grewThisSeason) invalidateGrowthItems(false);
   applyEquipmentBonuses();
-
-  // Hard rule: cannot play Little League at age 14+
-  // Skip off-season entirely and go straight to HS transition
-  if(careerStage === "Little League" && age >= 14){
-    saveAutoSlot();
-    showStageAdvanceModal({
-      emoji:"🏫", gradient:"linear-gradient(135deg,#1a0a3e,#2563eb)",
-      tag:"LITTLE LEAGUE COMPLETE", title:"Time for High School",
-      subtitle:"You've turned 14. Little League is behind you. The high school fields are waiting.",
-      summaryFn:buildLLSummary,
-      prompt:"Choose your high school to begin the next chapter.",
-      btnLabel:"Choose Your High School →", action:"hs"
-    });
-    return;
-  }
-
-  // Check for early LL promotion before showing off-season
-  if(careerStage === "Little League" && checkLLEarlyPromotion()){
-    showLLPromotionModal();
-  } else {
-    showOffseasonModal();
-  }
+  // Enter off-season mode (handles stage advance, gifts, activity panel)
+  enterOffSeasonMode();
 }
 function showLLPromotionModal(){
   let currentDiv = getEffectiveLLDivision();
@@ -7791,7 +7779,7 @@ function acceptLLPromotion(){
   addFeed("Early Promotion!", player.name + " moves up to " + nextDiv + " ahead of schedule!", "success");
   showToast("Promoted to " + nextDiv + "! ⭐", "success");
   updateUI();
-  showOffseasonModal();
+  renderOffSeasonPanel();
 }
 
 function declineLLPromotion(){
@@ -7801,7 +7789,7 @@ function declineLLPromotion(){
   player.offField.confidence = Math.min(100, (player.offField.confidence||50) + 5);
   showToast("Staying in " + currentDiv + " — big fish energy.", "success");
   updateUI();
-  showOffseasonModal();
+  renderOffSeasonPanel();
 }
 
 
@@ -8005,36 +7993,33 @@ function closeSeasonSummary(){
   showEquipDisposalModal(_pendingDisposalGrew);
 }
 
+function endOrStartSeason(){
+  if(isOffSeason){ startNewSeason(); } else { confirmEndSeason(); }
+}
+
+function doEndSeason(){
+  document.getElementById("endSeasonConfirmModal").classList.add("hidden");
+  endSeason();
+}
+
 function endSeason(){
   let cap = getCurrentSeasonCap();
   let gamesRemaining = cap - gamesPlayed;
-
-  // Auto-sim any remaining games with a notice
   if(gamesRemaining > 0){
-    showToast("Simulating " + gamesRemaining + " remaining game" + (gamesRemaining!==1?"s":"") + "…", "warning");
+    showToast("Simulating " + gamesRemaining + " remaining game" + (gamesRemaining!==1?"s":"") + "\u2026", "warning");
     while(gamesPlayed < cap){ silentGame(); }
-    addFeed("Auto-Simmed", gamesRemaining + " game" + (gamesRemaining!==1?"s":"") + " simulated to close the season.", "warning");
+    addFeed("Auto-Simmed", gamesRemaining + " game" + (gamesRemaining!==1?"s":"") + " simulated.", "warning");
   }
 
-  // Snapshot stats and attributes BEFORE reset/development
   let seasonStats = {...player.stats};
   let attrBefore  = {...attributes};
-
   let awards = generateAwards();
-  player.career.push({
-    stage: careerStage,
-    season: seasonsPlayed+1,
-    stats: seasonStats,
-    awards,
-    age
-  });
+  player.career.push({ stage:careerStage, season:seasonsPlayed+1, stats:seasonStats, awards, age });
   seasonsPlayed++;
 
   let heightBefore = physique.heightIn;
-  developPlayer();   // increments age, grows physique, boosts attrs
+  developPlayer();
   let grewThisSeason = physique.heightIn > heightBefore + 0.5;
-
-  // Snapshot attributes AFTER development to compute gains
   let attrAfter = {...attributes};
 
   updateMarkets();
@@ -8053,16 +8038,130 @@ function endSeason(){
   player.activityCounts = {};
   player.weeksSinceRequired = 0;
   player.baseballBlocked = false;
-  player.hadCoachThisSeason = false;  // reset private coach flag
+  player.hadCoachThisSeason = false;
+
+  let box = document.getElementById("weekSummaryBox");
   if(box) box.style.display="none";
   let offtimeP = document.getElementById("offtimePanel");
   if(offtimeP) offtimeP.style.display="none";
 
   saveAutoSlot();
-  addFeed("Season " + seasonsPlayed + " End", "MVP: " + (awards.MVP||"—") + " · Age " + age + " · Off-season begins.", "success");
+  addFeed("Season " + seasonsPlayed + " End", "MVP: " + (awards.MVP||"\u2014") + " \u00b7 Age " + age + " \u00b7 Off-season begins.", "success");
 
-  // Show season summary → then disposal → then off-season (or HS transition)
-  showSeasonSummary(seasonStats, attrBefore, attrAfter, awards, grewThisSeason);
+  if(grewThisSeason) invalidateGrowthItems(false);
+  _pendingOffSeasonData = {seasonStats, attrBefore, attrAfter, awards};
+  showEquipDisposalModal(grewThisSeason);
+}
+
+let _pendingOffSeasonData = null;
+
+function enterOffSeasonMode(){
+  isOffSeason = true;
+  let advanced = checkForStageAdvance();
+  if(advanced) return;
+
+  // Birthday gift inline
+  if(!player.birthdaySeenThisSeason){
+    player.birthdaySeenThisSeason = true;
+    let bd = BIRTHDAY_MONEY[player.parents] || BIRTHDAY_MONEY.middle;
+    let amount = Math.floor(bd.min + Math.random()*(bd.max - bd.min + 1));
+    if(amount > 0){
+      if(careerStage==="Little League"||careerStage==="High School"){
+        player.playerMoney = (player.playerMoney||0) + amount;
+      } else { player.money += amount; }
+      addFeed("\ud83c\udf82 Birthday!", "Age "+age+" \u2014 $"+fmt(amount)+" birthday gift!", "success");
+      showToast("\ud83c\udf82 Happy Birthday! +$"+fmt(amount), "success");
+    }
+  }
+
+  // Holiday gift inline
+  if(!player.holidayGiftThisSeason){
+    let hol = checkHolidayGift();
+    if(hol){
+      player.holidayGiftThisSeason = true;
+      let offerings = [];
+      for(let slot of EQUIP_SLOTS){
+        if(slot==="bat"||slot==="glove") continue;
+        let cat = EQUIPMENT_CATALOG[slot];
+        let item = cat.items.find(i=>i.tier===2);
+        let current = getPlayerEquip()[slot];
+        if(item&&(!current||current.tier<2)) offerings.push({slot,item,cat});
+      }
+      if(offerings.length){
+        let pick = offerings[Math.floor(Math.random()*offerings.length)];
+        let eq = getPlayerEquip(); eq[pick.slot]=pick.item;
+        player.equipment=eq; applyEquipmentBonuses();
+        addFeed(hol.emoji+" "+hol.name+" Gift!","Received "+pick.item.brand+" "+pick.item.model+".","success");
+        showToast(hol.emoji+" "+hol.name+" \u2014 "+pick.item.model+" equipped!","success");
+      }
+    }
+  }
+
+  // Christmas gift inline
+  if(isXmasEligible()){
+    let gift = pickXmasGift();
+    if(gift){
+      player.xmasGiftThisSeason=true;
+      let eq=getPlayerEquip(); eq[gift.slot]=gift.item;
+      player.equipment=eq; applyEquipmentBonuses();
+      let cat=EQUIPMENT_CATALOG[gift.slot];
+      addFeed("\ud83c\udf84 Christmas Gift!","Received "+gift.item.brand+" "+gift.item.model+" ("+cat.label+").","success");
+      showToast("\ud83c\udf84 Christmas \u2014 "+gift.item.model+" equipped!","success");
+    }
+  }
+
+  if(careerStage==="Little League"&&checkLLEarlyPromotion()){
+    showLLPromotionModal(); return;
+  }
+  renderOffSeasonPanel();
+}
+
+function renderOffSeasonPanel(){
+  let divLabel=(careerStage==="Little League")?getEffectiveLLDivision()+" \u00b7 ":"";
+  document.getElementById("offSeasonTag").textContent="\u2600\ufe0f OFF-SEASON \u00b7 "+divLabel+careerStage.toUpperCase();
+  document.getElementById("offSeasonTitle").textContent="Age "+age+" Off-Season";
+  document.getElementById("offSeasonSubtitle").textContent=
+    "Season "+seasonsPlayed+" complete \u00b7 $"+fmt(player.money)+" available \u00b7 Choose an activity.";
+
+  let available=OFFSEASON_ACTIVITIES.filter(a=>a.families.includes("all")||a.families.includes(player.parents));
+  let locked=OFFSEASON_ACTIVITIES.filter(a=>!a.families.includes("all")&&!a.families.includes(player.parents));
+
+  function card(act,isLocked){
+    let canAfford=!act.cost||player.money>=act.cost;
+    let cantAfford=!isLocked&&!canAfford;
+    let disabled=isLocked||cantAfford;
+    let tags=[];
+    if(act.fx&&act.fx.attrs) Object.entries(act.fx.attrs).forEach(([k,v])=>tags.push(`<span style="font-size:0.62rem;padding:2px 6px;border-radius:999px;background:rgba(34,197,94,0.12);color:var(--green);">${v>0?"+":""}${v} ${k[0].toUpperCase()+k.slice(1)}</span>`));
+    if(act.fx&&act.fx.offField) Object.entries(act.fx.offField).forEach(([k,v])=>tags.push(`<span style="font-size:0.62rem;padding:2px 6px;border-radius:999px;background:rgba(59,158,255,0.1);color:var(--accent2);">${v>0?"+":""}${v} ${k[0].toUpperCase()+k.slice(1)}</span>`));
+    if(act.cost) tags.push(`<span style="font-size:0.62rem;padding:2px 6px;border-radius:999px;background:rgba(239,68,68,0.1);color:var(--red);">-$${fmt(act.cost)}</span>`);
+    let note=isLocked?`<div style="font-size:0.63rem;color:var(--muted);margin-top:3px;">\ud83d\udd12 Other families</div>`:
+             cantAfford?`<div style="font-size:0.63rem;color:var(--red);margin-top:3px;">\ud83d\udcb8 Need $${fmt(act.cost)}</div>`:"";
+    let clickAttr=disabled?"":`onclick="selectOffseasonActivity('${act.key}')"`;
+    return `<div ${clickAttr} style="background:rgba(255,255,255,${disabled?0.02:0.04});border:1px solid ${disabled?"rgba(255,255,255,0.06)":"var(--border)"};border-radius:12px;padding:10px 12px;cursor:${disabled?"not-allowed":"pointer"};opacity:${disabled?0.45:1};transition:border-color 0.15s;" onmouseenter="this.style.borderColor='${disabled?"rgba(255,255,255,0.06)":"var(--accent2)"}'" onmouseleave="this.style.borderColor='${disabled?"rgba(255,255,255,0.06)":"var(--border)"}'">
+      <div style="font-size:1.4rem;margin-bottom:4px;">${act.emoji}</div>
+      <div style="font-size:0.82rem;font-weight:700;color:var(--ink);margin-bottom:3px;">${act.name}</div>
+      <div style="font-size:0.7rem;color:var(--muted);margin-bottom:5px;line-height:1.3;">${act.desc}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:3px;">${tags.join("")}</div>${note}
+    </div>`;
+  }
+
+  document.getElementById("offSeasonActivitiesGrid").innerHTML=
+    available.map(a=>card(a,false)).join("")+locked.map(a=>card(a,true)).join("");
+
+  document.getElementById("offSeasonPanel").style.display="block";
+  let weekArea=document.getElementById("weekControlsArea");
+  if(weekArea) weekArea.style.display="none";
+  updateUI();
+}
+
+function startNewSeason(){
+  if(!isOffSeason) return;
+  isOffSeason=false;
+  document.getElementById("offSeasonPanel").style.display="none";
+  let weekArea=document.getElementById("weekControlsArea");
+  if(weekArea) weekArea.style.display="block";
+  openEquipmentShop(true);
+  updateUI();
 }
 
 function retire(){
@@ -8752,10 +8851,24 @@ function updateUI(){
     let yr = yearNames[age] || ("Year " + (collegeSeasonsPlayed||1));
     stageLabel = yr + " · College";
   }
+  // Show OFF-SEASON badge in the stage pill when in off-season mode
+  if(isOffSeason) stageLabel = "☀️ Off-Season · " + stageLabel;
   document.getElementById("pillStage").textContent = stageLabel;
   document.getElementById("pillAge").textContent = `Age ${age}`;
   document.getElementById("pillMoney").textContent = `$${fmt(player.money)}`;
   document.getElementById("pillStatus").textContent = injury.active ? "🤕 Injured" : physique.heightIn ? `📏 ${inchesToStr(physique.heightIn)}` : "✅ Healthy";
+
+  // Swap End Season ↔ Start Season button
+  let btn = document.getElementById("btnEndStartSeason");
+  if(btn){
+    if(isOffSeason){
+      btn.textContent = "▶ Start Season";
+      btn.classList.add("primary");
+    } else {
+      btn.textContent = "🏁 End Season";
+      btn.classList.remove("primary");
+    }
+  }
 
   // badge
   document.getElementById("badgeNumber").textContent = `#${player.number}`;
