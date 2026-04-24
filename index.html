@@ -68,7 +68,7 @@ body::before {
   font-family: 'Playfair Display', serif;
   font-size: 1.3rem; font-weight: 900; letter-spacing: -0.02em;
   background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 .header-pills { display: flex; gap: 8px; flex-wrap: wrap; }
 .pill {
@@ -94,7 +94,7 @@ body::before {
   font-weight: 900; line-height: 0.92;
   letter-spacing: -0.04em;
   background: linear-gradient(160deg, #fff 20%, #e2eaf4 50%, var(--accent) 100%);
-  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   margin-bottom: 16px;
 }
 .start-hero p {
@@ -1565,6 +1565,9 @@ select option { background: #1a2332; }
           <h3>Save Slots</h3>
           <div class="save-grid" id="saveGrid"></div>
           <p style="font-size:0.8rem;color:var(--muted);margin-top:12px;">Auto-saved on season end.</p>
+          <div style="margin-top:12px;">
+            <button class="action-btn blue" onclick="loadAutoSave()">Load Auto-Save</button>
+          </div>
         </div>
       </div>
     </main>
@@ -6864,112 +6867,8 @@ function closeBirthdayModal(){
 }
 
 function showOffseasonModal(){
-  // 1. Birthday check — trigger once per year
-  if(!player.birthdaySeenThisSeason){
-    player.birthdaySeenThisSeason = true;
-    triggerBirthday();
-    // Birthday modal will call showOffseasonModal() when closed
-    return;
-  }
-
-  // 2. Holiday gift check (religion-based)
-  if(!player.holidayGiftThisSeason){
-    let hol = checkHolidayGift();
-    if(hol){
-      showHolidayGiftModal(hol);
-      // Holiday modal calls showOffseasonModal() when closed
-      return;
-    }
-  }
-
-  // 3. Private coach event (middle class+ families, random)
-  if(rollPrivateCoachEvent()){
-    showPrivateCoachModal();
-    return;
-  }
-
-  // 4. Christmas gift for non-wealthy families (already existing system)
-  if(isXmasEligible()){
-    showXmasModal();
-    return;
-  }
-
-  let newDiv  = getEffectiveLLDivision();
-  let promoted = careerStage === "Little League" && newDiv !== getLLDivision(age - 1);
-
-  let gradients = {
-    "Little League": "linear-gradient(135deg,#1a3a6e,#166534)",
-    "High School":   "linear-gradient(135deg,#1a0a3e,#2d1b5e)",
-    "College":       "linear-gradient(135deg,#0d1f3c,#1e3a6e)",
-    "Single-A":      "linear-gradient(135deg,#0a1a0a,#166534)",
-    "Double-A":      "linear-gradient(135deg,#0a0a2e,#1a2d6e)",
-    "Triple-A":      "linear-gradient(135deg,#1a0a2e,#5b21b6)",
-    "MLB":           "linear-gradient(135deg,#0a0808,#7f1d1d)",
-  };
-  let grad = gradients[careerStage] || gradients["Little League"];
-  document.getElementById("offseasonHeader").style.background = grad;
-  document.getElementById("offseasonTag").textContent = careerStage.toUpperCase() + " · OFF-SEASON";
-  document.getElementById("offseasonTitle").textContent = "Age " + age + " Off-Season";
-
-  let subtitle = "Year " + seasonsPlayed + " is behind you. How will you spend the break?";
-  if(promoted){
-    subtitle = "🎉 Division Promoted! You move up to " + newDiv + " next season!";
-    document.getElementById("offseasonTag").textContent = "PROMOTED TO " + newDiv + "!";
-  }
-  document.getElementById("offseasonSubtitle").textContent = subtitle;
-  document.getElementById("offseasonEmoji").textContent = promoted ? "🏆" : "☀️";
-
-  // ── Build activity grid — group by availability for this family ──
-  let familyLabel = {
-    wealthy:"💰 Wealthy",middle:"🏡 Middle Class",poor:"💪 Working Class",
-    sports:"⚾ Sports Family",strict:"📏 Strict Family",absent:"🏠 Absent Parent",
-    immigrant:"🌍 Immigrant Family",religious:"🙏 Religious Family",add:"⚡ ADD Family"
-  }[player.parents] || "Family";
-
-  let available  = OFFSEASON_ACTIVITIES.filter(a => a.families.includes("all") || a.families.includes(player.parents));
-  let locked     = OFFSEASON_ACTIVITIES.filter(a => !a.families.includes("all") && !a.families.includes(player.parents));
-
-  function buildCard(act, isLocked){
-    let canAfford  = !act.cost || player.money >= act.cost;
-    let cantAfford = !isLocked && !canAfford;
-    let tags = [];
-    if(act.fx.attrs)    Object.entries(act.fx.attrs).forEach(([k,v])=>tags.push({t:(v>0?"+":"")+v+" "+k[0].toUpperCase()+k.slice(1),p:v>0}));
-    if(act.fx.offField) Object.entries(act.fx.offField).forEach(([k,v])=>tags.push({t:(v>0?"+":"")+v+" "+k[0].toUpperCase()+k.slice(1),p:v>0}));
-    if(act.fx.grades)   tags.push({t:(act.fx.grades>0?"+":"")+act.fx.grades+" GPA",p:act.fx.grades>0});
-    if(act.injuryRisk)  tags.push({t:"⚠ Injury risk",p:false});
-    if(act.healInjury)  tags.push({t:"✓ Heals injury",p:true});
-    if(act.cost)        tags.push({t:"-$"+fmt(act.cost)+" cost",p:false});
-    let tagHtml = tags.map(t=>`<span class="os-fx-tag ${t.p?"pos":"neg"}">${t.t}</span>`).join("");
-    let badge = isLocked
-      ? `<span class="os-lock-badge">${act.lockLabel||"Locked"}</span>`
-      : cantAfford
-      ? `<span class="os-lock-badge" style="background:rgba(239,68,68,0.12);color:var(--red);border-color:rgba(239,68,68,0.2);">💸 Need $${fmt(act.cost)}</span>`
-      : "";
-    let cls = "os-card" + (isLocked||cantAfford?" locked":"");
-    let click = (isLocked||cantAfford) ? "" : `onclick="selectOffseasonActivity('${act.key}')"`;
-    return `<div class="${cls}" ${click}>${badge}<span class="os-emoji">${act.emoji}</span><div class="os-name">${act.name}</div><div class="os-desc">${act.desc}</div><div class="os-fx">${tagHtml}</div></div>`;
-  }
-
-  let html = "";
-
-  // Available activities section
-  html += `<div style="font-size:0.68rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding:0 2px;">✅ Available to you</div>`;
-  html += `<div class="offseason-grid" style="margin-bottom:18px;">` + available.map(a=>buildCard(a,false)).join("") + `</div>`;
-
-  // Locked activities — show greyed out with family label
-  if(locked.length){
-    html += `<div style="font-size:0.68rem;font-weight:800;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;padding:0 2px;">🔒 Other families only</div>`;
-    html += `<div class="offseason-grid">` + locked.map(a=>buildCard(a,true)).join("") + `</div>`;
-  }
-
-  let grid = document.getElementById("offseasonGrid");
-  grid.innerHTML = html;
-
-  // Update prompt with family context
-  document.getElementById("offseasonPrompt").textContent =
-    `Choose one activity for the ${familyLabel} off-season. Your choice shapes your development.`;
-
-  document.getElementById("offseasonModal").classList.remove("hidden");
+  // Legacy entry point — redirect to the new state-driven off-season mode
+  enterOffSeasonMode();
 }
 
 function selectOffseasonActivity(key){
@@ -7554,9 +7453,10 @@ function showEquipDisposalModal(grewThisSeason){
   // Check if any paid gear exists at all
   let hasPaidGear = EQUIP_SLOTS.some(s => eq[s] && eq[s].price > 0 && eq[s].tier > 0);
   if(!hasPaidGear){
-    // Nothing to dispose of — skip straight to off-season
+    // Nothing to dispose of — go straight to off-season mode
     if(grewThisSeason) invalidateGrowthItems(true);
-    showOffseasonModal();
+    applyEquipmentBonuses();
+    enterOffSeasonMode();
     return;
   }
 
@@ -8056,6 +7956,7 @@ function endSeason(){
 let _pendingOffSeasonData = null;
 
 function enterOffSeasonMode(){
+  if(isOffSeason) return; // already in off-season, don't re-enter
   isOffSeason = true;
   let advanced = checkForStageAdvance();
   if(advanced) return;
@@ -8299,10 +8200,43 @@ function generateAwards(){
 function lsGet(key){ try{ return localStorage.getItem(key); }catch(e){ return null; } }
 function lsSet(key, val){ try{ localStorage.setItem(key, val); }catch(e){} }
 
+function getSavePayload(){
+  let originalTeam = player.team;
+  if(originalTeam){
+    player.teamName = originalTeam.name;
+    delete player.team;
+  }
+
+  let payload = {
+    player,
+    attributes,
+    teams,
+    careerStage,
+    age,
+    gamesPlayed,
+    seasonsPlayed,
+    lastOutcome,
+    injury,
+    steroidUse,
+    difficulty,
+    eventFeed,
+    physique,
+    collegeSeasonsPlayed,
+    currentWeek,
+  };
+
+  let raw = JSON.stringify(payload);
+
+  if(originalTeam){
+    player.team = originalTeam;
+    delete player.teamName;
+  }
+
+  return raw;
+}
+
 function saveToSlot(n){
-  let savePlayer = Object.assign({}, player, {team: undefined, teamName: player.team ? player.team.name : (player.teamName||"")});
-  let data = {player:savePlayer,attributes,teams,careerStage,age,gamesPlayed,seasonsPlayed,lastOutcome,injury,steroidUse,difficulty,eventFeed,physique,collegeSeasonsPlayed,currentWeek};
-  lsSet("bls_save_" + n, JSON.stringify(data));
+  lsSet("bls_save_" + n, getSavePayload());
   showToast("Saved to Slot " + n + ".","success");
   renderSaveSlots();
 }
@@ -8310,21 +8244,55 @@ function saveToSlot(n){
 function loadGameSlot(n){
   let raw = lsGet("bls_save_" + n);
   if(!raw){ showToast("No save found.","warning"); return; }
-  let d = JSON.parse(raw);
-  player=d.player; attributes=d.attributes; teams=d.teams;
-  careerStage=d.careerStage; age=d.age; gamesPlayed=d.gamesPlayed;
-  seasonsPlayed=d.seasonsPlayed; lastOutcome=d.lastOutcome||"";
-  injury=d.injury||{active:false,name:"",gamesMissed:0,severity:"minor",rehabChosen:false};
-  steroidUse=d.steroidUse||{used:false,suspensions:0};
-  difficulty=d.difficulty;
-  eventFeed=d.eventFeed||[];
-  if(d.physique) physique=d.physique;
-  if(d.collegeSeasonsPlayed!==undefined) collegeSeasonsPlayed=d.collegeSeasonsPlayed;
-  if(d.currentWeek!==undefined) currentWeek=d.currentWeek;
-  if(!player.team && (player.teamName||player.mlbTeam)){
-    let tname = player.teamName || player.mlbTeam;
-    player.team = teams.find(t=>t.name===tname) || teams[0] || null;
+  let d;
+  try { d = JSON.parse(raw); } catch(e){ showToast("Save file is corrupted.","warning"); return; }
+
+  if(d.player){
+    player = d.player;
+    attributes = d.attributes;
+    teams = d.teams;
+    careerStage = d.careerStage;
+    age = d.age;
+    gamesPlayed = d.gamesPlayed;
+    seasonsPlayed = d.seasonsPlayed;
+    lastOutcome = d.lastOutcome || "";
+    injury = d.injury || {active:false,name:"",weeksRemaining:0};
+    steroidUse = d.steroidUse || {used:false,suspensions:0};
+    difficulty = d.difficulty;
+    eventFeed = d.eventFeed || [];
+    if(d.physique) physique = d.physique;
+    if(d.collegeSeasonsPlayed!==undefined) collegeSeasonsPlayed = d.collegeSeasonsPlayed;
+    if(d.currentWeek!==undefined) currentWeek = d.currentWeek;
+  } else {
+    // Legacy save format fallback
+    player = d;
+    attributes = d.attributes || createAttrs();
+    teams = d.teams || [];
+    careerStage = d.careerStage || careerStage;
+    age = d.age || age;
+    gamesPlayed = d.gamesPlayed || 0;
+    seasonsPlayed = d.seasonsPlayed || 0;
+    lastOutcome = d.lastOutcome || "";
+    injury = d.injury || {active:false,name:"",weeksRemaining:0};
+    steroidUse = d.steroidUse || {used:false,suspensions:0};
+    difficulty = d.difficulty || difficulty;
+    eventFeed = d.eventFeed || [];
+    if(d.physique) physique = d.physique;
+    if(d.collegeSeasonsPlayed!==undefined) collegeSeasonsPlayed = d.collegeSeasonsPlayed;
+    if(d.currentWeek!==undefined) currentWeek = d.currentWeek;
   }
+
+  if(player.teamName){
+    let team = teams.find(t=>t.name===player.teamName);
+    if(team){
+      let index = team.players.findIndex(p=>p.name===player.name && p.number===player.number);
+      if(index >= 0) team.players[index] = player;
+      else team.players.push(player);
+      player.team = team;
+    }
+    delete player.teamName;
+  }
+
   if(!player.offField) player.offField = {popularity:50,religiousness:20,intelligence:50,reputation:50,confidence:50,aggression:30,attractiveness:50,recklessness:20};
   if(!player.storyEventLog) player.storyEventLog = [];
   if(!player.storyEventsSeenThisSeason) player.storyEventsSeenThisSeason = [];
@@ -8336,9 +8304,69 @@ function loadGameSlot(n){
 }
 
 function saveAutoSlot(){
-  let savePlayer = Object.assign({}, player, {team: undefined, teamName: player.team ? player.team.name : (player.teamName||"")});
-  let data = {player:savePlayer,attributes,teams,careerStage,age,gamesPlayed,seasonsPlayed,lastOutcome,injury,steroidUse,difficulty,eventFeed,physique,collegeSeasonsPlayed,currentWeek};
-  lsSet("bls_auto", JSON.stringify(data));
+  lsSet("bls_auto", getSavePayload());
+}
+
+function loadAutoSave(){
+  let raw = lsGet("bls_auto");
+  if(!raw){ showToast("No auto-save found.","warning"); return; }
+  let d;
+  try { d = JSON.parse(raw); } catch(e){ showToast("Auto-save file is corrupted.","warning"); return; }
+
+  if(d.player){
+    player = d.player;
+    attributes = d.attributes;
+    teams = d.teams;
+    careerStage = d.careerStage;
+    age = d.age;
+    gamesPlayed = d.gamesPlayed;
+    seasonsPlayed = d.seasonsPlayed;
+    lastOutcome = d.lastOutcome || "";
+    injury = d.injury || {active:false,name:"",weeksRemaining:0};
+    steroidUse = d.steroidUse || {used:false,suspensions:0};
+    difficulty = d.difficulty;
+    eventFeed = d.eventFeed || [];
+    if(d.physique) physique = d.physique;
+    if(d.collegeSeasonsPlayed!==undefined) collegeSeasonsPlayed = d.collegeSeasonsPlayed;
+    if(d.currentWeek!==undefined) currentWeek = d.currentWeek;
+  } else {
+    // Legacy save format fallback
+    player = d;
+    attributes = d.attributes || createAttrs();
+    teams = d.teams || [];
+    careerStage = d.careerStage || careerStage;
+    age = d.age || age;
+    gamesPlayed = d.gamesPlayed || 0;
+    seasonsPlayed = d.seasonsPlayed || 0;
+    lastOutcome = d.lastOutcome || "";
+    injury = d.injury || {active:false,name:"",weeksRemaining:0};
+    steroidUse = d.steroidUse || {used:false,suspensions:0};
+    difficulty = d.difficulty || difficulty;
+    eventFeed = d.eventFeed || [];
+    if(d.physique) physique = d.physique;
+    if(d.collegeSeasonsPlayed!==undefined) collegeSeasonsPlayed = d.collegeSeasonsPlayed;
+    if(d.currentWeek!==undefined) currentWeek = d.currentWeek;
+  }
+
+  if(player.teamName){
+    let team = teams.find(t=>t.name===player.teamName);
+    if(team){
+      let index = team.players.findIndex(p=>p.name===player.name && p.number===player.number);
+      if(index >= 0) team.players[index] = player;
+      else team.players.push(player);
+      player.team = team;
+    }
+    delete player.teamName;
+  }
+
+  if(!player.offField) player.offField = {popularity:50,religiousness:20,intelligence:50,reputation:50,confidence:50,aggression:30,attractiveness:50,recklessness:20};
+  if(!player.storyEventLog) player.storyEventLog = [];
+  if(!player.storyEventsSeenThisSeason) player.storyEventsSeenThisSeason = [];
+  if(!player.equipment) player.equipment = getDefaultEquipment();
+  applyEquipmentBonuses();
+  showScreen("screenGame");
+  updateUI();
+  showToast("Auto-save loaded!","success");
 }
 
 // ===================== UI HELPERS =====================
@@ -8413,14 +8441,29 @@ function renderSaveSlots(){
   grid.innerHTML = [1,2,3].map(n=>{
     let raw = lsGet(`bls_save_${n}`);
     let info = "Empty";
-    if(raw){ try{ let d = JSON.parse(raw); info = `${d.player?.name||"??"} — ${d.careerStage||"??"} S${d.seasonsPlayed||0}`; }catch(e){} }
+    let hasSave = false;
+    if(raw){
+      try{
+        let d = JSON.parse(raw);
+        info = `${d.player?.name||"??"} — ${d.careerStage||"??"} S${d.seasonsPlayed||0}`;
+        hasSave = !!d.player;
+      }catch(e){}
+    }
     return `<div class="save-slot">
       <div class="slot-label">Slot ${n}</div>
       <div class="slot-data" style="font-size:0.78rem;color:var(--muted);margin-bottom:8px;">${info}</div>
       <button class="action-btn primary" style="width:100%;font-size:0.78rem;padding:7px;" onclick="saveToSlot(${n})">Save</button>
       <button class="action-btn blue" style="width:100%;font-size:0.78rem;padding:7px;margin-top:4px;" onclick="loadGameSlot(${n})">Load</button>
+      <button class="action-btn" style="width:100%;font-size:0.78rem;padding:7px;margin-top:4px;" onclick="deleteSaveSlot(${n})" ${hasSave?"":"disabled"}>Delete</button>
     </div>`;
   }).join("");
+}
+
+function deleteSaveSlot(n){
+  if(!confirm(`Delete save slot ${n}? This cannot be undone.`)) return;
+  try{ localStorage.removeItem(`bls_save_${n}`); }catch(e){}
+  showToast(`Deleted save slot ${n}.`,`warning`);
+  renderSaveSlots();
 }
 
 // ===================== STAGE BACKGROUND BANNERS =====================
