@@ -1293,6 +1293,21 @@ select option { background: #1a2332; }
             <input id="inputNum" placeholder="21" type="number" min="1" max="99">
           </div>
           <div>
+            <label>Throwing Arm</label>
+            <select id="inputThrow">
+              <option value="Right" selected>Right-Handed</option>
+              <option value="Left">Left-Handed</option>
+            </select>
+          </div>
+          <div>
+            <label>Hitting Side</label>
+            <select id="inputHitting">
+              <option value="Right" selected>Right-Handed Hitter</option>
+              <option value="Left">Left-Handed Hitter</option>
+              <option value="Switch">Switch Hitter</option>
+            </select>
+          </div>
+          <div>
             <label>Difficulty</label>
             <select id="inputDiff">
               <option value="Easy">Easy</option>
@@ -2182,6 +2197,7 @@ function createPlayer(){
     name:"", town:"", townFull:"", zip:"", lat:null, lng:null,
     state:"", country:"USA", isCanada:false,
     position:"SS", number:21,
+    throwingArm:"Right", hittingType:"Right",
     archetype:"athletic", parents:"middle",
     personality:[], rivalry:null,
     stats:{AB:0,H:0,HR:0,RBI:0,SO:0,AVG:0,OBP:0,SLG:0,OPS:0},
@@ -9097,6 +9113,9 @@ function startGame(){
   player.parents = document.getElementById("inputParents").value;
   difficulty = document.getElementById("inputDiff").value;
 
+  player.throwingArm = document.getElementById("inputThrow").value;
+  player.hittingType = document.getElementById("inputHitting").value;
+
   applyArchetype(player.archetype);
   applyParents(player.parents);
   clampAttrs();
@@ -9114,8 +9133,10 @@ function startGame(){
   showScreen("screenGame");
   let relEmoji = (RELIGIONS.find(r=>r.key===player.religion)||{emoji:"🙏"}).emoji;
   let relText = player.religion && player.religion !== "None / Secular" ? ` · ${relEmoji} ${player.religion}` : "";
+  let throwStr = player.throwingArm === "Left" ? "🤛 Left thrower" : "Right thrower";
+  let hitStr = player.hittingType === "Left" ? "🤛 Lefty batter" : player.hittingType === "Switch" ? "🔄 Switch hitter" : "Righty batter";
   setSpotlight("Career Begins", `${player.name} is ready.`, `A ${player.position} from ${player.town} starts the climb at ${careerStage}.${relText}`, "success");
-  addFeed("Career Starts", `${player.name} (#${player.number}) — ${player.archetype} — ${player.town}${relText}`, "success");
+  addFeed("Career Starts", `${player.name} (#${player.number}) — ${player.archetype} · ${throwStr} · ${hitStr} — ${player.town}${relText}`, "success");
   if(player.religion && player.religion !== "None / Secular"){
     addFeed("Background", `Raised ${player.religion} in ${player.town}. ${player.religionNote||""}`, "success");
   }
