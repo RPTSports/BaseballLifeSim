@@ -68,7 +68,7 @@ body::before {
   font-family: 'Playfair Display', serif;
   font-size: 1.3rem; font-weight: 900; letter-spacing: -0.02em;
   background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
-  background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
 }
 .header-pills { display: flex; gap: 8px; flex-wrap: wrap; }
 .pill {
@@ -94,7 +94,7 @@ body::before {
   font-weight: 900; line-height: 0.92;
   letter-spacing: -0.04em;
   background: linear-gradient(160deg, #fff 20%, #e2eaf4 50%, var(--accent) 100%);
-  background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
   margin-bottom: 16px;
 }
 .start-hero p {
@@ -1205,6 +1205,7 @@ select option { background: #1a2332; }
     <span class="pill" id="pillAge">Age 8</span>
     <span class="pill" id="pillMoney">$0</span>
     <span class="pill" id="pillStatus">Healthy</span>
+    <span class="pill" onclick="openTrophyRoom()" style="cursor:pointer;" title="Trophy Room">🏆</span>
   </div>
 </header>
 
@@ -1277,7 +1278,7 @@ select option { background: #1a2332; }
           <div>
             <label>Position</label>
             <select id="inputPos">
-              <option value="P">Pitcher (P)</option>
+              <option value="P" disabled style="display:none;">Pitcher (P) — Coming Soon</option>
               <option value="C">Catcher (C)</option>
               <option value="1B">First Base (1B)</option>
               <option value="2B">Second Base (2B)</option>
@@ -1293,19 +1294,19 @@ select option { background: #1a2332; }
             <input id="inputNum" placeholder="21" type="number" min="1" max="99">
           </div>
           <div>
-            <label>Throwing Arm</label>
-            <select id="inputThrow">
-              <option value="Right" selected>Right-Handed</option>
-              <option value="Left">Left-Handed</option>
-            </select>
+            <label>Bats</label>
+            <div style="display:flex;gap:6px;margin-top:4px;">
+              <button id="batsR" onclick="selectBats('R',this)" class="action-btn" style="flex:1;padding:8px 4px;font-size:0.88rem;font-weight:800;background:rgba(59,158,255,0.2);border-color:var(--accent2);color:var(--accent2);">R</button>
+              <button id="batsL" onclick="selectBats('L',this)" class="action-btn" style="flex:1;padding:8px 4px;font-size:0.88rem;font-weight:800;">L</button>
+              <button id="batsS" onclick="selectBats('S',this)" class="action-btn" style="flex:1;padding:8px 4px;font-size:0.88rem;font-weight:800;">S</button>
+            </div>
           </div>
           <div>
-            <label>Hitting Side</label>
-            <select id="inputHitting">
-              <option value="Right" selected>Right-Handed Hitter</option>
-              <option value="Left">Left-Handed Hitter</option>
-              <option value="Switch">Switch Hitter</option>
-            </select>
+            <label>Throws</label>
+            <div style="display:flex;gap:6px;margin-top:4px;">
+              <button id="throwsR" onclick="selectThrows('R',this)" class="action-btn" style="flex:1;padding:8px 4px;font-size:0.88rem;font-weight:800;background:rgba(59,158,255,0.2);border-color:var(--accent2);color:var(--accent2);">R</button>
+              <button id="throwsL" onclick="selectThrows('L',this)" class="action-btn" style="flex:1;padding:8px 4px;font-size:0.88rem;font-weight:800;">L</button>
+            </div>
           </div>
           <div>
             <label>Difficulty</label>
@@ -1324,7 +1325,7 @@ select option { background: #1a2332; }
           <button class="arch-btn selected" data-arch="athletic" onclick="selectArch(this)">⚡ Athletic<br><small>+Speed +Field</small></button>
           <button class="arch-btn" data-arch="power" onclick="selectArch(this)">💪 Power Hitter<br><small>+Power -Speed</small></button>
           <button class="arch-btn" data-arch="contact" onclick="selectArch(this)">🎯 Contact<br><small>+Contact +Field</small></button>
-          <button class="arch-btn" data-arch="pitcher" onclick="selectArch(this)">🔥 Ace Pitcher<br><small>+Control +Arm</small></button>
+          <button class="arch-btn" data-arch="pitcher" onclick="selectArch(this)" style="display:none;">🔥 Ace Pitcher<br><small>+Control +Arm</small></button>
           <button class="arch-btn" data-arch="star" onclick="selectArch(this)">⭐ Born Star<br><small>+All Stats</small></button>
           <button class="arch-btn" data-arch="scrappy" onclick="selectArch(this)">😤 Scrappy<br><small>+Contact +Hustle</small></button>
         </div>
@@ -1580,9 +1581,6 @@ select option { background: #1a2332; }
           <h3>Save Slots</h3>
           <div class="save-grid" id="saveGrid"></div>
           <p style="font-size:0.8rem;color:var(--muted);margin-top:12px;">Auto-saved on season end.</p>
-          <div style="margin-top:12px;">
-            <button class="action-btn blue" onclick="loadAutoSave()">Load Auto-Save</button>
-          </div>
         </div>
       </div>
     </main>
@@ -1659,6 +1657,110 @@ select option { background: #1a2332; }
         <span class="spin">⚾</span>
         <p>MLB Draft in progress…</p>
       </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ACHIEVEMENT POPUP MODAL -->
+<div class="modal-overlay hidden" id="achievementModal" style="z-index:10000;">
+  <div style="background:#08080f;border:2px solid #fbbf24;border-radius:4px;max-width:480px;width:97vw;overflow:hidden;box-shadow:0 0 60px rgba(251,191,36,0.4),0 0 120px rgba(251,191,36,0.15),0 40px 120px rgba(0,0,0,0.98);animation:slideUp 0.3s cubic-bezier(0.34,1.56,0.64,1);font-family:monospace;">
+    <!-- Arcade-style top bar -->
+    <div style="background:#000;padding:6px 12px;display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid #333;">
+      <span style="font-size:0.6rem;font-weight:900;letter-spacing:0.18em;color:#555;" id="achStageLabel">LITTLE LEAGUE</span>
+      <span style="font-size:0.65rem;font-weight:900;letter-spacing:0.12em;color:#fbbf24;animation:achBlink 1s step-end infinite;">★ ACHIEVEMENT UNLOCKED ★</span>
+      <span style="font-size:0.6rem;color:#333;">⚾</span>
+    </div>
+    <!-- Art canvas — full width, tall -->
+    <div style="position:relative;background:#000;line-height:0;">
+      <canvas id="achCanvas" width="480" height="280" style="display:block;width:100%;image-rendering:pixelated;image-rendering:crisp-edges;"></canvas>
+      <!-- Title overlay at bottom of canvas -->
+      <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.92));padding:20px 16px 12px;text-align:center;">
+        <div style="font-size:1.5rem;font-weight:900;color:#fff;font-family:'Playfair Display',serif;line-height:1.1;text-shadow:0 2px 8px rgba(0,0,0,0.8);" id="achTitle">Achievement</div>
+        <div style="font-size:0.78rem;color:rgba(255,255,255,0.75);margin-top:3px;" id="achDesc">...</div>
+      </div>
+    </div>
+    <!-- Stats bar -->
+    <div style="background:#0a0a14;padding:10px 16px;border-top:1px solid #1a1a2a;display:flex;justify-content:space-between;align-items:center;">
+      <div id="achStats" style="font-size:0.72rem;color:#888;font-family:monospace;"></div>
+      <button onclick="closeAchievement()" style="background:#fbbf24;border:none;border-radius:3px;color:#000;font-size:0.78rem;font-weight:900;padding:8px 18px;cursor:pointer;font-family:monospace;letter-spacing:0.06em;box-shadow:0 2px 0 #92400e;">
+        CONTINUE →
+      </button>
+    </div>
+    <!-- View in trophy room link -->
+    <div style="background:#000;padding:5px;text-align:center;border-top:1px solid #111;">
+      <button onclick="closeAchievement();setTimeout(openTrophyRoom,500)" style="background:none;border:none;color:#555;font-size:0.6rem;font-family:monospace;cursor:pointer;letter-spacing:0.08em;">VIEW TROPHY ROOM →</button>
+    </div>
+  </div>
+</div>
+<style>
+@keyframes achBlink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+@keyframes achFirework { 0%{transform:scale(0);opacity:1} 100%{transform:scale(1);opacity:0} }
+</style>
+
+<!-- TROPHY ROOM MODAL -->
+<div class="modal-overlay hidden" id="trophyRoomModal" style="z-index:9998;">
+  <div class="equip-modal" style="max-width:740px;">
+    <div class="equip-modal-header" style="background:linear-gradient(135deg,#0a0806,#3a1c00);">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <div>
+          <div style="font-size:0.6rem;font-weight:900;letter-spacing:0.15em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:5px;font-family:monospace;">CAREER ACHIEVEMENTS</div>
+          <h2 style="font-family:'Playfair Display',serif;color:#fbbf24;font-size:1.4rem;">🏆 Trophy Room</h2>
+          <div style="font-size:0.72rem;color:rgba(255,255,255,0.45);margin-top:3px;" id="trophyCount"></div>
+        </div>
+        <button onclick="closeTrophyRoom()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:6px;color:rgba(255,255,255,0.6);padding:6px 14px;cursor:pointer;font-size:0.8rem;">✕ Close</button>
+      </div>
+    </div>
+    <div class="equip-tabs" id="trophyTabs"></div>
+    <!-- Trophy grid with canvas previews -->
+    <div style="padding:14px;overflow-y:auto;max-height:500px;" id="trophyGrid"></div>
+    <!-- Selected achievement large view -->
+    <div id="trophyDetailPanel" style="display:none;padding:0;border-top:1px solid var(--border);">
+      <div style="position:relative;line-height:0;">
+        <canvas id="trophyDetailCanvas" width="700" height="300" style="display:block;width:100%;image-rendering:pixelated;"></canvas>
+        <div style="position:absolute;bottom:0;left:0;right:0;background:linear-gradient(transparent,rgba(0,0,0,0.9));padding:16px;text-align:center;">
+          <div style="font-size:1.1rem;font-weight:900;color:#fff;font-family:'Playfair Display',serif;" id="trophyDetailTitle"></div>
+          <div style="font-size:0.75rem;color:rgba(255,255,255,0.65);margin-top:3px;" id="trophyDetailStats"></div>
+        </div>
+        <button onclick="document.getElementById('trophyDetailPanel').style.display='none'" style="position:absolute;top:8px;right:8px;background:rgba(0,0,0,0.6);border:1px solid #444;border-radius:4px;color:#aaa;font-size:0.7rem;padding:4px 10px;cursor:pointer;">✕</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SPONSORSHIP OFFER MODAL -->
+<div class="modal-overlay hidden" id="sponsorshipModal" style="z-index:9990;">
+  <div class="equip-modal" style="max-width:640px;">
+    <div class="equip-modal-header" style="background:linear-gradient(135deg,#0a1a00,#1a5a00);">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+        <div>
+          <div style="font-size:0.62rem;font-weight:800;letter-spacing:0.12em;text-transform:uppercase;color:rgba(255,255,255,0.45);margin-bottom:5px;">⭐ SPONSORSHIP OFFER</div>
+          <h2 style="font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:white;" id="sponsorTitle">Brand Deal</h2>
+          <p style="font-size:0.82rem;color:rgba(255,255,255,0.65);margin-top:4px;" id="sponsorSubtitle">A major brand wants to sponsor you.</p>
+        </div>
+        <div style="text-align:right;flex-shrink:0;">
+          <div style="font-size:0.68rem;color:rgba(255,255,255,0.45);">Annual Income</div>
+          <div style="font-size:1.4rem;font-weight:900;color:#4ade80;" id="sponsorIncomeDisplay">$0</div>
+        </div>
+      </div>
+    </div>
+    <div style="padding:16px 20px;overflow-y:auto;max-height:400px;">
+      <!-- What you get -->
+      <div style="background:rgba(34,197,94,0.06);border:1px solid rgba(34,197,94,0.2);border-radius:12px;padding:14px;margin-bottom:14px;">
+        <div style="font-size:0.72rem;font-weight:800;color:var(--green);margin-bottom:8px;letter-spacing:0.06em;">WHAT YOU GET</div>
+        <div id="sponsorBenefitsList" style="font-size:0.82rem;color:var(--ink);line-height:1.8;"></div>
+      </div>
+      <!-- What they want -->
+      <div style="background:rgba(255,255,255,0.03);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:14px;">
+        <div style="font-size:0.72rem;font-weight:800;color:var(--muted);margin-bottom:8px;letter-spacing:0.06em;">WHAT THEY WANT</div>
+        <div id="sponsorRequirementsList" style="font-size:0.82rem;color:var(--muted);line-height:1.8;"></div>
+      </div>
+      <!-- Competing offers (if any) -->
+      <div id="sponsorOffersGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;"></div>
+    </div>
+    <div style="padding:12px 20px 16px;border-top:1px solid var(--border);display:flex;gap:10px;">
+      <button class="action-btn primary" style="flex:1;padding:13px;" id="sponsorAcceptBtn" onclick="acceptSponsor()">✅ Sign the Deal</button>
+      <button class="action-btn" style="padding:13px 20px;color:var(--muted);" onclick="declineSponsor()">Decline</button>
     </div>
   </div>
 </div>
@@ -2057,7 +2159,34 @@ let seasonsPlayed = 0;
 let lastOutcome = "";
 let injury = {active:false, name:"", gamesMissed:0, severity:"minor", rehabChosen:false};
 let steroidUse = {used:false,suspensions:0};
-let selectedArch = "athletic";
+let selectedBats   = "R";  // R, L, or S (switch)
+let selectedThrows = "R";  // R or L
+
+function selectBats(val, btn){
+  selectedBats = val;
+  ["R","L","S"].forEach(v=>{
+    let el = document.getElementById("bats"+v);
+    if(!el) return;
+    let active = v === val;
+    el.style.background    = active ? "rgba(59,158,255,0.2)" : "";
+    el.style.borderColor   = active ? "var(--accent2)" : "";
+    el.style.color         = active ? "var(--accent2)" : "";
+  });
+}
+
+function selectThrows(val, btn){
+  selectedThrows = val;
+  ["R","L"].forEach(v=>{
+    let el = document.getElementById("throws"+v);
+    if(!el) return;
+    let active = v === val;
+    el.style.background    = active ? "rgba(59,158,255,0.2)" : "";
+    el.style.borderColor   = active ? "var(--accent2)" : "";
+    el.style.color         = active ? "var(--accent2)" : "";
+  });
+}
+
+
 
 // ---- Injury chance: near-zero when young, scales with age & career games ----
 function injuryChance(){
@@ -2135,7 +2264,7 @@ const RANDOM_TOWNS = [
 
 const RANDOM_ARCHETYPES = ["athletic","power","contact","pitcher","star","scrappy"];
 const RANDOM_PARENTS    = ["wealthy","middle","poor","sports","strict","absent","immigrant","religious","add"];
-const RANDOM_POSITIONS  = ["C","1B","2B","3B","SS","LF","CF","RF","P"];
+const RANDOM_POSITIONS  = ["C","1B","2B","3B","SS","LF","CF","RF"]; // P removed — pitcher mode coming later
 
 function randomizePlayer(){
   // Animate the button briefly
@@ -2173,6 +2302,10 @@ function randomizePlayer(){
       if(posSelect) posSelect.value = pos;
       let num = Math.floor(Math.random()*99)+1;
       document.getElementById("inputNum").value = num;
+      // Randomize bats/throws
+      let batsOpts = ["R","R","R","L","L","S"]; // weighted — switch is rarer
+      selectBats(batsOpts[Math.floor(Math.random()*batsOpts.length)]);
+      selectThrows(Math.random()<0.85?"R":"L"); // ~85% throw right
     },
   ];
 
@@ -2196,8 +2329,7 @@ function createPlayer(){
   return {
     name:"", town:"", townFull:"", zip:"", lat:null, lng:null,
     state:"", country:"USA", isCanada:false,
-    position:"SS", number:21,
-    throwingArm:"Right", hittingType:"Right",
+    position:"SS", number:21, bats:"R", throws:"R",
     archetype:"athletic", parents:"middle",
     personality:[], rivalry:null,
     stats:{AB:0,H:0,HR:0,RBI:0,SO:0,AVG:0,OBP:0,SLG:0,OPS:0},
@@ -2373,6 +2505,7 @@ function developPlayer(){
 }
 
 // ===================== GAME PLAY =====================
+
 function playGame(){
   if(player.suspended && player.suspendedUntilSeason === seasonsPlayed){
     setSpotlight("⛔ Suspended","You cannot play this season.","End the season to move on.","warning");
@@ -2442,14 +2575,24 @@ function playGame(){
   // Check for new injury this game
   let justInjured = false;
   if(Math.random() < injuryChance()){
-    triggerInjury();   // sets injury.active, calls showRehabPicker()
+    triggerInjury();
     justInjured = true;
   }
 
-  // Only tick recovery if injury pre-existed (not just triggered this game)
   if(!justInjured) recoverInjury();
 
   if(Math.random()<0.25) schoolEvent();
+
+  // Check achievements (after stats updated, before UI refresh)
+  let gwHit  = results.includes("✅ Hit") && gamesPlayed === getCurrentSeasonCap();
+  let wOffHR = results.includes("💣 HOME RUN") && gamesPlayed === getCurrentSeasonCap();
+  let gameRes = {
+    H: results.filter(r=>r==="✅ Hit"||r==="💣 HOME RUN").length,
+    AB: results.length,
+    gameWinningHit: gwHit,
+    walkOffHR: wOffHR,
+  };
+  checkAchievements(gameRes);
 
   if(justInjured){
     // Injury dominates the narrative — override the game result spotlight
@@ -5451,6 +5594,8 @@ function completeCareerAdvance(){
   addFeed("Promoted",`Advanced to ${careerStage}!${newSalary>0?` Salary: $${fmt(newSalary)}/yr.`:""}`, "success");
   setSpotlight("Level Up!",`Welcome to ${careerStage}.`,`${player.name} earned a promotion. The competition just got real.`,"success");
   showToast(`Advanced to ${careerStage}!`,"success");
+  // Reset equipment to stage-appropriate level
+  resetEquipmentForStage(careerStage);
   updateUI();
 }
 
@@ -6212,6 +6357,66 @@ const OFFSEASON_ACTIVITIES = [
     fx:{attrs:{contact:4,fielding:3,speed:3}, offField:{attractiveness:5,reputation:8,popularity:5,confidence:5}},
     families:["wealthy"], cost:2500, lockLabel:"💰 Wealthy", category:"sport",
   },
+
+  // ── UNIVERSAL ADDITIONS ──
+  {
+    key:"weights",     emoji:"🏋️", name:"Weight Training",
+    desc:"Off-season gym work. Pure strength and explosion. Your frame fills out.",
+    fx:{attrs:{power:6,arm:3,speed:-1}, offField:{confidence:5,attractiveness:4,recklessness:2}},
+    families:["all"], cost:0, category:"baseball",
+  },
+  {
+    key:"travel_ball", emoji:"✈️", name:"Travel Ball Tournament",
+    desc:"Compete against the best in the country. Exposure to college scouts and tough competition.",
+    fx:{attrs:{contact:5,fielding:4,speed:3,power:2}, offField:{reputation:8,confidence:7,popularity:4}},
+    injuryRisk:0.05,
+    families:["all"], cost:800, category:"baseball",
+  },
+  {
+    key:"mental_coach", emoji:"🧠", name:"Mental Coaching",
+    desc:"Work with a sports psychologist. Pressure becomes fuel. Slumps get shorter.",
+    fx:{attrs:{contact:3,power:2}, offField:{confidence:12,aggression:-5,recklessness:-8,intelligence:6}},
+    families:["all"], cost:1200, category:"school",
+  },
+  {
+    key:"summer_job",  emoji:"💼", name:"Summer Job",
+    desc:"Work a summer job. Real money, real responsibility. Character builds quietly.",
+    fx:{offField:{intelligence:5,reputation:6,confidence:4}, moneyBonus:1200},
+    families:["all"], cost:0, category:"social",
+    moneyBonus:1200,
+  },
+
+  // ── FAMILY-SPECIFIC ADDITIONS ──
+  {
+    key:"hitting_lab",  emoji:"🔬", name:"Hitting Lab (Data-Driven)",
+    desc:"Biomechanics, launch angle, exit velocity. High-tech swing refinement.",
+    fx:{attrs:{contact:6,power:5}, offField:{intelligence:8,confidence:5}},
+    families:["wealthy","sports"], cost:3000, lockLabel:"💰 Wealthy / Sports family", category:"baseball",
+  },
+  {
+    key:"church_camp",  emoji:"⛪", name:"Church / Faith Camp",
+    desc:"Faith, community, character. Comes back grounded and grateful.",
+    fx:{offField:{religiousness:12,reputation:8,confidence:6,aggression:-4,recklessness:-6}},
+    families:["religious"], cost:0, lockLabel:"⛪ Religious family", category:"social",
+  },
+  {
+    key:"work_farm",   emoji:"🌾", name:"Work the Farm / Family Business",
+    desc:"Hard labor, long hours, callused hands. Builds strength nobody in a gym ever gets.",
+    fx:{attrs:{power:5,arm:3,speed:2}, offField:{confidence:6,reputation:4,intelligence:3}},
+    families:["poor","immigrant","absent"], cost:0, lockLabel:"Working-class family", category:"social",
+  },
+  {
+    key:"martial_arts", emoji:"🥋", name:"Martial Arts",
+    desc:"Discipline, focus, body control. The mental game transforms.",
+    fx:{attrs:{speed:4,fielding:3,contact:3}, offField:{confidence:8,aggression:-4,intelligence:6,recklessness:-5}},
+    families:["all"], cost:600, category:"sport",
+  },
+  {
+    key:"film_study",  emoji:"🎬", name:"Film Study & Analytics",
+    desc:"Watch tape all off-season. Pick apart every pitcher, every at-bat.",
+    fx:{attrs:{contact:5,fielding:3}, offField:{intelligence:10,confidence:4}},
+    families:["all"], cost:0, category:"baseball",
+  },
 ];
 
 // ===================== PRIVATE COACH SYSTEM =====================
@@ -6894,6 +7099,13 @@ function selectOffseasonActivity(key){
   // Deduct cost
   if(act.cost && act.cost > 0) player.money = Math.max(0, player.money - act.cost);
 
+  // Pay out money bonus (summer job etc.)
+  if(act.moneyBonus && act.moneyBonus > 0){
+    player.money += act.moneyBonus;
+    addFeed("💼 Earned $"+fmt(act.moneyBonus), "Off-season income from "+act.name+".", "success");
+    showToast("💼 +$"+fmt(act.moneyBonus)+" from "+act.name, "success");
+  }
+
   // Apply attribute effects
   if(act.fx.attrs)    for(let k in act.fx.attrs)    attributes[k] = Math.max(20,Math.min(99,(attributes[k]||50)+act.fx.attrs[k]));
   if(act.fx.offField) for(let k in act.fx.offField) player.offField[k] = Math.max(0,Math.min(100,(player.offField[k]||50)+act.fx.offField[k]));
@@ -7088,18 +7300,278 @@ let equipActiveSlot = "bat";
 let equipPendingSelections = {}; // {slotKey: itemObj} — temporary selections before confirm
 
 // Free all equipment at MLB level, or base model if scholarship
+// ── Stage-aware equipment free level ──
+// Returns: "all" = everything free, "team" = only team items free,
+//          "college" = all free (college provides), "minors" = all free (org provides)
+// ── Stage equipment rules ──
+// Returns an object describing what this stage provides
+function getStageEquipRules(){
+  let s = careerStage;
+  if(s === "Little League") return {
+    freeLevel: "team",        // only free team bat/glove
+    minTier: 1, maxTier: 2,   // youth items only
+    mustPay: true,            // player pays for extras
+    budgetSource: "parents",  // uses parentsMoney + playerMoney
+    label: "Youth gear — team bat & glove free, everything else costs money.",
+    orgName: null,
+  };
+  if(s === "High School") return {
+    freeLevel: "team",
+    minTier: 1, maxTier: 3,   // HS-appropriate range
+    mustPay: true,
+    budgetSource: "player",
+    label: "High school level — team bat & glove free. Buy your own extras.",
+    orgName: null,
+  };
+  if(s === "College") return {
+    freeLevel: "all",
+    minTier: 2, maxTier: 3,   // college-quality gear
+    mustPay: false,
+    budgetSource: null,
+    label: "College program provides all equipment FREE. Choose your loadout.",
+    orgName: "your college program",
+  };
+  if(s === "Single-A") return {
+    freeLevel: "all",
+    minTier: 3, maxTier: 4,
+    mustPay: false,
+    budgetSource: null,
+    label: "Minor league org provides all pro-level equipment FREE.",
+    orgName: "your minor league org",
+  };
+  if(s === "Double-A") return {
+    freeLevel: "all",
+    minTier: 3, maxTier: 4,
+    mustPay: false,
+    budgetSource: null,
+    label: "The organization issues full pro gear. Everything FREE.",
+    orgName: "your organization",
+  };
+  if(s === "Triple-A") return {
+    freeLevel: "all",
+    minTier: 4, maxTier: 4,   // top-tier only
+    mustPay: false,
+    budgetSource: null,
+    label: "Triple-A means elite gear. The club provides everything FREE.",
+    orgName: "the club",
+  };
+  if(s === "MLB") return {
+    freeLevel: "all",
+    minTier: 4, maxTier: 4,
+    mustPay: false,
+    budgetSource: null,
+    label: player && player.activeSponsor
+      ? `${player.activeSponsor.brand} sponsorship — all gear FREE + $${fmt(player.activeSponsor.annual)}/yr`
+      : "MLB — all equipment free. After a strong season, sponsorships become available.",
+    orgName: "the team",
+  };
+  return { freeLevel:"team", minTier:1, maxTier:4, mustPay:true, budgetSource:"player", label:"", orgName:null };
+}
+
 function getEquipFreeLevel(){
-  if(careerStage === "MLB") return "all";
-  if(player.scholarship || player.college) return "base"; // scholarship players get base
-  return "none";
+  return getStageEquipRules().freeLevel;
 }
 
 function isEquipFree(slot, item){
-  let fl = getEquipFreeLevel();
-  if(fl === "all") return true;
-  if(fl === "base" && item.tier === 1) return true;
-  if(slot === "bat" || slot === "glove") return item.tier === 0; // team items are always free
+  let rules = getStageEquipRules();
+  if(rules.freeLevel === "all") return true;
+  // "team" level: only tier-0 items are free (bat/glove team issue)
+  if(slot === "bat" || slot === "glove") return item.tier === 0;
   return false;
+}
+
+// Filter catalog items to stage-appropriate tier range
+function getStageItems(slot){
+  let rules = getStageEquipRules();
+  let cat = EQUIPMENT_CATALOG[slot];
+  return cat.items.filter(i => i.tier >= rules.minTier && i.tier <= rules.maxTier);
+}
+
+// ── Auto-equip appropriate gear when entering a new career stage ──
+function resetEquipmentForStage(newStage){
+  if(!player) return;
+  // Temporarily set stage so rules read correctly
+  let prevStage = careerStage;
+  careerStage = newStage;
+  let rules = getStageEquipRules();
+  let tier = rules.maxTier;
+  let eq = {};
+
+  for(let slot of EQUIP_SLOTS){
+    let cat = EQUIPMENT_CATALOG[slot];
+    // Start with team/free baseline
+    eq[slot] = cat.freeTeamItem ? {...cat.freeTeamItem} : null;
+
+    if(rules.freeLevel === "all"){
+      // Org/school provides gear — equip best item at stage tier
+      let item = cat.items.filter(i=>i.tier<=tier).sort((a,b)=>b.tier-a.tier)[0];
+      if(item) eq[slot] = {...item};
+    }
+    // "team" stages (LL, HS): only free team items auto-equipped, player buys the rest
+  }
+
+  careerStage = prevStage; // restore — careerStage is set by completeCareerAdvance after this
+  player.equipment = eq;
+  applyEquipmentBonuses();
+
+  let stageLabels = {
+    "Little League":"Youth",
+    "High School":"High School-level",
+    "College":"College-issue",
+    "Single-A":"Pro-level",
+    "Double-A":"Pro-level",
+    "Triple-A":"Elite pro",
+    "MLB":"MLB-grade",
+  };
+  let provided = rules.freeLevel === "all"
+    ? `${stageLabels[newStage]||"New"} gear issued by ${rules.orgName||"the organization"}.`
+    : `Team bat & glove issued. Purchase other gear in the equipment shop.`;
+  addFeed("Equipment Updated", provided, "success");
+}
+
+
+
+const SPONSOR_BRANDS = [
+  { brand:"Rawlings",    slots:["bat","glove","battingGloves","elbowGuard"],
+    baseAnnual:120000, logo:"⚾", color:"#c82020",
+    pitch:"Rawlings wants you as the face of their performance line.",
+    perks:["All Rawlings equipment free","$%ANNUAL%/yr contract","Rawlings logo on helmet"] },
+  { brand:"Marucci",     slots:["bat","battingGloves","elbowGuard","legGuard"],
+    baseAnnual:180000, logo:"🪵", color:"#8B4513",
+    pitch:"Marucci is building their MLB roster and want you as a cornerstone.",
+    perks:["All Marucci equipment free","$%ANNUAL%/yr contract","Personal signature bat model"] },
+  { brand:"Easton",      slots:["bat","battingGloves","slidingMitt","elbowGuard","legGuard"],
+    baseAnnual:150000, logo:"⚡", color:"#1a3a8c",
+    pitch:"Easton wants an active MLB star to anchor their performance line.",
+    perks:["All Easton equipment free","$%ANNUAL%/yr contract","Social media appearances"] },
+  { brand:"Nike",        slots:["cleats","battingGloves","sunglasses","legGuard"],
+    baseAnnual:300000, logo:"✔️", color:"#111111",
+    pitch:"Nike wants to add you to their elite baseball roster.",
+    perks:["All Nike equipment free","$%ANNUAL%/yr contract","Nike campaign feature","Custom colorway cleats"] },
+  { brand:"Under Armour",slots:["cleats","battingGloves","elbowGuard","legGuard"],
+    baseAnnual:220000, logo:"🛡️", color:"#c82020",
+    pitch:"Under Armour is building their baseball presence and want a star player.",
+    perks:["All UA equipment free","$%ANNUAL%/yr contract","UA ambassador status"] },
+  { brand:"Wilson",      slots:["glove","bat","battingGloves"],
+    baseAnnual:160000, logo:"🥊", color:"#8B4513",
+    pitch:"Wilson wants to build a signature glove model around you.",
+    perks:["All Wilson equipment free","$%ANNUAL%/yr contract","Signature A2000 named after you"] },
+  { brand:"Oakley",      slots:["sunglasses","glove"],
+    baseAnnual:200000, logo:"😎", color:"#1a1a1a",
+    pitch:"Oakley wants you as their MLB eyewear ambassador.",
+    perks:["All Oakley equipment free","$%ANNUAL%/yr contract","Custom Radar EV colorway","Oakley lifestyle campaign"] },
+];
+
+let _pendingSponsorOffer  = null;
+let _pendingSponsorOffers = [];
+
+function checkSponsorshipOffer(){
+  if(careerStage !== "MLB" || !player) return false;
+  let s = player.stats;
+  let avg = s.AB > 20 ? s.H / s.AB : 0;
+  return avg >= 0.270 || s.HR >= 20 || s.RBI >= 80;
+}
+
+function buildSponsorOffers(){
+  let s = player.stats;
+  let avg = s.AB > 0 ? s.H/s.AB : 0;
+  let mult = 1.0
+    + (avg  >= 0.300 ? 0.30 : avg  >= 0.280 ? 0.15 : 0)
+    + (s.HR >= 40   ? 0.50 : s.HR >= 30   ? 0.30 : s.HR >= 20 ? 0.15 : 0)
+    + (s.RBI >= 100 ? 0.30 : s.RBI >= 80  ? 0.15 : 0);
+  let shuffled = [...SPONSOR_BRANDS].sort(()=>Math.random()-0.5);
+  let count = avg >= 0.300 && s.HR >= 30 ? 3 : 2;
+  return shuffled.slice(0, count).map(b => ({
+    ...b, annual: Math.round(b.baseAnnual * mult / 5000) * 5000,
+  }));
+}
+
+function showSponsorshipOffer(){
+  let offers = buildSponsorOffers();
+  _pendingSponsorOffers = offers;
+  _pendingSponsorOffer  = offers[0];
+  _renderSponsorModal(offers[0], offers.length > 1 ? offers : null);
+  document.getElementById("sponsorshipModal").classList.remove("hidden");
+}
+
+function _renderSponsorModal(offer, allOffers){
+  document.getElementById("sponsorTitle").textContent = offer.brand + " Sponsorship Offer";
+  document.getElementById("sponsorSubtitle").textContent = offer.pitch;
+  document.getElementById("sponsorIncomeDisplay").textContent = "$" + fmt(offer.annual) + "/yr";
+  let benefits = offer.perks.map(p => p.replace("%ANNUAL%", fmt(offer.annual)));
+  document.getElementById("sponsorBenefitsList").innerHTML = benefits.map(b=>`✅ ${b}`).join("<br>");
+  document.getElementById("sponsorRequirementsList").innerHTML = [
+    `Use only ${offer.brand} equipment in games and appearances`,
+    `2× social media posts/month featuring ${offer.brand}`,
+    `1 ${offer.brand} promotional event per year`,
+    "2-year contract, renewable",
+  ].map(r=>`📋 ${r}`).join("<br>");
+  let grid = document.getElementById("sponsorOffersGrid");
+  if(allOffers && allOffers.length > 1){
+    grid.style.display = "grid";
+    grid.innerHTML = allOffers.map((o,i) => `
+      <div onclick="selectSponsorOffer(${i})" id="sponsorCard_${i}"
+        style="border:2px solid ${o===offer?"var(--green)":"var(--border)"};border-radius:12px;padding:12px;cursor:pointer;
+               background:${o===offer?"rgba(34,197,94,0.06)":"rgba(255,255,255,0.03)"};transition:all 0.15s;"
+        onmouseenter="this.style.borderColor='var(--accent2)'" onmouseleave="this.style.borderColor='${o===offer?"var(--green)":"var(--border)"}'">
+        <div style="font-size:1.2rem;margin-bottom:4px;">${o.logo}</div>
+        <div style="font-size:0.85rem;font-weight:800;color:var(--ink);">${o.brand}</div>
+        <div style="font-size:0.82rem;font-weight:700;color:var(--green);">$${fmt(o.annual)}/yr</div>
+        <div style="font-size:0.68rem;color:var(--muted);margin-top:3px;">${o.slots.length} gear slots covered</div>
+      </div>`).join("");
+  } else {
+    grid.style.display = "none";
+  }
+  document.getElementById("sponsorAcceptBtn").textContent = `✅ Sign with ${offer.brand}`;
+}
+
+function selectSponsorOffer(idx){
+  _pendingSponsorOffer = _pendingSponsorOffers[idx];
+  _pendingSponsorOffers.forEach((_,i) => {
+    let card = document.getElementById("sponsorCard_"+i);
+    if(card){
+      card.style.borderColor = i===idx ? "var(--green)" : "var(--border)";
+      card.style.background  = i===idx ? "rgba(34,197,94,0.06)" : "rgba(255,255,255,0.03)";
+    }
+  });
+  _renderSponsorModal(_pendingSponsorOffer);
+}
+
+function acceptSponsor(){
+  let offer = _pendingSponsorOffer;
+  if(!offer) return;
+  player.activeSponsor = { brand:offer.brand, annual:offer.annual, slots:offer.slots, logo:offer.logo, signedSeason:seasonsPlayed };
+  player.money += offer.annual;
+  // Auto-equip sponsor brand items
+  let eq = getPlayerEquip();
+  for(let slot of offer.slots){
+    let cat = EQUIPMENT_CATALOG[slot];
+    if(!cat) continue;
+    let item = cat.items.filter(i=>i.brand===offer.brand).sort((a,b)=>b.tier-a.tier)[0];
+    if(item) eq[slot] = {...item};
+  }
+  player.equipment = eq;
+  applyEquipmentBonuses();
+  document.getElementById("sponsorshipModal").classList.add("hidden");
+  addFeed("🤝 Sponsorship Signed!", `${offer.brand}: $${fmt(offer.annual)}/yr + all ${offer.brand} gear FREE!`, "success");
+  showToast(`Signed with ${offer.brand}! +$${fmt(offer.annual)}/yr 💰`, "success");
+  updateUI();
+  renderOffSeasonPanel();
+}
+
+function declineSponsor(){
+  document.getElementById("sponsorshipModal").classList.add("hidden");
+  addFeed("Sponsorship Declined", "You passed on the brand deal.", "success");
+  updateUI();
+  renderOffSeasonPanel();
+}
+
+function maybeTriggerSponsorshipOffer(){
+  if(!checkSponsorshipOffer()) return false;
+  let chance = player.activeSponsor ? 0.30 : 0.70;
+  if(Math.random() > chance) return false;
+  showSponsorshipOffer();
+  return true;
 }
 
 function getPlayerEquip(){
@@ -7115,27 +7587,24 @@ function openEquipmentShop(isNewSeason){
   }
   equipActiveSlot = "bat";
 
-  let freeAll = getEquipFreeLevel() === "all";
-
-  // LL Finance: show parent budget + player's own money separately
+  let rules = getStageEquipRules();
+  let freeAll = rules.freeLevel === "all";
   let isLL = careerStage === "Little League";
   let parentsBudget = isLL ? (player.parentsMoney||0) : 0;
   let playerOwn     = isLL ? (player.playerMoney||0)  : 0;
   let totalBudget   = isLL ? parentsBudget + playerOwn : player.money;
 
   let tagText = isNewSeason ? "PRE-SEASON EQUIPMENT" : "UPGRADE EQUIPMENT";
+  if(careerStage === "MLB" && player.activeSponsor){
+    tagText = `🏆 ${player.activeSponsor.brand.toUpperCase()} SPONSORED LOADOUT`;
+  } else if(freeAll){
+    tagText = `✅ ${(rules.orgName||"ORGANIZATION").toUpperCase()} ISSUE`;
+  }
   document.getElementById("equipModalTag").textContent = tagText;
-
-  let subtitle = freeAll
-    ? "You're in the MLB — all equipment is FREE. Pick the best."
-    : isLL
-      ? `Parents' budget: $${fmt(parentsBudget)} · Your money: $${fmt(playerOwn)} · Combined: $${fmt(totalBudget)}`
-      : "Choose your gear. Better gear = small stat boosts. Protective gear reduces injuries.";
-  document.getElementById("equipModalSubtitle").textContent = subtitle;
-
-  // For budget display in the header, show combined LL budget or regular money
-  document.getElementById("equipBudgetDisplay").textContent = isLL
-    ? "$" + fmt(totalBudget) + " total"
+  document.getElementById("equipModalSubtitle").textContent = rules.label || "Choose your gear.";
+  document.getElementById("equipBudgetDisplay").textContent = freeAll
+    ? "FREE"
+    : isLL ? "$" + fmt(totalBudget) + " total"
     : "$" + fmt(player.money);
 
   renderEquipTabs();
@@ -7172,16 +7641,14 @@ function equipSwitchTab(slot){
 function renderEquipSlot(slot){
   let cat    = EQUIPMENT_CATALOG[slot];
   let eq     = getPlayerEquip();
-  let freeAll = getEquipFreeLevel() === "all";
-  let freeBase= getEquipFreeLevel() === "base";
+  let rules  = getStageEquipRules();
+  let freeAll = rules.freeLevel === "all";
   let current = equipPendingSelections[slot] || eq[slot];
   let body    = document.getElementById("equipBody");
 
-  let currentLabel = current
-    ? `${current.brand} ${current.model}` 
-    : "None";
+  let currentLabel = current ? `${current.brand} ${current.model}` : "None";
 
-  // Team free item for bat/glove
+  // Team free item
   let freeTeamCard = "";
   if(cat.freeTeamItem){
     let ti = cat.freeTeamItem;
@@ -7196,33 +7663,48 @@ function renderEquipSlot(slot){
     </div>`;
   }
 
-  // Optional slot note
+  // Optional slot note for paid stages
   let slotNote = "";
   if(!cat.freeTeamItem && !freeAll){
     let protecNote = cat.protective ? " · Reduces injury risk" : "";
     slotNote = `<p style="font-size:0.78rem;color:var(--muted);margin-bottom:12px;">Optional — costs money. Playing without is allowed.${protecNote}</p>`;
   }
 
-  let itemCards = cat.items.map((item, idx) => {
-    let isFree    = freeAll || (freeBase && item.tier === 1) || isEquipFree(slot, item);
-    let canAfford = isFree || getEffectiveBudget() >= item.price;
-    let isEquipped= current && current.model === item.model && current.brand === item.brand;
-    let classes   = `equip-card${isEquipped?" equipped":""}${!canAfford?" cant-afford":""}`;
+  // Filter to stage-appropriate items
+  let stageItems = cat.items.filter(i => i.tier >= rules.minTier && i.tier <= rules.maxTier);
 
-    // Build effect tags
+  // Always include currently-equipped item even if outside tier range
+  if(current && current.tier > 0 && !stageItems.find(i=>i.model===current.model)){
+    let idx = cat.items.findIndex(i=>i.model===current.model);
+    if(idx >= 0) stageItems = [cat.items[idx], ...stageItems];
+  }
+
+  let itemCards = stageItems.map(item => {
+    // Find real index in full catalog for selectEquipItem call
+    let realIdx = cat.items.findIndex(i=>i.model===item.model && i.brand===item.brand);
+    let isFree = freeAll || isEquipFree(slot, item);
+    if(player.activeSponsor && item.brand === player.activeSponsor.brand) isFree = true;
+    let canAfford = isFree || getEffectiveBudget() >= item.price;
+    let isEquipped = current && current.model === item.model && current.brand === item.brand;
+    let classes = `equip-card${isEquipped?" equipped":""}${!canAfford?" cant-afford":""}`;
+
     let tags = [];
     if(cat.attrBonus) Object.entries(cat.attrBonus).forEach(([k,v])=>tags.push({t:`+${v} ${k[0].toUpperCase()+k.slice(1)}`,cl:"pos"}));
     if(cat.injuryReduction && item.injuryReduction) tags.push({t:`−${Math.round((item.injuryReduction||cat.injuryReduction)*100)}% Injury`,cl:"prot"});
     else if(cat.injuryReduction) tags.push({t:`−${Math.round(cat.injuryReduction*100)}% Injury`,cl:"prot"});
 
+    let freeReason = freeAll ? (careerStage==="MLB"?"MLB":"Org Issued") : (player.activeSponsor&&item.brand===player.activeSponsor.brand?"Sponsored":"");
     let priceDisplay = isFree
-      ? `<span class="ec-price free-price">FREE${player.scholarship||careerStage==="MLB"?" (Scholarship)":""}</span>`
+      ? `<span class="ec-price free-price">FREE${freeReason?" ("+freeReason+")":""}</span>`
       : `<span class="ec-price">$${item.price.toLocaleString()}</span>`;
+    // Tier badge
+    let tierStars = "★".repeat(item.tier)+"☆".repeat(4-item.tier);
 
-    return `<div class="${classes}" onclick="selectEquipItem('${slot}', ${idx})">
+    return `<div class="${classes}" onclick="selectEquipItem('${slot}', ${realIdx})">
       ${isEquipped?'<span class="ec-badge owned">✓ Equipped</span>':""}
-      ${!canAfford?'<span class="ec-badge" style="background:rgba(239,68,68,0.1);color:var(--red);border-color:rgba(239,68,68,0.2);">💸 Need $'+item.price+'</span>':""}
-      <div class="ec-brand">${item.brand}</div>
+      ${!canAfford&&!isFree?'<span class="ec-badge" style="background:rgba(239,68,68,0.1);color:var(--red);border-color:rgba(239,68,68,0.2);">💸 $'+item.price+'</span>':""}
+      ${(player.activeSponsor&&item.brand===player.activeSponsor.brand)?'<span class="ec-badge free-badge">⭐ Sponsor</span>':""}
+      <div class="ec-brand">${item.brand} <span style="font-size:0.6rem;color:var(--accent);letter-spacing:0;">${tierStars}</span></div>
       <div class="ec-model">${item.model}</div>
       ${priceDisplay}
       <div class="ec-desc">${item.desc}</div>
@@ -7242,22 +7724,21 @@ function renderEquipSlot(slot){
 function selectEquipItem(slot, idx){
   let cat = EQUIPMENT_CATALOG[slot];
   let eq  = getPlayerEquip();
-  let freeAll  = getEquipFreeLevel() === "all";
-  let freeBase = getEquipFreeLevel() === "base";
+  let freeAll = getEquipFreeLevel() === "all";
 
   if(idx === -1){
     equipPendingSelections[slot] = cat.freeTeamItem;
   } else {
     let item = cat.items[idx];
-    let isFree = freeAll || (freeBase && item.tier===1) || isEquipFree(slot, item);
-    // Check affordability (account for other pending purchases)
+    let isFree = freeAll || isEquipFree(slot, item);
+    if(player.activeSponsor && item.brand === player.activeSponsor.brand) isFree = true;
     if(!isFree){
       let pendingCost = calcPendingCost();
       let prevSel = equipPendingSelections[slot];
       let prevOwned = prevSel && eq[slot] && prevSel.model===eq[slot].model && prevSel.brand===eq[slot].brand;
       let prevCost  = (prevSel && !prevOwned && prevSel.price>0) ? prevSel.price : 0;
       let newNet = pendingCost - prevCost + item.price;
-      if(newNet > getEffectiveBudget()) return; // can't afford
+      if(newNet > getEffectiveBudget()) return;
     }
     equipPendingSelections[slot] = item;
   }
@@ -7298,15 +7779,15 @@ function getEffectiveBudget(){
 // Calculate total cost of pending new purchases (items not already owned)
 function calcPendingCost(){
   let eq = getPlayerEquip();
-  let freeAll  = getEquipFreeLevel() === "all";
-  let freeBase = getEquipFreeLevel() === "base";
+  let freeAll = getEquipFreeLevel() === "all";
   let total = 0;
   for(let slot of EQUIP_SLOTS){
     let sel = equipPendingSelections[slot];
     if(!sel || sel.price === 0) continue;
     let alreadyOwned = eq[slot] && eq[slot].model===sel.model && eq[slot].brand===sel.brand;
     if(alreadyOwned) continue;
-    let isFree = freeAll || (freeBase && sel.tier===1) || isEquipFree(slot, sel);
+    let isFree = freeAll || isEquipFree(slot, sel);
+    if(player.activeSponsor && sel.brand === player.activeSponsor.brand) isFree = true;
     if(!isFree) total += sel.price;
   }
   return total;
@@ -7444,7 +7925,1246 @@ function renderEquipmentCard(){
 }
 
 
-// ===================== EQUIPMENT DISPOSAL SYSTEM =====================
+// ===================== ACHIEVEMENT SYSTEM =====================
+
+// Achievement definitions per stage group
+// Each achievement: { id, title, desc, check(stats,player,extra), art(ctx,W,H,SC), once:true }
+// "once" = only fire once per stage group (default true)
+// extra = { prevStats, gameResult, streak }
+
+const ACH_STAGES = ["Little League","High School","College","Single-A","Double-A","Triple-A","MLB"];
+
+const ACHIEVEMENTS = {
+  "Little League": [
+    { id:"ll_first_hit",    title:"First Hit!",         desc:"You got your first Little League hit.",
+      check:(s)=> s.H >= 1,
+      art: (ctx,W,H)=> achArtHit(ctx,W,H,"#3aaa3a","#ffee00","FIRST HIT!") },
+    { id:"ll_first_hr",     title:"First Home Run!",    desc:"You crushed your first career home run.",
+      check:(s)=> s.HR >= 1,
+      art: (ctx,W,H)=> achArtHR(ctx,W,H,"#3aaa3a","#ffee00") },
+    { id:"ll_10_hits",      title:"10 Hits!",           desc:"10 hits in Little League.",
+      check:(s)=> s.H >= 10,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"10","HITS","#3aaa3a","#60a5fa") },
+    { id:"ll_25_hits",      title:"25 Hits!",           desc:"25 hits — you're a consistent bat in LL.",
+      check:(s)=> s.H >= 25,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"25","HITS","#3aaa3a","#60a5fa") },
+    { id:"ll_5_hr",         title:"5 Home Runs!",       desc:"5 homers — the park is too small for you.",
+      check:(s)=> s.HR >= 5,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"5","HOME RUNS","#1a2a8c","#fbbf24") },
+    { id:"ll_streak5",      title:"5-Game Hit Streak!", desc:"5 consecutive games with a hit.",
+      check:(s,p,e)=> e&&e.streak>=5,
+      art: (ctx,W,H)=> achArtStreak(ctx,W,H,5,"#3aaa3a") },
+    { id:"ll_streak10",     title:"10-Game Hit Streak!",desc:"10 straight games with at least one hit.",
+      check:(s,p,e)=> e&&e.streak>=10,
+      art: (ctx,W,H)=> achArtStreak(ctx,W,H,10,"#f59e0b") },
+    { id:"ll_400_avg",      title:"Batting .400!",      desc:"Hitting .400 average in Little League.",
+      check:(s)=> s.AB>=20 && s.H/s.AB>=0.400,
+      art: (ctx,W,H)=> achArtAvg(ctx,W,H,".400","#fbbf24") },
+    { id:"ll_gwh",          title:"Game-Winning Hit!",  desc:"Your hit won the game in the final inning.",
+      check:(s,p,e)=> e&&e.gameWinningHit,
+      art: (ctx,W,H)=> achArtHit(ctx,W,H,"#1a3a1a","#34d399","WALK-OFF!") },
+  ],
+  "High School": [
+    { id:"hs_first_hit",    title:"First HS Hit!",      desc:"Your first hit at the high school level.",
+      check:(s)=> s.H >= 1,
+      art: (ctx,W,H)=> achArtHit(ctx,W,H,"#1a2a8c","#60a5fa","FIRST HIT!") },
+    { id:"hs_first_hr",     title:"First HS Homer!",    desc:"First home run in high school ball.",
+      check:(s)=> s.HR >= 1,
+      art: (ctx,W,H)=> achArtHR(ctx,W,H,"#1a2a8c","#60a5fa") },
+    { id:"hs_first_gwh",    title:"Game-Winning Hit!",  desc:"A hit that won the game for your team.",
+      check:(s,p,e)=> e&&e.gameWinningHit,
+      art: (ctx,W,H)=> achArtHit(ctx,W,H,"#1a2a8c","#34d399","CLUTCH!") },
+    { id:"hs_walkoff_hr",   title:"Walk-Off Homer!",    desc:"A walk-off home run to win the game.",
+      check:(s,p,e)=> e&&e.walkOffHR,
+      art: (ctx,W,H)=> achArtWalkOff(ctx,W,H,"#1a2a8c") },
+    { id:"hs_50_hits",      title:"50 Hits!",           desc:"50 hits in your high school career.",
+      check:(s)=> s.H >= 50,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"50","HITS","#1a2a8c","#60a5fa") },
+    { id:"hs_100_hits",     title:"100 Hits!",          desc:"100 career hits in high school.",
+      check:(s)=> s.H >= 100,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"100","HITS","#1a2a8c","#fbbf24") },
+    { id:"hs_10_hr",        title:"10 Home Runs!",      desc:"Double digits in the long ball.",
+      check:(s)=> s.HR >= 10,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"10","HOME RUNS","#1a2a8c","#fbbf24") },
+    { id:"hs_streak10",     title:"10-Game Hit Streak!",desc:"10 straight games with a hit.",
+      check:(s,p,e)=> e&&e.streak>=10,
+      art: (ctx,W,H)=> achArtStreak(ctx,W,H,10,"#60a5fa") },
+    { id:"hs_streak20",     title:"20-Game Hit Streak!",desc:"20 consecutive games with at least one hit.",
+      check:(s,p,e)=> e&&e.streak>=20,
+      art: (ctx,W,H)=> achArtStreak(ctx,W,H,20,"#fbbf24") },
+    { id:"hs_350_avg",      title:"Batting .350!",      desc:"A .350 average is elite at any level.",
+      check:(s)=> s.AB>=30 && s.H/s.AB>=0.350,
+      art: (ctx,W,H)=> achArtAvg(ctx,W,H,".350","#60a5fa") },
+  ],
+  "College": [
+    { id:"col_first_hit",   title:"First College Hit!", desc:"Your first hit in college ball.",
+      check:(s)=> s.H >= 1,
+      art: (ctx,W,H)=> achArtHit(ctx,W,H,"#8a1010","#f0f0f0","FIRST HIT!") },
+    { id:"col_first_hr",    title:"First College Homer!",desc:"Going deep in college.",
+      check:(s)=> s.HR >= 1,
+      art: (ctx,W,H)=> achArtHR(ctx,W,H,"#8a1010","#f0f0f0") },
+    { id:"col_gwh",         title:"Game-Winning Hit!",  desc:"Your hit won the game.",
+      check:(s,p,e)=> e&&e.gameWinningHit,
+      art: (ctx,W,H)=> achArtHit(ctx,W,H,"#8a1010","#34d399","CLUTCH!") },
+    { id:"col_walkoff_hr",  title:"Walk-Off Homer!",    desc:"Sent the stadium home happy.",
+      check:(s,p,e)=> e&&e.walkOffHR,
+      art: (ctx,W,H)=> achArtWalkOff(ctx,W,H,"#8a1010") },
+    { id:"col_100_hits",    title:"100 College Hits!",  desc:"100 hits in your college career.",
+      check:(s)=> s.H >= 100,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"100","HITS","#8a1010","#f0f0f0") },
+    { id:"col_200_hits",    title:"200 College Hits!",  desc:"200 hits — one of the best in school history.",
+      check:(s)=> s.H >= 200,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"200","HITS","#8a1010","#fbbf24") },
+    { id:"col_20_hr",       title:"20 College Homers!", desc:"20 home runs at the college level.",
+      check:(s)=> s.HR >= 20,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"20","HOME RUNS","#8a1010","#fbbf24") },
+    { id:"col_streak20",    title:"20-Game Hit Streak!",desc:"20 straight games with a hit.",
+      check:(s,p,e)=> e&&e.streak>=20,
+      art: (ctx,W,H)=> achArtStreak(ctx,W,H,20,"#f59e0b") },
+    { id:"col_draft_eligible",title:"Draft Eligible!",  desc:"Your performance earned MLB draft attention.",
+      check:(s,p)=> p&&p.draftEligible,
+      art: (ctx,W,H)=> achArtSpecial(ctx,W,H,"DRAFT ELIGIBLE","MLB scouts are watching.","#0a1a4e","#fbbf24") },
+  ],
+  "Single-A": [
+    { id:"a_first_hit",     title:"First Pro Hit!",     desc:"Your first hit as a professional.",
+      check:(s)=> s.H >= 1,
+      art: (ctx,W,H)=> achArtHit(ctx,W,H,"#102050","#f0f0f0","FIRST PRO HIT!") },
+    { id:"a_first_hr",      title:"First Pro Homer!",   desc:"Your first professional home run.",
+      check:(s)=> s.HR >= 1,
+      art: (ctx,W,H)=> achArtHR(ctx,W,H,"#102050","#fbbf24") },
+    { id:"a_50_hits",       title:"50 Pro Hits!",       desc:"50 hits in the minor leagues.",
+      check:(s)=> s.H >= 50,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"50","PRO HITS","#102050","#60a5fa") },
+    { id:"a_100_hits",      title:"100 Pro Hits!",      desc:"100 professional hits.",
+      check:(s)=> s.H >= 100,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"100","PRO HITS","#102050","#fbbf24") },
+    { id:"a_10_hr",         title:"10 Pro Homers!",     desc:"10 home runs as a professional.",
+      check:(s)=> s.HR >= 10,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"10","HOME RUNS","#102050","#fbbf24") },
+    { id:"a_gwh",           title:"Game-Winning Hit!",  desc:"A clutch hit to win the game.",
+      check:(s,p,e)=> e&&e.gameWinningHit,
+      art: (ctx,W,H)=> achArtHit(ctx,W,H,"#102050","#34d399","CLUTCH!") },
+    { id:"a_walkoff_hr",    title:"Walk-Off Homer!",    desc:"A walk-off home run as a pro.",
+      check:(s,p,e)=> e&&e.walkOffHR,
+      art: (ctx,W,H)=> achArtWalkOff(ctx,W,H,"#102050") },
+    { id:"a_streak15",      title:"15-Game Hit Streak!",desc:"15 straight games with a hit.",
+      check:(s,p,e)=> e&&e.streak>=15,
+      art: (ctx,W,H)=> achArtStreak(ctx,W,H,15,"#60a5fa") },
+    { id:"a_promoted",      title:"Promoted!",          desc:"Earned a promotion to the next level.",
+      check:(s,p)=> p&&p.justPromoted,
+      art: (ctx,W,H)=> achArtSpecial(ctx,W,H,"PROMOTED!","Moving up the ladder.","#102050","#34d399") },
+  ],
+  "Double-A": [
+    { id:"aa_first_hit",    title:"Double-A Debut!",    desc:"Your first hit at Double-A.",
+      check:(s)=> s.H >= 1,
+      art: (ctx,W,H)=> achArtHit(ctx,W,H,"#3a1a6e","#a78bfa","DOUBLE-A DEBUT!") },
+    { id:"aa_first_hr",     title:"Double-A Power!",    desc:"First homer at Double-A.",
+      check:(s)=> s.HR >= 1,
+      art: (ctx,W,H)=> achArtHR(ctx,W,H,"#3a1a6e","#a78bfa") },
+    { id:"aa_100_hits",     title:"100 Double-A Hits!", desc:"100 hits at the Double-A level.",
+      check:(s)=> s.H >= 100,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"100","HITS","#3a1a6e","#a78bfa") },
+    { id:"aa_20_hr",        title:"20 Double-A Homers!",desc:"20 home runs at Double-A.",
+      check:(s)=> s.HR >= 20,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"20","HOME RUNS","#3a1a6e","#fbbf24") },
+    { id:"aa_walkoff_hr",   title:"Walk-Off Homer!",    desc:"A walk-off homer at Double-A.",
+      check:(s,p,e)=> e&&e.walkOffHR,
+      art: (ctx,W,H)=> achArtWalkOff(ctx,W,H,"#3a1a6e") },
+    { id:"aa_streak20",     title:"20-Game Hit Streak!",desc:"20 straight games with a hit.",
+      check:(s,p,e)=> e&&e.streak>=20,
+      art: (ctx,W,H)=> achArtStreak(ctx,W,H,20,"#a78bfa") },
+  ],
+  "Triple-A": [
+    { id:"aaa_first_hit",   title:"Triple-A Arrival!",  desc:"First hit one step from The Show.",
+      check:(s)=> s.H >= 1,
+      art: (ctx,W,H)=> achArtHit(ctx,W,H,"#0e0e4e","#818cf8","ONE STEP AWAY!") },
+    { id:"aaa_first_hr",    title:"Triple-A Power!",    desc:"First homer at Triple-A.",
+      check:(s)=> s.HR >= 1,
+      art: (ctx,W,H)=> achArtHR(ctx,W,H,"#0e0e4e","#818cf8") },
+    { id:"aaa_100_hits",    title:"100 Triple-A Hits!", desc:"100 hits at Triple-A.",
+      check:(s)=> s.H >= 100,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"100","HITS","#0e0e4e","#818cf8") },
+    { id:"aaa_30_hr",       title:"30 Triple-A Homers!",desc:"30 home runs at Triple-A.",
+      check:(s)=> s.HR >= 30,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"30","HOME RUNS","#0e0e4e","#fbbf24") },
+    { id:"aaa_walkoff_hr",  title:"Walk-Off Homer!",    desc:"A walk-off homer at Triple-A.",
+      check:(s,p,e)=> e&&e.walkOffHR,
+      art: (ctx,W,H)=> achArtWalkOff(ctx,W,H,"#0e0e4e") },
+    { id:"aaa_streak25",    title:"25-Game Hit Streak!",desc:"25 straight games with a hit.",
+      check:(s,p,e)=> e&&e.streak>=25,
+      art: (ctx,W,H)=> achArtStreak(ctx,W,H,25,"#818cf8") },
+    { id:"aaa_mlb_call",    title:"Called Up to MLB!",  desc:"The call every minor leaguer dreams of.",
+      check:(s,p)=> p&&p.justPromoted&&careerStage==="MLB",
+      art: (ctx,W,H)=> achArtSpecial(ctx,W,H,"THE CALL!","You're going to The Show.","#040828","#fbbf24") },
+  ],
+  "MLB": [
+    { id:"mlb_debut",       title:"MLB Debut!",         desc:"You played your first Major League game.",
+      check:(s,p)=> p&&p.mlbDebutGame,
+      art: (ctx,W,H)=> achArtSpecial(ctx,W,H,"MLB DEBUT","Welcome to The Show.","#040828","#fbbf24") },
+    { id:"mlb_first_hit",   title:"First MLB Hit!",     desc:"Your first hit in the Major Leagues.",
+      check:(s)=> s.H >= 1,
+      art: (ctx,W,H)=> achArtHit(ctx,W,H,"#040828","#fbbf24","FIRST MLB HIT!") },
+    { id:"mlb_first_hr",    title:"First MLB Homer!",   desc:"Your first home run in The Show.",
+      check:(s)=> s.HR >= 1,
+      art: (ctx,W,H)=> achArtHR(ctx,W,H,"#040828","#fbbf24") },
+    { id:"mlb_gwh",         title:"Game-Winning Hit!",  desc:"A clutch hit that won an MLB game.",
+      check:(s,p,e)=> e&&e.gameWinningHit,
+      art: (ctx,W,H)=> achArtHit(ctx,W,H,"#040828","#34d399","CLUTCH MLB HIT!") },
+    { id:"mlb_walkoff_hr",  title:"Walk-Off Homer!",    desc:"A walk-off homer in The Show. Legendary.",
+      check:(s,p,e)=> e&&e.walkOffHR,
+      art: (ctx,W,H)=> achArtWalkOff(ctx,W,H,"#040828") },
+    { id:"mlb_50_hits",     title:"50 MLB Hits!",       desc:"50 hits in the Major Leagues.",
+      check:(s)=> s.H >= 50,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"50","MLB HITS","#040828","#fbbf24") },
+    { id:"mlb_100_hits",    title:"100 MLB Hits!",      desc:"100 hits in the bigs.",
+      check:(s)=> s.H >= 100,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"100","MLB HITS","#040828","#fbbf24") },
+    { id:"mlb_200_hits",    title:"200 MLB Hits!",      desc:"200 hits — a legitimate big leaguer.",
+      check:(s)=> s.H >= 200,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"200","MLB HITS","#040828","#f59e0b") },
+    { id:"mlb_500_hits",    title:"500 MLB Hits!",      desc:"500 career MLB hits. Hall of Fame territory.",
+      check:(s)=> s.H >= 500,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"500","MLB HITS","#040828","#f59e0b") },
+    { id:"mlb_1000_hits",   title:"1000 MLB Hits!",     desc:"1000 hits — a certain Hall of Famer.",
+      check:(s)=> s.H >= 1000,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"1000","MLB HITS","#040828","#ef4444") },
+    { id:"mlb_10_hr",       title:"10 MLB Homers!",     desc:"10 home runs in The Show.",
+      check:(s)=> s.HR >= 10,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"10","MLB HOMERS","#040828","#fbbf24") },
+    { id:"mlb_50_hr",       title:"50 MLB Homers!",     desc:"50 home runs in The Show.",
+      check:(s)=> s.HR >= 50,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"50","MLB HOMERS","#040828","#f59e0b") },
+    { id:"mlb_100_hr",      title:"100 MLB Homers!",    desc:"100 career home runs. Power legend.",
+      check:(s)=> s.HR >= 100,
+      art: (ctx,W,H)=> achArtMilestone(ctx,W,H,"100","MLB HOMERS","#040828","#ef4444") },
+    { id:"mlb_streak20",    title:"20-Game Hit Streak!",desc:"20 consecutive games with a hit in MLB.",
+      check:(s,p,e)=> e&&e.streak>=20,
+      art: (ctx,W,H)=> achArtStreak(ctx,W,H,20,"#fbbf24") },
+    { id:"mlb_streak30",    title:"30-Game Hit Streak!",desc:"30 straight games — Joe DiMaggio territory.",
+      check:(s,p,e)=> e&&e.streak>=30,
+      art: (ctx,W,H)=> achArtStreak(ctx,W,H,30,"#f59e0b") },
+    { id:"mlb_streak56",    title:"56-Game Hit Streak!",desc:"56 consecutive games. The record.",
+      check:(s,p,e)=> e&&e.streak>=56,
+      art: (ctx,W,H)=> achArtStreak(ctx,W,H,56,"#ef4444") },
+    { id:"mlb_300_avg",     title:"Batting .300!",      desc:".300 batting average in MLB.",
+      check:(s)=> s.AB>=100 && s.H/s.AB>=0.300,
+      art: (ctx,W,H)=> achArtAvg(ctx,W,H,".300","#fbbf24") },
+    { id:"mlb_400_avg",     title:"Batting .400!",      desc:".400 in MLB. It hasn't been done since 1941.",
+      check:(s)=> s.AB>=100 && s.H/s.AB>=0.400,
+      art: (ctx,W,H)=> achArtAvg(ctx,W,H,".400","#ef4444") },
+    { id:"mlb_allstar",     title:"All-Star!",           desc:"Selected to the MLB All-Star Game.",
+      check:(s,p)=> p&&p.allStar,
+      art: (ctx,W,H)=> achArtSpecial(ctx,W,H,"ALL-STAR!","Voted to the Midsummer Classic.","#040828","#fbbf24") },
+    { id:"mlb_mvp",         title:"MVP Award!",         desc:"Most Valuable Player of the season.",
+      check:(s,p)=> p&&p.mvpWon,
+      art: (ctx,W,H)=> achArtSpecial(ctx,W,H,"MVP!","Most Valuable Player.","#040828","#f59e0b") },
+  ],
+};
+
+// ── Achievement state ──
+// player.achievements = { [stageKey]: [{id, title, earnedAt, stageStats}] }
+// player.achHitStreak = current hit streak (resets on non-hit game)
+
+function getAchGroup(){
+  let s = careerStage;
+  if(s==="Single-A"||s==="Double-A"||s==="Triple-A") return s;
+  return s; // LL, HS, College, MLB each have own group
+}
+
+function initAchievements(){
+  if(!player.achievements) player.achievements = {};
+  if(!player.achHitStreak) player.achHitStreak = 0;
+}
+
+function hasEarned(id){
+  let grp = getAchGroup();
+  if(!player.achievements) return false;
+  let earned = player.achievements[grp]||[];
+  return earned.some(a=>a.id===id);
+}
+
+function earnAchievement(ach){
+  initAchievements();
+  let grp = getAchGroup();
+  if(!player.achievements[grp]) player.achievements[grp]=[];
+  player.achievements[grp].push({
+    id: ach.id,
+    title: ach.title,
+    desc: ach.desc,
+    earnedAt: new Date().toLocaleDateString(),
+    stage: careerStage,
+    stats: {H:player.stats.H, HR:player.stats.HR, AVG:player.stats.AVG, RBI:player.stats.RBI},
+  });
+  showAchievementPopup(ach);
+}
+
+// Queue for sequential popups
+let _achQueue = [];
+let _achShowing = false;
+
+function showAchievementPopup(ach){
+  _achQueue.push(ach);
+  if(!_achShowing) processAchQueue();
+}
+
+function processAchQueue(){
+  if(_achQueue.length===0){ _achShowing=false; return; }
+  _achShowing=true;
+  let ach = _achQueue.shift();
+  _renderAchPopup(ach);
+}
+
+function _renderAchPopup(ach){
+  let stageColors = {
+    "Little League":"#16a34a","High School":"#2563eb","College":"#dc2626",
+    "Single-A":"#0369a1","Double-A":"#7c3aed","Triple-A":"#6366f1","MLB":"#b45309"
+  };
+  let col = stageColors[careerStage]||"#b45309";
+
+  document.getElementById("achStageLabel").textContent = careerStage.toUpperCase();
+  document.getElementById("achTitle").textContent = ach.title;
+  document.getElementById("achDesc").textContent = ach.desc;
+  document.getElementById("achStats").textContent =
+    `.${String(Math.round((player.stats.AVG||0)*1000)).padStart(3,"0")} AVG · ${player.stats.HR||0} HR · ${player.stats.RBI||0} RBI · ${player.stats.H||0} H`;
+
+  let canvas = document.getElementById("achCanvas");
+  canvas.width = 480; canvas.height = 280;
+  let ctx = canvas.getContext("2d");
+  ctx.clearRect(0,0,480,280);
+  try { ach.art(ctx, 480, 280, col); } catch(e){ achArtDefault(ctx,480,280,ach.title,col); }
+
+  document.getElementById("achievementModal").classList.remove("hidden");
+}
+
+function closeAchievement(){
+  document.getElementById("achievementModal").classList.add("hidden");
+  setTimeout(processAchQueue, 400);
+}
+
+// ── Check achievements after every at-bat result ──
+function checkAchievements(gameResult){
+  if(!player || !careerStage) return;
+  initAchievements();
+  let grp = getAchGroup();
+  let defs = ACHIEVEMENTS[grp];
+  if(!defs) return;
+
+  // Update hit streak
+  if(gameResult && gameResult.H > 0){
+    player.achHitStreak = (player.achHitStreak||0) + 1;
+  } else if(gameResult && gameResult.AB > 0){
+    player.achHitStreak = 0;
+  }
+
+  // Build extra context
+  let extra = {
+    streak: player.achHitStreak||0,
+    gameWinningHit: gameResult && gameResult.gameWinningHit,
+    walkOffHR: gameResult && gameResult.walkOffHR,
+  };
+
+  // Check each unearned achievement
+  for(let ach of defs){
+    if(hasEarned(ach.id)) continue;
+    try {
+      if(ach.check(player.stats, player, extra)){
+        earnAchievement(ach);
+      }
+    } catch(e){}
+  }
+}
+
+// Reset streak and debut flag on stage change
+function resetAchievementState(){
+  if(player){
+    player.achHitStreak = 0;
+    player.mlbDebutGame = false;
+    player.justPromoted = false;
+  }
+}
+
+// ── Trophy Room ──
+function openTrophyRoom(){
+  if(!player){ showToast("Start a game first!","warning"); return; }
+  initAchievements();
+  // Build stage tabs
+  let tabs = document.getElementById("trophyTabs");
+  let stages = ACH_STAGES.filter(s => {
+    let grp = s;
+    return (player.achievements[grp]||[]).length > 0 || s===careerStage;
+  });
+  if(stages.length===0) stages = ["Little League"];
+  let activeStage = stages.includes(careerStage)?careerStage:stages[0];
+  tabs.innerHTML = stages.map(s=>`<button class="equip-tab${s===activeStage?" active":""}" onclick="trophyShowStage('${s}',this)">${s}</button>`).join("");
+  trophyShowStage(activeStage);
+  document.getElementById("trophyRoomModal").classList.remove("hidden");
+}
+
+function closeTrophyRoom(){
+  document.getElementById("trophyRoomModal").classList.add("hidden");
+}
+
+function trophyShowStage(stage, btnEl){
+  document.querySelectorAll("#trophyTabs .equip-tab").forEach(b=>{
+    b.classList.toggle("active", b.textContent.trim()===stage);
+  });
+  initAchievements();
+  let earned = player.achievements[stage]||[];
+  let defs   = ACHIEVEMENTS[stage]||[];
+  let grid   = document.getElementById("trophyGrid");
+
+  // Update count
+  let countEl = document.getElementById("trophyCount");
+  if(countEl){
+    let total = Object.values(player.achievements||{}).reduce((a,v)=>a+v.length,0);
+    countEl.textContent = `${earned.length} of ${defs.length} unlocked this stage · ${total} total`;
+  }
+
+  document.getElementById("trophyDetailPanel").style.display="none";
+
+  if(defs.length===0){
+    grid.innerHTML=`<p style="color:var(--muted);text-align:center;padding:20px;font-family:monospace;">No achievements for this stage.</p>`;
+    return;
+  }
+
+  // Build cards with mini canvas previews
+  let html = `<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:8px;">`;
+  html += defs.map(def=>{
+    let e = earned.find(a=>a.id===def.id);
+    let locked = !e;
+    return `<div onclick="${locked?'':'trophyViewAch(\''+def.id+'\',\''+stage+'\')'}"
+      style="background:${locked?"rgba(0,0,0,0.4)":"rgba(255,255,255,0.05)"};
+             border:1px solid ${locked?"rgba(255,255,255,0.07)":"rgba(251,191,36,0.35)"};
+             border-radius:6px;overflow:hidden;cursor:${locked?"default":"pointer"};
+             opacity:${locked?0.4:1};transition:border-color 0.12s,transform 0.12s;"
+      onmouseenter="if(!${locked}){this.style.borderColor='#fbbf24';this.style.transform='translateY(-2px)'}"
+      onmouseleave="if(!${locked}){this.style.borderColor='rgba(251,191,36,0.35)';this.style.transform=''}">
+      <canvas id="mini_${def.id}" width="160" height="90" style="display:block;width:100%;image-rendering:pixelated;${locked?"filter:grayscale(1) brightness(0.3)":""}"></canvas>
+      <div style="padding:7px 8px;">
+        <div style="font-size:0.75rem;font-weight:700;color:${locked?"rgba(255,255,255,0.3)":"var(--ink)"};margin-bottom:2px;font-family:monospace;">${locked?"???":def.title}</div>
+        <div style="font-size:0.63rem;color:var(--muted);line-height:1.3;">${locked?"Locked":def.desc}</div>
+        ${e?`<div style="font-size:0.6rem;color:#fbbf24;margin-top:4px;font-family:monospace;">${e.earnedAt||""}</div>`:""}
+      </div>
+    </div>`;
+  }).join("");
+  html += `</div>`;
+  grid.innerHTML = html;
+
+  // Render mini canvases after DOM updates
+  requestAnimationFrame(()=>{
+    defs.forEach(def=>{
+      let cvs = document.getElementById("mini_"+def.id);
+      if(!cvs) return;
+      let ctx = cvs.getContext("2d");
+      try { def.art(ctx, 160, 90, "#888"); }
+      catch(e){ achArtDefault(ctx, 160, 90, def.title, "#888"); }
+    });
+  });
+}
+
+function trophyViewAch(id, stage){
+  initAchievements();
+  let earned = (player.achievements[stage]||[]).find(a=>a.id===id);
+  let def    = (ACHIEVEMENTS[stage]||[]).find(d=>d.id===id);
+  if(!def||!earned) return;
+
+  let panel = document.getElementById("trophyDetailPanel");
+  let cvs   = document.getElementById("trophyDetailCanvas");
+  let ctx   = cvs.getContext("2d");
+  ctx.clearRect(0,0,700,300);
+  try { def.art(ctx, 700, 300, "#888"); }
+  catch(e){ achArtDefault(ctx,700,300,def.title,"#888"); }
+
+  document.getElementById("trophyDetailTitle").textContent = def.title;
+  document.getElementById("trophyDetailStats").textContent = earned.stats
+    ? `.${String(Math.round((earned.stats.AVG||0)*1000)).padStart(3,"0")} AVG · ${earned.stats.HR} HR · ${earned.stats.RBI} RBI · ${earned.stats.H} H · ${earned.earnedAt||""}`
+    : earned.earnedAt||"";
+
+  panel.style.display = "block";
+  panel.scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+// ════════════════════════════════════════════
+// ACHIEVEMENT ART GENERATORS
+// Canvas pixel art for each achievement type
+// ════════════════════════════════════════════
+
+// ════════════════════════════════════════════════════════════
+// ACHIEVEMENT ART — Authentic Clutch Hitter / Sega System 18 style
+// Based on actual game screenshots: hard pixel outlines, flat color blocks,
+// dithering for shading, grey stipple crowd, bright saturated Sega palette
+// ════════════════════════════════════════════════════════════
+
+// ── Sega System 18 hardware palette (exact RGB from screenshots) ──
+const SP = {
+  // Sky & background
+  skyDayHi:"#88c8f0",  skyDayLo:"#60b0e8",
+  skyNightHi:"#081840",skyNightLo:"#040c28",
+  skyDuskHi:"#3060a8", skyDuskLo:"#183080",
+  // Stadium walls/stands (grey concrete from screenshot)
+  standsDark:"#606870", standsLight:"#909898", standsMid:"#788088",
+  standsShadow:"#484e54",
+  // Crowd dots (grey mottled - exactly like screenshot image 2)
+  crowdBase:"#9090a0", crowdDark:"#707080", crowdLight:"#b0b0c0",
+  crowdDot1:"#808090", crowdDot2:"#a0a0b0",
+  // Field colors (bright Sega green)
+  fieldBright:"#30c840",fieldDark:"#20a030",fieldStripe:"#28b438",
+  dirtBright:"#c8a040",dirtDark:"#a07830",
+  // Green outfield wall (like screenshot)
+  wallGreen:"#30a038", wallDarkGreen:"#1c7028",
+  // Player colors
+  skinLight:"#f0b878", skinMid:"#d89060", skinDark:"#b87048",skinShadow:"#906038",
+  white:"#f8f8f0", cream:"#e8e0c0",
+  // Team jerseys (from screenshot: blue/white pinstripes)
+  jerseyBlue:"#4060c8", jerseyCap:"#3050a8",jerseyDark:"#203888",
+  jerseySock:"#c82020",
+  jerseyGrey:"#c0c0c8", jerseyGreyDk:"#9898a0",
+  jerseyWhite:"#f0f0e8",
+  jerseyRed:"#c82020",  jerseyRedDk:"#901818",
+  jerseyPurple:"#7030c0",jerseyPurpleDk:"#501890",
+  // Helmet colors
+  helmetBlue:"#3050a8", helmetRed:"#a81818",helmetPurple:"#6028a8",
+  // Gold (number on card, from screenshot image 3)
+  gold:"#e8b820",  goldDark:"#b88810", goldBright:"#f0d040",
+  // Black outline (thick, like real sprites)
+  outline:"#080808",
+  // Ball
+  ballWhite:"#f0e8d0",ballShadow:"#c8b890",
+  ballSeam:"#c82020",
+  // Text colors
+  textYellow:"#f8e020",textYellowDk:"#c8a000",
+  textWhite:"#f8f8f8",textRed:"#e82020",
+  textBlue:"#2060e8",  textGreen:"#20c040",
+  // Umpire grey (from screenshot)
+  umpGrey:"#808898",umpGreyDk:"#606070",umpGreyLt:"#a8b0b8",
+};
+
+// Stage configs (what stadium/time to show)
+const ACH_STAGE_CFG = {
+  "Little League":{ sky:"day",   crowd:"sparse",  wall:false, lights:false, night:false, teamA:[SP.jerseyRed,SP.helmetRed],     teamB:[SP.jerseyGrey,SP.helmetBlue]  },
+  "High School":  { sky:"day",   crowd:"small",   wall:true,  lights:false, night:false, teamA:[SP.jerseyBlue,SP.helmetBlue],   teamB:[SP.jerseyGrey,SP.helmetRed]   },
+  "College":      { sky:"day",   crowd:"medium",  wall:true,  lights:true,  night:false, teamA:[SP.jerseyWhite,SP.helmetBlue],  teamB:[SP.jerseyGrey,SP.helmetRed]   },
+  "Single-A":     { sky:"dusk",  crowd:"medium",  wall:true,  lights:true,  night:false, teamA:[SP.jerseyBlue,SP.helmetBlue],   teamB:[SP.jerseyGrey,SP.helmetPurple]},
+  "Double-A":     { sky:"night", crowd:"large",   wall:true,  lights:true,  night:true,  teamA:[SP.jerseyPurple,SP.helmetPurple],teamB:[SP.jerseyGrey,SP.helmetBlue]  },
+  "Triple-A":     { sky:"night", crowd:"large",   wall:true,  lights:true,  night:true,  teamA:[SP.jerseyBlue,SP.helmetBlue],   teamB:[SP.jerseyGrey,SP.helmetRed]   },
+  "MLB":          { sky:"night", crowd:"packed",  wall:true,  lights:true,  night:true,  teamA:[SP.jerseyWhite,SP.helmetBlue],  teamB:[SP.jerseyGrey,SP.helmetRed]   },
+};
+
+// ─── PIXEL HELPERS ───
+function P(ctx,x,y,w,h){ ctx.fillRect(x|0,y|0,(w||1)|0,(h||1)|0); }
+
+// Dither pattern (2x2 checkerboard for shading, like real Sega sprites)
+function Pdither(ctx,x,y,w,h,col1,col2){
+  for(let py=y|0;py<(y+h)|0;py++){
+    for(let px=x|0;px<(x+w)|0;px++){
+      ctx.fillStyle=(px+py)%2===0?col1:col2;
+      ctx.fillRect(px,py,1,1);
+    }
+  }
+}
+
+// Thick black outline box (key Clutch Hitter look)
+function Poutline(ctx,x,y,w,h,thick){
+  thick=thick||2;
+  ctx.fillStyle=SP.outline;
+  P(ctx,x-thick,y-thick,w+thick*2,thick);     // top
+  P(ctx,x-thick,y+h,    w+thick*2,thick);     // bottom
+  P(ctx,x-thick,y,      thick,    h);          // left
+  P(ctx,x+w,    y,      thick,    h);          // right
+}
+
+// Big arcade text with hard shadow (like "SELECT STADIUM" in image 4)
+function Ptext(ctx,text,x,y,size,col,shadowCol,outline){
+  ctx.font=`bold ${size}px monospace`;
+  ctx.textAlign="center";
+  // Thick pixel outline
+  ctx.fillStyle=outline||SP.outline;
+  let offsets=[[-2,0],[2,0],[0,-2],[0,2],[-2,-2],[2,-2],[-2,2],[2,2]];
+  offsets.forEach(([dx,dy])=>ctx.fillText(text,x+dx,y+dy));
+  // Shadow
+  if(shadowCol){ ctx.fillStyle=shadowCol; ctx.fillText(text,x+3,y+3); }
+  // Main text
+  ctx.fillStyle=col; ctx.fillText(text,x,y);
+}
+
+// ─── BACKGROUND SCENES ───
+// Based directly on screenshot image 2: grey stands, green field, crowd dots
+
+function achBgScene(ctx,W,H,stage){
+  let C = ACH_STAGE_CFG[stage] || ACH_STAGE_CFG["MLB"];
+
+  // SKY
+  if(C.sky==="day"){
+    ctx.fillStyle=SP.skyDayHi; P(ctx,0,0,W,H*0.28);
+    ctx.fillStyle=SP.skyDayLo; P(ctx,0,H*0.22,W,H*0.10);
+  } else if(C.sky==="dusk"){
+    ctx.fillStyle=SP.skyDuskHi; P(ctx,0,0,W,H*0.28);
+    ctx.fillStyle=SP.skyDuskLo; P(ctx,0,H*0.22,W,H*0.10);
+    // Orange horizon
+    ctx.fillStyle="#e06020"; P(ctx,0,H*0.25,W,H*0.05);
+  } else {
+    ctx.fillStyle=SP.skyNightHi; P(ctx,0,0,W,H*0.10);
+    ctx.fillStyle=SP.skyNightLo; P(ctx,0,H*0.08,W,H*0.24);
+    // Stars
+    for(let i=0;i<50;i++){
+      let sx=(i*137+i*i*31)%W|0, sy=(i*79+i*19)%(H*0.26)|0;
+      ctx.fillStyle=i%3===0?"#ffffff":"#c0c8e0";
+      P(ctx,sx,sy,i%5===0?2:1,i%5===0?2:1);
+    }
+    // Moon
+    ctx.fillStyle="#f0f0d0"; ctx.beginPath(); ctx.arc(W*0.88,H*0.08,10,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle=SP.skyNightLo; ctx.beginPath(); ctx.arc(W*0.91,H*0.07,7.5,0,Math.PI*2); ctx.fill();
+  }
+
+  // STADIUM UPPER DECK (grey concrete, like screenshot)
+  // The stands in image 2 are grey with rows of tiny crowd dots
+  ctx.fillStyle=SP.standsDark; P(ctx,0,H*0.12,W,H*0.22);
+  ctx.fillStyle=SP.standsMid;  P(ctx,0,H*0.14,W,H*0.05);
+  ctx.fillStyle=SP.standsLight;P(ctx,0,H*0.19,W,H*0.04);
+
+  // CROWD ROWS — grey stipple dots (exactly matching screenshot image 2)
+  // Image 2 shows uniform grey crowd with tiny colored dots
+  let crowdTypes=C.crowd==="packed"?8:C.crowd==="large"?6:C.crowd==="medium"?4:C.crowd==="small"?2:1;
+  for(let row=0;row<crowdTypes;row++){
+    let ry=H*(0.13+row*0.025), rh=H*0.022;
+    // Row base (grey)
+    ctx.fillStyle=row%2===0?SP.crowdBase:SP.crowdDark;
+    P(ctx,0,ry,W,rh);
+    // Individual crowd dots (2px, mottled grey with occasional color)
+    let dotColors=[SP.crowdDot1,SP.crowdDot2,SP.crowdLight,SP.crowdDark];
+    let teamColors=["#3060c8","#c82020","#f0f0f0","#c0c040","#c03090"];
+    for(let x=2;x<W-2;x+=4){
+      let jitter=Math.sin(x*0.6+row*1.3)*0.8|0;
+      // Head
+      ctx.fillStyle=row%3===0&&x%16<4?teamColors[x%5]:["#f0b878","#d89060","#b87048","#c89058"][(x*3+row*7)%4];
+      P(ctx,x,ry+jitter,3,rh*0.42);
+      // Body
+      ctx.fillStyle=row%3===0&&x%16<4?teamColors[(x+2)%5]:dotColors[(x*5+row*11)%4];
+      P(ctx,x,ry+rh*0.42+jitter,4,rh*0.55);
+    }
+  }
+
+  // STADIUM LIGHTS (image 4 shows light towers clearly)
+  if(C.lights){
+    let lightX=[W*0.04,W*0.2,W*0.8,W*0.96];
+    lightX.forEach(lx=>{
+      ctx.fillStyle="#909080"; P(ctx,lx-2,H*0.10,4,H*0.22); // pole
+      ctx.fillStyle="#c0c0a0"; P(ctx,lx-12,H*0.08,24,8);    // bank
+      ctx.fillStyle="#ffffe0"; P(ctx,lx-10,H*0.09,20,5);    // bulbs
+      if(C.night){
+        // Light cone
+        ctx.fillStyle="rgba(255,255,200,0.035)";
+        ctx.beginPath(); ctx.moveTo(lx,H*0.12); ctx.lineTo(lx-W*0.14,H); ctx.lineTo(lx+W*0.14,H); ctx.closePath(); ctx.fill();
+      }
+    });
+  }
+
+  // GREEN OUTFIELD WALL (image 2 has bright green wall behind players)
+  ctx.fillStyle=SP.wallGreen;     P(ctx,0,H*0.33,W,H*0.05);
+  ctx.fillStyle=SP.wallDarkGreen; P(ctx,0,H*0.33,W,3);
+  ctx.fillStyle=SP.wallDarkGreen; P(ctx,0,H*0.38,W,2);
+  // Wall panel divisions
+  let panelW=W/14;
+  for(let i=0;i<14;i++){
+    if(i%3===1) ctx.fillStyle=SP.wallDarkGreen;
+    else ctx.fillStyle=SP.wallGreen;
+    P(ctx,i*panelW,H*0.335,panelW-1,H*0.044);
+    // Panel highlight
+    ctx.fillStyle="rgba(255,255,255,0.08)";
+    P(ctx,i*panelW,H*0.335,panelW-1,2);
+  }
+
+  // WARNING TRACK
+  ctx.fillStyle=SP.dirtDark; P(ctx,0,H*0.38,W,H*0.025);
+  Pdither(ctx,0,H*0.38,W,H*0.012,SP.dirtBright,SP.dirtDark);
+
+  // GRASS FIELD (bright Sega green with mowing stripes — image 2)
+  ctx.fillStyle=SP.fieldBright; P(ctx,0,H*0.405,W,H);
+  // Alternating stripes (prominent in all screenshots)
+  let sw=W/10;
+  for(let s=0;s<10;s++){
+    ctx.fillStyle=s%2===0?SP.fieldBright:SP.fieldDark;
+    P(ctx,s*sw,H*0.405,sw,H*0.595);
+  }
+
+  // FOUL LINES
+  ctx.fillStyle="#f8f8f0";
+  // Left line
+  ctx.save(); ctx.translate(W/2,H*0.40);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-W*0.52,H*0.60); ctx.lineWidth=2; ctx.strokeStyle="#f0f0e0"; ctx.stroke();
+  // Right line
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(W*0.52,H*0.60);  ctx.stroke();
+  ctx.restore();
+
+  // INFIELD DIRT CIRCLE
+  ctx.fillStyle=SP.dirtBright;
+  ctx.beginPath(); ctx.ellipse(W/2,H*0.72,W*0.26,H*0.10,0,0,Math.PI*2); ctx.fill();
+  Pdither(ctx,W/2-W*0.22,H*0.66,W*0.44,H*0.12,SP.dirtBright,SP.dirtDark);
+
+  // PITCHER'S MOUND
+  ctx.fillStyle=SP.dirtBright;
+  ctx.beginPath(); ctx.ellipse(W/2,H*0.51,W*0.06,H*0.03,0,0,Math.PI*2); ctx.fill();
+  Pdither(ctx,W/2-W*0.04,H*0.49,W*0.08,H*0.025,SP.dirtBright,SP.dirtDark);
+
+  // Stage label (arcade overlay style, bottom right)
+  ctx.font="bold 9px monospace"; ctx.textAlign="right";
+  ctx.fillStyle=SP.outline; ctx.fillText(stage.toUpperCase(),W-3,H-3);
+  ctx.fillStyle="rgba(255,255,255,0.35)"; ctx.fillText(stage.toUpperCase(),W-4,H-4);
+}
+
+// ─── PLAYER SPRITES (Clutch Hitter style — large chunky, thick outlines) ───
+// Based on image 2 and 3: oversized sprites, pinstripe uniforms, detailed helmets
+
+function achSpriteBatter(ctx,x,y,scale,jersey,helmet,swing,pinstripe){
+  let s=scale||1;
+  ctx.save(); ctx.translate(x|0,y|0); ctx.scale(s,s);
+
+  // ── SHADOW (ellipse under feet)
+  ctx.fillStyle="rgba(0,0,0,0.35)";
+  ctx.beginPath(); ctx.ellipse(0,6,14,5,0,0,Math.PI*2); ctx.fill();
+
+  // ── CLEATS
+  ctx.fillStyle=SP.outline;
+  P(ctx,-9,16,10,6); P(ctx,2,16,10,6);
+  ctx.fillStyle="#303030";
+  P(ctx,-8,17,8,4);  P(ctx,3,17,8,4);
+  // Cleat spikes
+  ctx.fillStyle=SP.outline;
+  for(let sp=0;sp<4;sp++){ P(ctx,-7+sp*2,22,2,3); P(ctx,4+sp*2,22,2,3); }
+
+  // ── PANTS (white with black outline)
+  ctx.fillStyle=SP.outline;
+  P(ctx,-9,-2,9,22); P(ctx,1,-2,9,22);  // outline
+  ctx.fillStyle=SP.white;
+  P(ctx,-8,-1,7,20); P(ctx,2,-1,7,20);
+  // Pant leg shadow
+  ctx.fillStyle=SP.cream;
+  P(ctx,-8,8,3,12); P(ctx,6,8,3,12);
+  // Stirrups
+  ctx.fillStyle=jersey[0];
+  P(ctx,-8,12,3,8); P(ctx,6,12,3,8);
+
+  // ── JERSEY BODY (with thick outline, matching image 2)
+  ctx.fillStyle=SP.outline;
+  P(ctx,-12,-30,24,32);  // outer outline
+  ctx.fillStyle=jersey[0];
+  P(ctx,-11,-29,22,30);
+  // Jersey shading (dither on side)
+  Pdither(ctx,-11,-29,4,30,jersey[0],SP.outline);
+  Pdither(ctx,7,-29,4,30,jersey[0],SP.outline);
+  // Pinstripes (image 2 shows pinstripe uniforms)
+  if(pinstripe){
+    ctx.fillStyle="rgba(255,255,255,0.25)";
+    for(let p=0;p<5;p++) P(ctx,-9+p*4,-29,1,30);
+  }
+  // Front placket
+  ctx.fillStyle="rgba(0,0,0,0.25)"; P(ctx,-1,-26,2,20);
+  // Belt
+  ctx.fillStyle=SP.outline; P(ctx,-11,-2,22,3);
+  ctx.fillStyle="#404040"; P(ctx,-10,-1,20,1);
+
+  // ── ARMS (swing animation)
+  let batAngle = swing<0.05 ? -1.05 : -1.05+swing*2.75;
+  if(swing<0.15){
+    // Ready stance — hands back
+    ctx.fillStyle=SP.outline; P(ctx,5,-32,8,18); P(ctx,-4,-36,7,16);
+    ctx.fillStyle=jersey[0]; P(ctx,6,-31,6,16); P(ctx,-3,-35,5,14);
+    // Batting gloves
+    ctx.fillStyle="#c09040"; P(ctx,6,-16,6,6); P(ctx,-3,-22,5,6);
+  } else {
+    // Swing — arms rotate through contact
+    ctx.save(); ctx.rotate(-0.3+swing*1.9);
+    ctx.fillStyle=SP.outline; P(ctx,4,-32,8,20);
+    ctx.fillStyle=jersey[0];  P(ctx,5,-31,6,18);
+    ctx.restore();
+    ctx.save(); ctx.rotate(-0.5+swing*2.1);
+    ctx.fillStyle=SP.outline; P(ctx,-4,-34,7,18);
+    ctx.fillStyle=jersey[0];  P(ctx,-3,-33,5,16);
+    ctx.restore();
+  }
+
+  // ── BAT (Clutch Hitter shows brown wood bat clearly)
+  ctx.save();
+  ctx.translate(6,-28);
+  ctx.rotate(batAngle);
+  // Bat shadow trail
+  for(let g=1;g<=3;g++){
+    let gs=Math.max(0,swing-g*0.10);
+    if(gs<0.05) continue;
+    ctx.save(); ctx.rotate(-g*0.18); ctx.globalAlpha=0.2-g*0.04;
+    ctx.fillStyle="#f8e040"; P(ctx,-2,-46,4,46); ctx.restore();
+  }
+  ctx.globalAlpha=1;
+  // Knob
+  ctx.fillStyle=SP.outline; P(ctx,-4,-2,8,6);
+  ctx.fillStyle="#804010"; P(ctx,-3,-1,6,4);
+  // Handle
+  ctx.fillStyle=SP.outline; P(ctx,-3,-30,6,30);
+  ctx.fillStyle="#904818"; P(ctx,-2,-29,4,28);
+  // Grip tape
+  ctx.fillStyle="#282018"; P(ctx,-2,-20,4,2); P(ctx,-2,-15,4,2); P(ctx,-2,-10,4,2);
+  // Barrel
+  ctx.fillStyle=SP.outline; P(ctx,-5,-50,10,22);
+  ctx.fillStyle="#c08030"; P(ctx,-4,-49,8,20);
+  ctx.fillStyle="#d4a040"; P(ctx,-3,-49,4,16);  // highlight
+  ctx.fillStyle="#a06020"; P(ctx,2,-49,2,16);   // shadow
+  // End cap
+  ctx.fillStyle=SP.outline; P(ctx,-5,-52,10,4);
+  ctx.fillStyle="#b07028"; P(ctx,-4,-51,8,3);
+  ctx.restore();
+
+  // ── HEAD & NECK
+  ctx.fillStyle=SP.outline;
+  P(ctx,-6,-38,12,12);  // neck outline
+  ctx.fillStyle=SP.skinMid;
+  P(ctx,-5,-37,10,10);
+  // Neck shadow
+  ctx.fillStyle=SP.skinDark; P(ctx,-5,-34,4,6); P(ctx,3,-34,2,6);
+
+  // ── FACE (image 3 shows detailed face with skin tones)
+  ctx.fillStyle=SP.outline;  P(ctx,-10,-56,20,20);
+  ctx.fillStyle=SP.skinLight; P(ctx,-9,-55,18,18);
+  // Face shading
+  ctx.fillStyle=SP.skinMid;  P(ctx,-9,-55,4,18);   // left shadow
+  ctx.fillStyle=SP.skinShadow;P(ctx,-9,-55,2,18);  // deeper shadow
+  ctx.fillStyle=SP.skinDark;  P(ctx,5,-55,4,18);   // right shadow
+  // Eyes (image 3 has detailed eyes)
+  ctx.fillStyle="#f8f8f0"; P(ctx,-5,-49,4,4); P(ctx,1,-49,4,4);
+  ctx.fillStyle="#303070"; P(ctx,-4,-48,3,3); P(ctx,2,-48,3,3);
+  ctx.fillStyle=SP.outline;  P(ctx,-4,-49,3,1); P(ctx,2,-49,3,1); // brow
+  ctx.fillStyle="#804020";   P(ctx,-5,-44,4,1); P(ctx,1,-44,4,1); // eyebrow
+  // Nose
+  ctx.fillStyle=SP.skinDark; P(ctx,-1,-44,2,3);
+  // Mouth (gritted)
+  ctx.fillStyle="#601010"; P(ctx,-4,-39,8,2);
+  ctx.fillStyle="#f0f0e0"; P(ctx,-3,-39,6,1);
+
+  // ── BATTING HELMET (image 3 shows purple helmet with gold logo star)
+  ctx.fillStyle=SP.outline;
+  P(ctx,-12,-58,24,12); // dome outline
+  P(ctx,-13,-68,26,12); // top outline
+  P(ctx,-15,-50,5,16);  // ear flap outline
+  P(ctx,-17,-48,4,8);   // brim outline
+  ctx.fillStyle=helmet;
+  P(ctx,-11,-57,22,11); // dome
+  P(ctx,-12,-67,24,11); // top
+  // Helmet shading
+  Pdither(ctx,-11,-57,6,11,helmet,SP.outline);     // left shadow
+  Pdither(ctx,7,-57,4,11,helmet,SP.outline);       // right shadow
+  ctx.fillStyle=SP.outline;
+  P(ctx,-15,-49,5,15); // ear flap dark side
+  ctx.fillStyle=helmet;
+  P(ctx,-14,-49,4,14); // ear flap
+  // Brim
+  ctx.fillStyle=SP.outline; P(ctx,-17,-47,5,6);
+  ctx.fillStyle=helmet;     P(ctx,-16,-46,4,5);
+  // Helmet logo (star, like image 3)
+  ctx.fillStyle=SP.gold;
+  P(ctx,-2,-65,4,2); P(ctx,-1,-66,2,4); // cross
+  P(ctx,-3,-64,2,2); P(ctx,1,-64,2,2);  // diagonals
+  // Helmet highlight
+  ctx.fillStyle="rgba(255,255,255,0.18)";
+  P(ctx,-8,-66,5,6);
+
+  ctx.restore();
+}
+
+// ── Clutch Hitter pitcher sprite (image 2 shows umpire + pitcher clearly)
+function achSpritePitcher(ctx,x,y,scale,jersey,helmet,windupT){
+  let s=scale||1;
+  ctx.save(); ctx.translate(x|0,y|0); ctx.scale(s,s);
+  ctx.fillStyle="rgba(0,0,0,0.3)";
+  ctx.beginPath(); ctx.ellipse(0,8,12,4,0,0,Math.PI*2); ctx.fill();
+  // Cleats
+  ctx.fillStyle=SP.outline; P(ctx,-6,15,8,6); P(ctx,1,15,8,6);
+  ctx.fillStyle="#303030";  P(ctx,-5,16,6,4); P(ctx,2,16,6,4);
+  // Pants
+  ctx.fillStyle=SP.outline; P(ctx,-7,-2,7,18); P(ctx,1,-2,7,18);
+  ctx.fillStyle=SP.white;   P(ctx,-6,-1,5,17); P(ctx,2,-1,5,17);
+  ctx.fillStyle=jersey[0];  P(ctx,-6,10,2,7); P(ctx,5,10,2,7); // stirrups
+  // Jersey
+  ctx.fillStyle=SP.outline; P(ctx,-10,-26,20,28);
+  ctx.fillStyle=jersey[0];  P(ctx,-9,-25,18,26);
+  Pdither(ctx,-9,-25,3,26,jersey[0],SP.outline);
+  Pdither(ctx,6,-25,3,26,jersey[0],SP.outline);
+  // Throwing arm
+  let armA = -0.3 - windupT*1.1;
+  if(windupT>0.6) armA = -0.3-1.1+(windupT-0.6)*3.8;
+  ctx.save(); ctx.rotate(armA);
+  ctx.fillStyle=SP.outline; P(ctx,6,-26,7,20);
+  ctx.fillStyle=jersey[0];  P(ctx,7,-25,5,18);
+  ctx.fillStyle=SP.skinMid; P(ctx,7,-8,5,14);
+  ctx.restore();
+  // Glove arm
+  ctx.save(); ctx.rotate(0.3-windupT*0.5);
+  ctx.fillStyle=SP.outline;  P(ctx,-13,-24,7,18);
+  ctx.fillStyle=jersey[0];   P(ctx,-12,-23,5,16);
+  ctx.fillStyle="#8b4513";   P(ctx,-16,-8,10,10); // glove
+  ctx.fillStyle="#6b3510";   P(ctx,-17,-10,4,5);  // glove thumb
+  ctx.restore();
+  // Head
+  ctx.fillStyle=SP.outline; P(ctx,-6,-35,12,12);
+  ctx.fillStyle=SP.skinMid; P(ctx,-5,-34,10,10);
+  ctx.fillStyle=SP.skinDark;P(ctx,-5,-31,3,6);
+  ctx.fillStyle=SP.outline; P(ctx,-10,-52,20,18);
+  ctx.fillStyle=SP.skinLight;P(ctx,-9,-51,18,16);
+  ctx.fillStyle="#303060";P(ctx,-4,-44,2,3); ctx.fillStyle="#303060";P(ctx,2,-44,2,3);
+  // Cap
+  ctx.fillStyle=SP.outline; P(ctx,-11,-52,22,10); P(ctx,-10,-61,20,11);
+  P(ctx,-13,-51,4,4); P(ctx,10,-51,4,4);
+  ctx.fillStyle=helmet; P(ctx,-10,-51,20,9); P(ctx,-9,-60,18,10);
+  ctx.fillStyle=helmet; P(ctx,-12,-50,3,4); P(ctx,9,-50,4,4);
+  ctx.fillStyle=SP.gold; P(ctx,-2,-57,4,2); P(ctx,-1,-58,2,4);
+  ctx.restore();
+}
+
+// ── Umpire sprite (image 2 shows umpire in grey on left)
+function achSpriteUmpire(ctx,x,y,scale){
+  let s=scale||1;
+  ctx.save(); ctx.translate(x|0,y|0); ctx.scale(s,s);
+  ctx.fillStyle="rgba(0,0,0,0.25)"; ctx.beginPath(); ctx.ellipse(0,6,10,3,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle=SP.outline; P(ctx,-5,12,5,6); P(ctx,1,12,5,6);
+  ctx.fillStyle="#383838"; P(ctx,-4,13,4,4); P(ctx,2,13,4,4);
+  ctx.fillStyle=SP.outline; P(ctx,-7,-2,6,15); P(ctx,1,-2,6,15);
+  ctx.fillStyle=SP.umpGrey; P(ctx,-6,-1,5,13); P(ctx,2,-1,5,13);
+  ctx.fillStyle=SP.outline; P(ctx,-9,-22,18,22);
+  ctx.fillStyle=SP.umpGrey; P(ctx,-8,-21,16,20);
+  Pdither(ctx,-8,-21,4,20,SP.umpGrey,SP.umpGreyDk);
+  // Arms raised (calling safe/out)
+  ctx.fillStyle=SP.outline; P(ctx,-12,-18,5,6); P(ctx,8,-18,5,6);
+  ctx.fillStyle=SP.umpGrey; P(ctx,-11,-17,3,5); P(ctx,9,-17,3,5);
+  ctx.fillStyle=SP.skinMid; P(ctx,-11,-12,4,5); P(ctx,8,-12,4,5);
+  // Head
+  ctx.fillStyle=SP.outline; P(ctx,-6,-30,12,10);
+  ctx.fillStyle=SP.skinLight;P(ctx,-5,-29,10,8);
+  // Umpire cap (dark blue/black)
+  ctx.fillStyle=SP.outline; P(ctx,-7,-33,14,8); P(ctx,-6,-40,12,9);
+  P(ctx,-9,-32,3,3); P(ctx,7,-32,3,3);
+  ctx.fillStyle="#202838"; P(ctx,-6,-32,12,7); P(ctx,-5,-39,10,8);
+  ctx.fillStyle="#202838"; P(ctx,-8,-31,3,3); P(ctx,6,-31,3,3);
+  // Ball/strike indicator panel (image 2 shows count panel on left)
+  ctx.restore();
+}
+
+// ── Home plate (from image 2 — white pentagon with red ball spot)
+function achSpritePlate(ctx,x,y,scale){
+  let s=scale||1;
+  ctx.save(); ctx.translate(x|0,y|0); ctx.scale(s,s);
+  ctx.fillStyle=SP.outline;
+  ctx.beginPath(); ctx.moveTo(-24,0); ctx.lineTo(24,0); ctx.lineTo(24,12); ctx.lineTo(0,22); ctx.lineTo(-24,12); ctx.closePath(); ctx.fill();
+  ctx.fillStyle="#f0f0ec";
+  ctx.beginPath(); ctx.moveTo(-22,1); ctx.lineTo(22,1); ctx.lineTo(22,11); ctx.lineTo(0,19); ctx.lineTo(-22,11); ctx.closePath(); ctx.fill();
+  // Batter's box lines
+  ctx.strokeStyle="rgba(255,255,255,0.5)"; ctx.lineWidth=2;
+  ctx.strokeRect(-50,-40,30,50);
+  ctx.restore();
+}
+
+// ── Count indicator panel (like image 2 — boxes for B, S, O)
+function achCountPanel(ctx,x,y,balls,strikes,outs){
+  ctx.fillStyle=SP.outline; P(ctx,x,y,32,48);
+  ctx.fillStyle="#181830"; P(ctx,x+1,y+1,30,46);
+  let labels=["B","S","O"], vals=[balls,strikes,outs], maxV=[4,3,3];
+  let dotCols=["#20e840","#e8e040","#e82020"];
+  labels.forEach((lbl,i)=>{
+    let ly=y+4+i*15;
+    ctx.font="bold 7px monospace"; ctx.textAlign="left"; ctx.fillStyle="rgba(255,255,255,0.7)";
+    ctx.fillText(lbl,x+3,ly+8);
+    for(let d=0;d<maxV[i];d++){
+      let on=d<vals[i];
+      ctx.fillStyle=SP.outline; P(ctx,x+12+d*5,ly+2,4,4);
+      ctx.fillStyle=on?dotCols[i]:"#303030"; P(ctx,x+13+d*5,ly+3,2,2);
+    }
+  });
+}
+
+// ── Baseball sprite (flat pixel, like game screenshots)
+function achSpriteBall(ctx,x,y,r){
+  r=r|0;
+  ctx.fillStyle="rgba(0,0,0,0.30)";
+  ctx.beginPath(); ctx.ellipse(x+r*0.35,y+r*0.65,r*0.75,r*0.28,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle=SP.ballShadow; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle=SP.ballWhite;  ctx.beginPath(); ctx.arc(x-r*0.22,y-r*0.22,r*0.78,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle="#f0ecd8";     ctx.beginPath(); ctx.arc(x-r*0.08,y-r*0.08,r*0.58,0,Math.PI*2); ctx.fill();
+  if(r>=5){
+    ctx.fillStyle=SP.ballSeam;
+    let sr=Math.max(1,r*0.13|0);
+    [[-r*0.28,-r*0.44],[-r*0.44,-r*0.10],[-r*0.36,r*0.30],[r*0.28,r*0.44],[r*0.44,r*0.10],[r*0.36,-r*0.30]].forEach(([sx,sy])=>{
+      P(ctx,x+sx-sr,y+sy-sr,sr*2,sr*2);
+    });
+  }
+  ctx.strokeStyle=SP.outline; ctx.lineWidth=r>10?2:1.5;
+  ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.stroke();
+}
+
+// ── Clutch Hitter style cursor (corner brackets, bright yellow)
+function achCursor(ctx,cx,cy){
+  let br=16;
+  ctx.strokeStyle="#ffee00"; ctx.lineWidth=3;
+  [[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([sx,sy])=>{
+    let ox=cx+sx*br, oy=cy+sy*br, bl=7;
+    ctx.beginPath(); ctx.moveTo(ox,oy); ctx.lineTo(ox-sx*bl,oy); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(ox,oy); ctx.lineTo(ox,oy-sy*bl); ctx.stroke();
+  });
+  ctx.fillStyle="#ffee00"; P(ctx,cx-2,cy-2,4,4);
+  ctx.fillStyle="#fff";    P(ctx,cx-1,cy-1,2,2);
+}
+
+// ── Fireworks (Sega-style: cross/star bursts)
+function achFireworks(ctx,W,H,count,col){
+  let fc=["#f8e020","#e82020","#20e040","#2060e8","#c020d0","#f8f8f8","#e88020"];
+  for(let f=0;f<(count||5);f++){
+    let fx=(W*(0.10+f*0.18))|0, fy=(H*(0.06+f*0.04+(f%2)*0.03))|0;
+    let rays=6+f%4, len=(H*(0.055+f%3*0.020))|0;
+    for(let r=0;r<rays;r++){
+      let a=r*(Math.PI*2/rays);
+      ctx.strokeStyle=fc[(f*3+r)%fc.length]; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(fx,fy); ctx.lineTo(fx+Math.cos(a)*len,fy+Math.sin(a)*len); ctx.stroke();
+      // Pixel dot at tip
+      ctx.fillStyle=fc[(f*2+r+1)%fc.length];
+      P(ctx,fx+Math.cos(a)*len-1,fy+Math.sin(a)*len-1,3,3);
+    }
+    // Center cross (pixel art look)
+    ctx.fillStyle="#ffffff";
+    P(ctx,fx-3,fy-1,6,2); P(ctx,fx-1,fy-3,2,6);
+    P(ctx,fx-1,fy-1,2,2);
+  }
+}
+
+// ── Confetti (rectangular pieces falling)
+function achConfetti(ctx,W,H){
+  let cols=["#f8e020","#e82020","#20c840","#2060e8","#c020c0","#f8f8f8","#e88020","#20d0c0"];
+  for(let i=0;i<70;i++){
+    let cx=(i*97+i*i*17)%W, cy=(i*73+i*23)%(H*0.52);
+    let sw=3+i%4, sh=2+i%3;
+    ctx.fillStyle=cols[i%cols.length];
+    ctx.save(); ctx.translate(cx,cy); ctx.rotate(i*0.45);
+    P(ctx,-sw/2,-sh,sw,sh*2.5); ctx.restore();
+  }
+}
+
+// ── Big Sega-style text (yellow with black outline + blue shadow, like title screen)
+function achSegaText(ctx,text,x,y,size,mainCol,shadowCol){
+  ctx.font=`bold ${size}px monospace`;
+  ctx.textAlign="center";
+  // Thick black outline (multiple pixels)
+  ctx.fillStyle=SP.outline;
+  let offsets=[[-3,0],[3,0],[0,-3],[0,3],[-3,-3],[3,-3],[-3,3],[3,3],[-2,0],[2,0],[0,-2],[0,2]];
+  offsets.forEach(([dx,dy])=>ctx.fillText(text,x+dx,y+dy));
+  // Blue/purple shadow (like Clutch Hitter logo in image 1)
+  if(shadowCol){ ctx.fillStyle=shadowCol; ctx.fillText(text,x+4,y+4); }
+  // Main color
+  ctx.fillStyle=mainCol; ctx.fillText(text,x,y);
+  // Highlight on top
+  ctx.fillStyle="rgba(255,255,255,0.35)"; ctx.fillText(text,x-1,y-1);
+}
+
+// ─────────────────────────────────────────────────────────────
+// ACHIEVEMENT ART SCENES — Each renders a full action scene
+// ─────────────────────────────────────────────────────────────
+
+function achBg(ctx,W,H,stageOverride){
+  let stage=stageOverride||(typeof careerStage!=="undefined"?careerStage:"Little League");
+  achBgScene(ctx,W,H,stage);
+}
+
+function achArtHit(ctx,W,H,stageCol,textCol,label){
+  let stage=typeof careerStage!=="undefined"?careerStage:"Little League";
+  let C=ACH_STAGE_CFG[stage]||ACH_STAGE_CFG["MLB"];
+  achBgScene(ctx,W,H,stage);
+  // Umpire on left (safe call gesture)
+  achSpriteUmpire(ctx,W*0.10,H*0.84,1.1);
+  // Count panel
+  achCountPanel(ctx,W*0.04,H*0.42,1,0,1);
+  // Batter mid-swing (contact frame)
+  achSpriteBatter(ctx,W*0.32,H*0.85,1.45,C.teamA,C.teamA[1],0.72,true);
+  // Ball in air
+  achSpriteBall(ctx,W*0.70,H*0.38,10);
+  // Ball arc trail (dashed pixel line)
+  ctx.strokeStyle=SP.ballWhite; ctx.lineWidth=2; ctx.setLineDash([3,2]);
+  ctx.beginPath(); for(let t=0;t<=1;t+=0.1){ let px=W*(0.38+t*0.30),py=H*(0.60-t*0.26-t*t*0.08); t===0?ctx.moveTo(px,py):ctx.lineTo(px,py); } ctx.stroke(); ctx.setLineDash([]);
+  // Home plate
+  achSpritePlate(ctx,W*0.46,H*0.88,1.0);
+  achConfetti(ctx,W,H);
+  // TEXT — Sega arcade style
+  achSegaText(ctx,label||"HIT!",W/2,H*0.20,Math.round(W/12),SP.textYellow,"#3030c0");
+  ctx.font=`bold ${W/42|0}px monospace`; ctx.textAlign="center";
+  ctx.fillStyle="rgba(255,255,255,0.55)"; ctx.fillText(stage.toUpperCase(),W/2,H*0.92);
+}
+
+function achArtHR(ctx,W,H,stageCol,accentCol){
+  let stage=typeof careerStage!=="undefined"?careerStage:"Little League";
+  let C=ACH_STAGE_CFG[stage]||ACH_STAGE_CFG["MLB"];
+  achBgScene(ctx,W,H,stage);
+  achFireworks(ctx,W,H,7,accentCol||SP.textYellow);
+  achConfetti(ctx,W,H);
+  // Pitcher on mound reacting
+  achSpritePitcher(ctx,W*0.55,H*0.72,0.9,C.teamB,C.teamB[1],0.0);
+  // Batter in full follow-through
+  achSpriteBatter(ctx,W*0.22,H*0.85,1.55,C.teamA,C.teamA[1],1.0,true);
+  // Ball arcing high over wall
+  for(let i=5;i>0;i--){
+    let t=i/5;
+    achSpriteBall(ctx,W*(0.44+t*0.48),H*(0.62-t*0.52+t*t*0.30),3+t*10);
+  }
+  achSpriteBall(ctx,W*0.94,H*0.12,13);
+  achSpritePlate(ctx,W*0.44,H*0.88,1.0);
+  achSegaText(ctx,"HOME RUN!",W/2,H*0.46,Math.round(W/12),SP.textYellow,"#3030c0");
+  ctx.font=`bold ${W/42|0}px monospace`; ctx.textAlign="center"; ctx.fillStyle="rgba(255,255,255,0.55)";
+  if(typeof player!=="undefined"&&player) ctx.fillText(player.name+" · HR #"+(player.stats.HR||1),W/2,H*0.60);
+}
+
+function achArtWalkOff(ctx,W,H,stageCol){
+  let stage=typeof careerStage!=="undefined"?careerStage:"Little League";
+  let C=ACH_STAGE_CFG[stage]||ACH_STAGE_CFG["MLB"];
+  achBgScene(ctx,W,H,stage);
+  achFireworks(ctx,W,H,9,SP.textYellow);
+  achConfetti(ctx,W,H);
+  // Multiple players rushing field (pixel art crowd)
+  let teamCols=[SP.jerseyRed,SP.jerseyBlue,SP.jerseyGrey,SP.jerseyPurple,SP.jerseyRed,SP.jerseyBlue];
+  for(let i=0;i<6;i++){
+    let cx=W*(0.08+i*0.155)|0, cy=H*0.78|0;
+    let col=teamCols[i], skinT=["#f0b878","#d89060","#b87048","#c89058"][i%4];
+    ctx.fillStyle=SP.outline; P(ctx,cx-5,cy-22,10,22);
+    ctx.fillStyle=col;         P(ctx,cx-4,cy-21,8,20);
+    Pdither(ctx,cx-4,cy-21,3,20,col,SP.outline);
+    ctx.fillStyle=SP.outline;  P(ctx,cx-5,cy-30,10,10);
+    ctx.fillStyle=skinT;       P(ctx,cx-4,cy-29,8,8);
+    // Arms raised high
+    ctx.fillStyle=SP.outline;
+    P(ctx,cx-10,cy-24,5,3); P(ctx,cx+5,cy-24,5,3);  // horizontal
+    P(ctx,cx-10,cy-28,3,4); P(ctx,cx+7,cy-28,3,4);  // vertical
+    ctx.fillStyle=col;
+    P(ctx,cx-9,cy-23,4,2); P(ctx,cx+6,cy-23,4,2);
+    P(ctx,cx-9,cy-27,2,4); P(ctx,cx+7,cy-27,2,4);
+    // Hat
+    ctx.fillStyle=SP.outline; P(ctx,cx-5,cy-34,10,5); P(ctx,cx-4,cy-38,8,5);
+    ctx.fillStyle=col; P(ctx,cx-4,cy-33,8,4); P(ctx,cx-3,cy-37,6,4);
+  }
+  achSegaText(ctx,"WALK-OFF!",W/2,H*0.38,Math.round(W/11),SP.textYellow,"#3030c0");
+  achSegaText(ctx,"HOME RUN",W/2,H*0.52,Math.round(W/18),"#f0f0f0","#202020");
+}
+
+function achArtMilestone(ctx,W,H,number,label,stageCol,numCol){
+  let stage=typeof careerStage!=="undefined"?careerStage:"Little League";
+  let C=ACH_STAGE_CFG[stage]||ACH_STAGE_CFG["MLB"];
+  achBgScene(ctx,W,H,stage);
+  achFireworks(ctx,W,H,6,numCol||SP.textYellow);
+  achConfetti(ctx,W,H);
+  // Small batter silhouette in corner
+  achSpriteBatter(ctx,W*0.88,H*0.87,0.75,C.teamA,C.teamA[1],0.55,true);
+  // Gold number plate (like player card background in image 3)
+  let nw=W*0.58, nh=H*0.30, nx=W/2-nw/2, ny=H*0.24;
+  // Gold diagonal stripe background
+  for(let s=0;s<nw+nh;s+=6){
+    ctx.fillStyle=s%12<6?SP.gold:SP.goldDark;
+    ctx.fillRect(nx+s-nh,ny+0,6,nh);
+  }
+  ctx.fillStyle=SP.outline; P(ctx,nx-2,ny-2,nw+4,nh+4);
+  for(let s=0;s<nw+nh;s+=6){ ctx.fillStyle=s%12<6?SP.gold:SP.goldDark; ctx.fillRect(nx+s-nh,ny,6,nh); }
+  ctx.fillStyle=SP.goldBright; P(ctx,nx,ny,nw,4);   // top highlight
+  ctx.fillStyle=SP.goldDark;   P(ctx,nx,ny+nh-4,nw,4); // bottom shadow
+  // Number
+  let fs=number.length<=2?Math.round(nh*0.85):number.length<=3?Math.round(nh*0.72):Math.round(nh*0.58);
+  achSegaText(ctx,number,W/2,ny+nh*0.72,fs,SP.textWhite,SP.outline);
+  // Label below plate
+  achSegaText(ctx,label,W/2,H*0.62,Math.round(H*0.072),"#f0f0f0","#202020");
+  // Trophy row
+  for(let i=0;i<Math.min(5,Math.ceil(parseInt(number)||1/10)+2);i++){
+    let tx=(W*(0.10+i*0.20))|0, ty=(H*0.80)|0;
+    ctx.fillStyle=SP.outline; P(ctx,tx-5,ty-8,10,12); P(ctx,tx-6,ty-10,12,4); P(ctx,tx-2,ty+4,4,5);
+    ctx.fillStyle=SP.gold;    P(ctx,tx-4,ty-7,8,10); P(ctx,tx-5,ty-9,10,3); P(ctx,tx-1,ty+5,2,4);
+    ctx.fillStyle=SP.goldBright;P(ctx,tx-3,ty-7,3,6);
+  }
+}
+
+function achArtStreak(ctx,W,H,count,streakCol){
+  let stage=typeof careerStage!=="undefined"?careerStage:"Little League";
+  let C=ACH_STAGE_CFG[stage]||ACH_STAGE_CFG["MLB"];
+  achBgScene(ctx,W,H,stage);
+  if(count>=15){
+    // Fire effect (pixel repeating)
+    for(let fx=0;fx<W;fx+=4){
+      let fh=(H*(0.04+Math.abs(Math.sin(fx*0.20))*0.038))|0;
+      ctx.fillStyle=`rgba(255,${70+Math.sin(fx*0.25)*55|0},0,0.75)`;
+      P(ctx,fx,H*0.56-fh,4,fh+2);
+      ctx.fillStyle=`rgba(255,${140+Math.sin(fx*0.30)*80|0},0,0.45)`;
+      P(ctx,fx,H*0.56-fh*1.5,4,fh*0.5);
+    }
+  }
+  if(count>=10){ achFireworks(ctx,W,H,5,streakCol||SP.textYellow); achConfetti(ctx,W,H); }
+  // Streak game boxes (pixel art game tiles)
+  let maxShow=Math.min(count,24);
+  let bw=Math.min(16,((W-24)/maxShow)|0);
+  let total=maxShow*bw, sx2=(W-total)/2|0;
+  for(let i=0;i<maxShow;i++){
+    let bx=sx2+i*bw, by=H*0.57|0;
+    let isLast=i===maxShow-1;
+    // Box
+    ctx.fillStyle=SP.outline;  P(ctx,bx,by,bw,bw);
+    ctx.fillStyle=isLast?"#f0f0f0":streakCol; P(ctx,bx+1,by+1,bw-2,bw-2);
+    // Pixel highlight
+    ctx.fillStyle="rgba(255,255,255,0.30)"; P(ctx,bx+1,by+1,bw-2,2);
+    // Checkmark pixel
+    ctx.fillStyle=SP.outline;
+    P(ctx,bx+bw*0.25,by+bw*0.45,bw*0.18,bw*0.35);
+    P(ctx,bx+bw*0.43,by+bw*0.58,bw*0.40,bw*0.18);
+    // Game number label (every 5)
+    if((i+1)%5===0){
+      ctx.font=`bold ${Math.max(5,bw*0.65|0)}px monospace`; ctx.textAlign="center";
+      ctx.fillStyle="rgba(255,255,255,0.55)";
+      ctx.fillText(i+1,bx+bw/2,by+bw+9);
+    }
+  }
+  achSegaText(ctx,String(count),W/2,H*0.42,Math.round(H*0.32),streakCol||SP.textYellow,"#3030c0");
+  achSegaText(ctx,"GAME HIT STREAK",W/2,H*0.75,Math.round(H*0.068),"#f0f0f0","#202020");
+  achSpriteBatter(ctx,W*0.90,H*0.87,0.72,C.teamA,C.teamA[1],0.30,true);
+}
+
+function achArtAvg(ctx,W,H,avgStr,col){
+  let stage=typeof careerStage!=="undefined"?careerStage:"Little League";
+  let C=ACH_STAGE_CFG[stage]||ACH_STAGE_CFG["MLB"];
+  achBgScene(ctx,W,H,stage);
+  achFireworks(ctx,W,H,5,col||SP.textYellow);
+  achConfetti(ctx,W,H);
+  // Player card style (gold diagonal background, like image 3)
+  let cw=W*0.52, ch=H*0.32, cx2=W/2-cw/2, cy2=H*0.20;
+  ctx.fillStyle=SP.outline; P(ctx,cx2-2,cy2-2,cw+4,ch+4);
+  for(let s=0;s<cw+ch;s+=6){ ctx.fillStyle=s%12<6?SP.gold:SP.goldDark; ctx.fillRect(cx2+s-ch,cy2,6,ch); }
+  ctx.fillStyle=SP.goldBright; P(ctx,cx2,cy2,cw,3);
+  ctx.fillStyle=SP.goldDark;   P(ctx,cx2,cy2+ch-3,cw,3);
+  // Avg text on gold card
+  achSegaText(ctx,avgStr,W/2,cy2+ch*0.72,Math.round(ch*0.60),SP.textWhite,SP.outline);
+  achSegaText(ctx,"BATTING AVG",W/2,H*0.59,Math.round(H*0.068),"#f0f0f0","#202020");
+  ctx.font=`bold ${H*0.052|0}px monospace`; ctx.textAlign="center"; ctx.fillStyle="rgba(255,255,255,0.45)";
+  if(typeof player!=="undefined"&&player)
+    ctx.fillText((player.stats.H||0)+" H · "+(player.stats.AB||0)+" AB",W/2,H*0.72);
+  achSpriteBatter(ctx,W*0.88,H*0.87,0.80,C.teamA,C.teamA[1],0.62,true);
+}
+
+function achArtSpecial(ctx,W,H,headline,subline,bgCol,accentCol){
+  let stage=typeof careerStage!=="undefined"?careerStage:"MLB";
+  achBgScene(ctx,W,H,stage);
+  achFireworks(ctx,W,H,10,accentCol||SP.textYellow);
+  achConfetti(ctx,W,H);
+  // Stadium silhouette at horizon (pixel blocky)
+  ctx.fillStyle="rgba(0,0,0,0.25)";
+  for(let i=0;i<W;i+=10){
+    let ht=H*(0.04+Math.abs(Math.sin(i*0.07+0.3))*0.06+Math.abs(Math.sin(i*0.04))*0.04);
+    P(ctx,i,H*0.76-ht,9,ht+H*0.24);
+  }
+  achSegaText(ctx,headline,W/2,H*0.42,Math.round(H*0.185),accentCol||SP.textYellow,"#3030c0");
+  achSegaText(ctx,subline,W/2,H*0.57,Math.round(H*0.070),"#f0f0f0","#202020");
+  if(typeof player!=="undefined"&&player){
+    ctx.font=`bold ${H*0.052|0}px monospace`; ctx.textAlign="center"; ctx.fillStyle="rgba(255,255,255,0.40)";
+    ctx.fillText(player.name+" · "+careerStage,W/2,H*0.70);
+  }
+}
+
+function achArtDefault(ctx,W,H,title,stageCol){
+  achArtSpecial(ctx,W,H,title||"ACHIEVEMENT!","Milestone reached.",stageCol||"#040828",SP.textYellow);
+}
+
 
 // Slots that are invalidated by a growth spurt (size-dependent items)
 const SIZE_DEPENDENT_SLOTS = ["cleats","battingGloves"];
@@ -7951,6 +9671,7 @@ function endSeason(){
   player.suspended = false;
   player.birthdaySeenThisSeason = false;
   player.holidayGiftThisSeason  = false;
+  player.sponsorOfferedThisSeason = false;
   player.activityCounts = {};
   player.weeksSinceRequired = 0;
   player.baseballBlocked = false;
@@ -8030,6 +9751,13 @@ function enterOffSeasonMode(){
   if(careerStage==="Little League"&&checkLLEarlyPromotion()){
     showLLPromotionModal(); return;
   }
+
+  // MLB sponsorship check — after a good season
+  if(careerStage==="MLB" && !player.sponsorOfferedThisSeason){
+    player.sponsorOfferedThisSeason = true;
+    if(maybeTriggerSponsorshipOffer()) return; // sponsorship modal → calls renderOffSeasonPanel when closed
+  }
+
   renderOffSeasonPanel();
 }
 
@@ -8216,43 +9944,10 @@ function generateAwards(){
 function lsGet(key){ try{ return localStorage.getItem(key); }catch(e){ return null; } }
 function lsSet(key, val){ try{ localStorage.setItem(key, val); }catch(e){} }
 
-function getSavePayload(){
-  let originalTeam = player.team;
-  if(originalTeam){
-    player.teamName = originalTeam.name;
-    delete player.team;
-  }
-
-  let payload = {
-    player,
-    attributes,
-    teams,
-    careerStage,
-    age,
-    gamesPlayed,
-    seasonsPlayed,
-    lastOutcome,
-    injury,
-    steroidUse,
-    difficulty,
-    eventFeed,
-    physique,
-    collegeSeasonsPlayed,
-    currentWeek,
-  };
-
-  let raw = JSON.stringify(payload);
-
-  if(originalTeam){
-    player.team = originalTeam;
-    delete player.teamName;
-  }
-
-  return raw;
-}
-
 function saveToSlot(n){
-  lsSet("bls_save_" + n, getSavePayload());
+  let savePlayer = Object.assign({}, player, {team: undefined, teamName: player.team ? player.team.name : (player.teamName||"")});
+  let data = {player:savePlayer,attributes,teams,careerStage,age,gamesPlayed,seasonsPlayed,lastOutcome,injury,steroidUse,difficulty,eventFeed,physique,collegeSeasonsPlayed,currentWeek};
+  lsSet("bls_save_" + n, JSON.stringify(data));
   showToast("Saved to Slot " + n + ".","success");
   renderSaveSlots();
 }
@@ -8260,59 +9955,27 @@ function saveToSlot(n){
 function loadGameSlot(n){
   let raw = lsGet("bls_save_" + n);
   if(!raw){ showToast("No save found.","warning"); return; }
-  let d;
-  try { d = JSON.parse(raw); } catch(e){ showToast("Save file is corrupted.","warning"); return; }
-
-  if(d.player){
-    player = d.player;
-    attributes = d.attributes;
-    teams = d.teams;
-    careerStage = d.careerStage;
-    age = d.age;
-    gamesPlayed = d.gamesPlayed;
-    seasonsPlayed = d.seasonsPlayed;
-    lastOutcome = d.lastOutcome || "";
-    injury = d.injury || {active:false,name:"",weeksRemaining:0};
-    steroidUse = d.steroidUse || {used:false,suspensions:0};
-    difficulty = d.difficulty;
-    eventFeed = d.eventFeed || [];
-    if(d.physique) physique = d.physique;
-    if(d.collegeSeasonsPlayed!==undefined) collegeSeasonsPlayed = d.collegeSeasonsPlayed;
-    if(d.currentWeek!==undefined) currentWeek = d.currentWeek;
-  } else {
-    // Legacy save format fallback
-    player = d;
-    attributes = d.attributes || createAttrs();
-    teams = d.teams || [];
-    careerStage = d.careerStage || careerStage;
-    age = d.age || age;
-    gamesPlayed = d.gamesPlayed || 0;
-    seasonsPlayed = d.seasonsPlayed || 0;
-    lastOutcome = d.lastOutcome || "";
-    injury = d.injury || {active:false,name:"",weeksRemaining:0};
-    steroidUse = d.steroidUse || {used:false,suspensions:0};
-    difficulty = d.difficulty || difficulty;
-    eventFeed = d.eventFeed || [];
-    if(d.physique) physique = d.physique;
-    if(d.collegeSeasonsPlayed!==undefined) collegeSeasonsPlayed = d.collegeSeasonsPlayed;
-    if(d.currentWeek!==undefined) currentWeek = d.currentWeek;
+  let d = JSON.parse(raw);
+  player=d.player; attributes=d.attributes; teams=d.teams;
+  careerStage=d.careerStage; age=d.age; gamesPlayed=d.gamesPlayed;
+  seasonsPlayed=d.seasonsPlayed; lastOutcome=d.lastOutcome||"";
+  injury=d.injury||{active:false,name:"",gamesMissed:0,severity:"minor",rehabChosen:false};
+  steroidUse=d.steroidUse||{used:false,suspensions:0};
+  difficulty=d.difficulty;
+  eventFeed=d.eventFeed||[];
+  if(d.physique) physique=d.physique;
+  if(d.collegeSeasonsPlayed!==undefined) collegeSeasonsPlayed=d.collegeSeasonsPlayed;
+  if(d.currentWeek!==undefined) currentWeek=d.currentWeek;
+  if(!player.team && (player.teamName||player.mlbTeam)){
+    let tname = player.teamName || player.mlbTeam;
+    player.team = teams.find(t=>t.name===tname) || teams[0] || null;
   }
-
-  if(player.teamName){
-    let team = teams.find(t=>t.name===player.teamName);
-    if(team){
-      let index = team.players.findIndex(p=>p.name===player.name && p.number===player.number);
-      if(index >= 0) team.players[index] = player;
-      else team.players.push(player);
-      player.team = team;
-    }
-    delete player.teamName;
-  }
-
   if(!player.offField) player.offField = {popularity:50,religiousness:20,intelligence:50,reputation:50,confidence:50,aggression:30,attractiveness:50,recklessness:20};
   if(!player.storyEventLog) player.storyEventLog = [];
   if(!player.storyEventsSeenThisSeason) player.storyEventsSeenThisSeason = [];
   if(!player.equipment) player.equipment = getDefaultEquipment();
+  if(!player.bats)   player.bats   = "R";
+  if(!player.throws) player.throws = "R";
   applyEquipmentBonuses();
   showScreen("screenGame");
   updateUI();
@@ -8320,69 +9983,9 @@ function loadGameSlot(n){
 }
 
 function saveAutoSlot(){
-  lsSet("bls_auto", getSavePayload());
-}
-
-function loadAutoSave(){
-  let raw = lsGet("bls_auto");
-  if(!raw){ showToast("No auto-save found.","warning"); return; }
-  let d;
-  try { d = JSON.parse(raw); } catch(e){ showToast("Auto-save file is corrupted.","warning"); return; }
-
-  if(d.player){
-    player = d.player;
-    attributes = d.attributes;
-    teams = d.teams;
-    careerStage = d.careerStage;
-    age = d.age;
-    gamesPlayed = d.gamesPlayed;
-    seasonsPlayed = d.seasonsPlayed;
-    lastOutcome = d.lastOutcome || "";
-    injury = d.injury || {active:false,name:"",weeksRemaining:0};
-    steroidUse = d.steroidUse || {used:false,suspensions:0};
-    difficulty = d.difficulty;
-    eventFeed = d.eventFeed || [];
-    if(d.physique) physique = d.physique;
-    if(d.collegeSeasonsPlayed!==undefined) collegeSeasonsPlayed = d.collegeSeasonsPlayed;
-    if(d.currentWeek!==undefined) currentWeek = d.currentWeek;
-  } else {
-    // Legacy save format fallback
-    player = d;
-    attributes = d.attributes || createAttrs();
-    teams = d.teams || [];
-    careerStage = d.careerStage || careerStage;
-    age = d.age || age;
-    gamesPlayed = d.gamesPlayed || 0;
-    seasonsPlayed = d.seasonsPlayed || 0;
-    lastOutcome = d.lastOutcome || "";
-    injury = d.injury || {active:false,name:"",weeksRemaining:0};
-    steroidUse = d.steroidUse || {used:false,suspensions:0};
-    difficulty = d.difficulty || difficulty;
-    eventFeed = d.eventFeed || [];
-    if(d.physique) physique = d.physique;
-    if(d.collegeSeasonsPlayed!==undefined) collegeSeasonsPlayed = d.collegeSeasonsPlayed;
-    if(d.currentWeek!==undefined) currentWeek = d.currentWeek;
-  }
-
-  if(player.teamName){
-    let team = teams.find(t=>t.name===player.teamName);
-    if(team){
-      let index = team.players.findIndex(p=>p.name===player.name && p.number===player.number);
-      if(index >= 0) team.players[index] = player;
-      else team.players.push(player);
-      player.team = team;
-    }
-    delete player.teamName;
-  }
-
-  if(!player.offField) player.offField = {popularity:50,religiousness:20,intelligence:50,reputation:50,confidence:50,aggression:30,attractiveness:50,recklessness:20};
-  if(!player.storyEventLog) player.storyEventLog = [];
-  if(!player.storyEventsSeenThisSeason) player.storyEventsSeenThisSeason = [];
-  if(!player.equipment) player.equipment = getDefaultEquipment();
-  applyEquipmentBonuses();
-  showScreen("screenGame");
-  updateUI();
-  showToast("Auto-save loaded!","success");
+  let savePlayer = Object.assign({}, player, {team: undefined, teamName: player.team ? player.team.name : (player.teamName||"")});
+  let data = {player:savePlayer,attributes,teams,careerStage,age,gamesPlayed,seasonsPlayed,lastOutcome,injury,steroidUse,difficulty,eventFeed,physique,collegeSeasonsPlayed,currentWeek};
+  lsSet("bls_auto", JSON.stringify(data));
 }
 
 // ===================== UI HELPERS =====================
@@ -8457,29 +10060,14 @@ function renderSaveSlots(){
   grid.innerHTML = [1,2,3].map(n=>{
     let raw = lsGet(`bls_save_${n}`);
     let info = "Empty";
-    let hasSave = false;
-    if(raw){
-      try{
-        let d = JSON.parse(raw);
-        info = `${d.player?.name||"??"} — ${d.careerStage||"??"} S${d.seasonsPlayed||0}`;
-        hasSave = !!d.player;
-      }catch(e){}
-    }
+    if(raw){ try{ let d = JSON.parse(raw); info = `${d.player?.name||"??"} — ${d.careerStage||"??"} S${d.seasonsPlayed||0}`; }catch(e){} }
     return `<div class="save-slot">
       <div class="slot-label">Slot ${n}</div>
       <div class="slot-data" style="font-size:0.78rem;color:var(--muted);margin-bottom:8px;">${info}</div>
       <button class="action-btn primary" style="width:100%;font-size:0.78rem;padding:7px;" onclick="saveToSlot(${n})">Save</button>
       <button class="action-btn blue" style="width:100%;font-size:0.78rem;padding:7px;margin-top:4px;" onclick="loadGameSlot(${n})">Load</button>
-      <button class="action-btn" style="width:100%;font-size:0.78rem;padding:7px;margin-top:4px;" onclick="deleteSaveSlot(${n})" ${hasSave?"":"disabled"}>Delete</button>
     </div>`;
   }).join("");
-}
-
-function deleteSaveSlot(n){
-  if(!confirm(`Delete save slot ${n}? This cannot be undone.`)) return;
-  try{ localStorage.removeItem(`bls_save_${n}`); }catch(e){}
-  showToast(`Deleted save slot ${n}.`,`warning`);
-  renderSaveSlots();
 }
 
 // ===================== STAGE BACKGROUND BANNERS =====================
@@ -8933,7 +10521,7 @@ function updateUI(){
   document.getElementById("badgeNumber").textContent = `#${player.number}`;
   document.getElementById("badgeName").textContent = player.name;
   let orgLabel = player.mlbTeam ? player.mlbTeam : player.college ? player.college : careerStage;
-  document.getElementById("badgeSub").textContent = `${player.position} · ${orgLabel}`;
+  document.getElementById("badgeSub").textContent = `${player.position} · ${orgLabel} · Bats ${player.bats} / Throws ${player.throws}`;
   let tags = document.getElementById("badgeTags");
   tags.innerHTML = "";
   player.personality.forEach(p=>{ let t=document.createElement("span"); t.className="tag gold"; t.textContent=p; tags.appendChild(t); });
@@ -9108,13 +10696,12 @@ function startGame(){
   // Apply religion gameplay effects
   applyReligion(player.religion);
   player.position = document.getElementById("inputPos").value;
-  player.number = parseInt(document.getElementById("inputNum").value)||21;
+  player.number   = parseInt(document.getElementById("inputNum").value)||21;
+  player.bats     = selectedBats;    // R, L, or S
+  player.throws   = selectedThrows;  // R or L
   player.archetype = selectedArch;
-  player.parents = document.getElementById("inputParents").value;
+  player.parents   = document.getElementById("inputParents").value;
   difficulty = document.getElementById("inputDiff").value;
-
-  player.throwingArm = document.getElementById("inputThrow").value;
-  player.hittingType = document.getElementById("inputHitting").value;
 
   applyArchetype(player.archetype);
   applyParents(player.parents);
@@ -9133,10 +10720,8 @@ function startGame(){
   showScreen("screenGame");
   let relEmoji = (RELIGIONS.find(r=>r.key===player.religion)||{emoji:"🙏"}).emoji;
   let relText = player.religion && player.religion !== "None / Secular" ? ` · ${relEmoji} ${player.religion}` : "";
-  let throwStr = player.throwingArm === "Left" ? "🤛 Left thrower" : "Right thrower";
-  let hitStr = player.hittingType === "Left" ? "🤛 Lefty batter" : player.hittingType === "Switch" ? "🔄 Switch hitter" : "Righty batter";
   setSpotlight("Career Begins", `${player.name} is ready.`, `A ${player.position} from ${player.town} starts the climb at ${careerStage}.${relText}`, "success");
-  addFeed("Career Starts", `${player.name} (#${player.number}) — ${player.archetype} · ${throwStr} · ${hitStr} — ${player.town}${relText}`, "success");
+  addFeed("Career Starts", `${player.name} (#${player.number}) — ${player.archetype} — ${player.town}${relText}`, "success");
   if(player.religion && player.religion !== "None / Secular"){
     addFeed("Background", `Raised ${player.religion} in ${player.town}. ${player.religionNote||""}`, "success");
   }
@@ -9316,6 +10901,8 @@ function renderBioTab(){
         <div class="bio-kv"><span class="k">Full Name</span><span class="v">${player.name}</span></div>
         <div class="bio-kv"><span class="k">Hometown</span><span class="v">${player.town}</span></div>
         <div class="bio-kv"><span class="k">Position</span><span class="v">${player.position}</span></div>
+        <div class="bio-kv"><span class="k">Bats</span><span class="v">${player.bats==="S"?"Switch (S)":player.bats==="L"?"Left (L)":"Right (R)"}</span></div>
+        <div class="bio-kv"><span class="k">Throws</span><span class="v">${player.throws==="L"?"Left (L)":"Right (R)"}</span></div>
         <div class="bio-kv"><span class="k">Jersey #</span><span class="v">${player.number}</span></div>
         <div class="bio-kv"><span class="k">Age</span><span class="v">${age}</span></div>
         <div class="bio-kv"><span class="k">Physique</span><span class="v">${physiqueStr}</span></div>
